@@ -633,7 +633,7 @@ T[] repeat (T) (T[] arr, int number)
  *
  * Returns: $(D_KEYWORD true) if this array contains elements
  */
-bool any (T) (T[] arr)
+@property bool any (T) (T[] arr)
 {
 	return arr.length > 0;
 }

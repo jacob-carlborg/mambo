@@ -10,7 +10,7 @@ template Singleton ()
 {
 	private static typeof(this) instance_;
 	
-	static typeof(this) instance ()
+	@property static typeof(this) instance ()
 	{
 		if (instance_)
 			return instance_;

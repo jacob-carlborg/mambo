@@ -231,7 +231,7 @@ in
 }
 body
 {
-	return str[beginIndex .. endIndex].dup;
+	return str[beginIndex .. endIndex].idup;
 }
 
 /**
@@ -267,7 +267,7 @@ in
 }
 body
 {
-	return str[beginIndex .. endIndex].dup;
+	return str[beginIndex .. endIndex].idup;
 }
 
 /**
@@ -303,7 +303,7 @@ in
 }
 body
 {
-	return str[beginIndex .. endIndex].dup;
+	return str[beginIndex .. endIndex].idup;
 }
 
 /**
@@ -444,7 +444,7 @@ body
 			end = str.length;
 	}
 	
-	return str[pos .. end].dup;
+	return str[pos .. end].idup;
 }
 
 /**
@@ -489,7 +489,7 @@ body
 			end = str.length;
 	}
 	
-	return str[pos .. end].dup;
+	return str[pos .. end].idup;
 }
 
 /**
@@ -534,7 +534,7 @@ body
 			end = str.length;
 	}
 	
-	return str[pos .. end].dup;
+	return str[pos .. end].idup;
 }
 
 /**
@@ -810,7 +810,7 @@ T[] replace (T) (T[] source, dchar match, dchar replacement)
  * 
  * See_Also: isPresent 
  */
-bool isBlank (T) (T[] str)
+@property bool isBlank (T) (T[] str)
 {
 	return str is null || str.length == 0 || str == "";
 }
@@ -834,7 +834,7 @@ bool isBlank (T) (T[] str)
  * 
  * See_Also: isBlank
  */
-bool isPresent (T) (T[] str)
+@property bool isPresent (T) (T[] str)
 {
 	return !str.isBlank();
 }

@@ -11,46 +11,23 @@ public import mambo.collection.Array;
 import mambo.util.Version;
 import mambo.util.Traits;
 
-version (Tango)
-{
-	static import tango.stdc.stringz;
-	import tango.text.Unicode : toFold, isDigit;
-	import tango.text.convert.Utf;
-	import tango.text.Util;
-	
-	alias tango.stdc.stringz.toStringz toStringz;
-	alias tango.stdc.stringz.toString16z toString16z;
-	alias tango.stdc.stringz.toString32z toString32z;
-	
-	alias tango.stdc.stringz.fromStringz fromStringz;
-	alias tango.stdc.stringz.fromString16z fromString16z;
-	alias tango.stdc.stringz.fromString32z fromString32z;
-	
-	alias tango.text.convert.Utf.toString16 toString16;
-	alias tango.text.convert.Utf.toString32 toString32;
-}
+static import tango.stdc.stringz;
+import tango.text.Unicode : toFold, isDigit;
+import tango.text.convert.Utf;
+import tango.text.Util;
 
-else
-{	
-	import std.string;
-	import std.utf;
-	import std.ctype : isxdigit;
-	
-	version = Phobos;
-	
-	private alias std.string.tolower toFold;
-	
-	alias std.utf.toUTF8 toString;
-	alias std.utf.toUTF16 toString16;
-	alias std.utf.toUTF32 toString32;
-	
-	alias std.string.toStringz toStringz;
-	alias std.utf.toUTF16z toString16z;
-	
-	alias std.string.toString fromStringz;
-}
+alias tango.stdc.stringz.toStringz toStringz;
+alias tango.stdc.stringz.toString16z toString16z;
+alias tango.stdc.stringz.toString32z toString32z;
 
-static if (Tango && !PhobosCompatibility)
+alias tango.stdc.stringz.fromStringz fromStringz;
+alias tango.stdc.stringz.fromString16z fromString16z;
+alias tango.stdc.stringz.fromString32z fromString32z;
+
+alias tango.text.convert.Utf.toString16 toString16;
+alias tango.text.convert.Utf.toString32 toString32;
+
+static if (!PhobosCompatibility)
 {
 	/**
 	 * string alias
@@ -126,11 +103,7 @@ body
 	if (str == anotherString)
 		return true;
 
-	version (Tango)
-		return toFold(str) == toFold(anotherString);
-
-	else
-		return toFold(toUTF8(str)) == toFold(toUTF8(anotherString));
+	return toFold(str) == toFold(anotherString);
 }
 
 /**
@@ -160,11 +133,7 @@ body
 	if (str == anotherString)
 		return true;
 
-	version (Tango)
-		return toFold(str) == toFold(anotherString);
-
-	else
-		return toFold(toUTF8(str)) == toFold(toUTF8(anotherString));
+	return toFold(str) == toFold(anotherString);
 }
 
 /**
@@ -599,18 +568,12 @@ body
  */
 size_t find (string str, string sub, size_t start = 0)
 {
-	version (Tango)
-	{
-		size_t index = str.locatePattern(sub, start);
-		
-		if (index == str.length)
-			return size_t.max;
-		
-		return index;
-	}
+	size_t index = str.locatePattern(sub, start);
 	
-	else
-		return std.string.find(str, sub, start);
+	if (index == str.length)
+		return size_t.max;
+	
+	return index;
 }
 
 /**
@@ -625,18 +588,12 @@ size_t find (string str, string sub, size_t start = 0)
  */
 size_t find (wstring str, wstring sub, size_t start = 0)
 {
-	version (Tango)
-	{
-		size_t index = str.locatePattern(sub, start);
-		
-		if (index == str.length)
-			return size_t.max;
-		
-		return index;
-	}
+	size_t index = str.locatePattern(sub, start);
 	
-	else
-		return std.string.find(str, sub, start);
+	if (index == str.length)
+		return size_t.max;
+	
+	return index;
 }
 
 /**
@@ -651,18 +608,12 @@ size_t find (wstring str, wstring sub, size_t start = 0)
  */
 size_t find (dstring str, dstring sub, size_t start = 0)
 {
-	version (Tango)
-	{
-		size_t index = str.locatePattern(sub, start);
-		
-		if (index == str.length)
-			return size_t.max;
-		
-		return index;
-	}
+	size_t index = str.locatePattern(sub, start);
 	
-	else
-		return std.string.find(str, sub, start);
+	if (index == str.length)
+		return size_t.max;
+	
+	return index;
 }
 
 /**
@@ -753,133 +704,29 @@ alias compareIgnoreCase icompare;
  */
 bool isHexDigit (dchar ch)
 {
-	version (Tango)
+	switch (ch)
 	{
-		switch (ch)
-		{
-			case 'A': return true;				
-			case 'B': return true;
-			case 'C': return true;
-			case 'D': return true;
-			case 'E': return true;
-			case 'F': return true;
-			
-			case 'a': return true;
-			case 'b': return true;
-			case 'c': return true;
-			case 'd': return true;
-			case 'e': return true;
-			case 'f': return true;
-			
-			default: break;
-		}
+		case 'A': return true;				
+		case 'B': return true;
+		case 'C': return true;
+		case 'D': return true;
+		case 'E': return true;
+		case 'F': return true;
 		
-		if (isDigit(ch))
-			return true;
+		case 'a': return true;
+		case 'b': return true;
+		case 'c': return true;
+		case 'd': return true;
+		case 'e': return true;
+		case 'f': return true;
+		
+		default: break;
 	}
-
-	else
-		if (isxdigit(ch) != 0)
-			return true;
+	
+	if (isDigit(ch))
+		return true;
 		
 	return false;
-}
-
-/*version (Tango)
-{
-	string toString (string str)
-	{
-		return str;
-	}
-	
-	string toString (wstring str)
-	{
-		return tango.text.convert.Utf.toString(str);
-	}
-	
-	string toString (dstring str)
-	{
-		return tango.text.convert.Utf.toString(str);
-	}
-}*/
-
-version (Phobos)
-{	
-	/**
-	 * Converts the given string to C-style 0 terminated string.
-	 * 
-	 * Params:
-	 *     str = the string to convert
-	 *     
-	 * Returns: the a C-style 0 terminated string.
-	 */
-	dchar* toString32z (dstring str)
-	{
-		return (str ~ '\0').ptr;
-	}
-	
-	/**
-	 * Converts a C-style 0 terminated string to a wstring
-	 * 
-	 * Params:
-	 *     str = the C-style 0 terminated string
-	 *     
-	 * Returns: the converted wstring
-	 */
-	wstring fromString16z (wchar* str)
-	{
-		return str[0 .. strlen(str)];
-	}
-	
-	/**
-	 * Converts a C-style 0 terminated string to a dstring
-	 * Params:
-	 *     str = the C-style 0 terminated string
-	 *     
-	 * Returns: the converted dstring
-	 */
-	dstring fromString32z (dchar* str)
-	{
-		return str[0 .. strlen(str)];
-	}
-	
-	/**
-	 * Gets the length of the given C-style 0 terminated string
-	 * 
-	 * Params:
-	 *     str = the C-style 0 terminated string to get the length of
-	 *     
-	 * Returns: the length of the string
-	 */
-	size_t strlen (wchar* str)
-	{
-		size_t i = 0;
-		
-		if (str)
-			while(*str++)
-				++i;
-		
-		return i;
-	}
-	
-	/**
-	 * Gets the length of the given C-style 0 terminated string
-	 * 
-	 * Params:
-	 *     str = the C-style 0 terminated string to get the length of
-	 *     
-	 * Returns: the length of the string
-	 */
-	size_t strlen (dchar* str)
-	{
-		size_t i = 0;
-		
-		if (str)
-			while(*str++)
-				++i;
-		
-		return i;
-	}
 }
 
 T[] replace (T) (T[] source, dchar match, dchar replacement)
@@ -915,17 +762,8 @@ T[] replace (T) (T[] source, dchar match, dchar replacement)
 		{
 			T[encodedLength] encodedMatch;
 			T[encodedLength] encodedReplacement;
-			
-			version (Tango)
-				return source.substitute(encode(encodedMatch, match), encode(encodedReplacement, replacement));
-			
-			else
-			{
-				auto matchLength = encode(encodedMatch, match);
-				auto replacementLength = encode(encodedReplacement, replacement);
-				
-				return std.string.replace(source, encodedMatch[0 .. matchLength], encodedReplacement[0 .. replacementLength]);
-			}
+
+			return source.substitute(encode(encodedMatch, match), encode(encodedReplacement, replacement));
 		}
 	}
 	

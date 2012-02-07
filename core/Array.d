@@ -7,21 +7,9 @@
  */
 module mambo.core.Array;
 
-version (Tango)
-{
-	static import tango.core.Array;
-	import tango.stdc.string : memmove;
-	static import tango.text.Util;
-}
-
-else
-{
-	version = Phobos;
-	
-	import std.c.string : memmove;
-	import algorithm = std.algorithm;
-	import stdString = std.string;
-}
+static import tango.core.Array;
+import tango.stdc.string : memmove;
+static import tango.text.Util;
 
 import mambo.util.Traits;
 
@@ -235,33 +223,12 @@ in
 }
 body
 {
-	version (Tango)
-	{
-		U index = tango.text.Util.locate(arr, element, start);
-		
-		if (index == arr.length)
-			index = U.max;
+	U index = tango.text.Util.locate(arr, element, start);
+	
+	if (index == arr.length)
+		index = U.max;
 
-		return index;
-	}
-
-	else
-	{
-		static if (isString!(T))
-			return stdString.indexOf(arr, element);
-		
-		else
-			return algorithm.find(arr[start .. $], element);
-		
-		/*if (start > arr.length)
-			start = arr.length;
-		
-		for (U i = start; i < arr.length; i++)
-			if (arr[i] == element)
-				return i;
-		
-		return U.max;*/
-	}
+	return index;
 }
 
 /**
@@ -297,22 +264,10 @@ body
 bool contains (T) (T[] arr, T[] pattern)
 {
 	static if (isChar!(T))
-	{
-		version (Tango)
-			return tango.text.Util.containsPattern(arr, pattern);
-		
-		else
-			return stdString.indexOf(arr, element) != -1;
-	}
+		return tango.text.Util.containsPattern(arr, pattern);
 	
 	else
-	{
-		version (Tango)
-			return tango.core.Array.contains(arr, pattern);
-		
-		else
-			return !algorithm.find(arr, pattern).empty;
-	}
+		return tango.core.Array.contains(arr, pattern);
 }
 
 /**
@@ -399,39 +354,19 @@ body
  * Throws: AssertException if the return value is less than -1 or
  * 		   greater than the length of the array - 1.
  */
-version (Tango)
+U lastIndexOf (T, U = size_t) (in T[] arr, T element)
+in
 {
-	U lastIndexOf (T, U = size_t) (in T[] arr, T element)
-	in
-	{
-		assert(arr.length > 0, "mambo.collection.Array.lastIndexOf: The length of the array was 0");
-	}
-	body
-	{
-		U index = tango.text.Util.locatePrior(arr, element);
-
-		if (index == arr.length)
-			return U.max;
-
-		return index;
-	}
+	assert(arr.length > 0, "mambo.collection.Array.lastIndexOf: The length of the array was 0");
 }
-
-else
+body
 {
-	U lastIndexOf (T, U = size_t) (in T[] arr, dchar element)
-	in
-	{
-		assert(arr.length > 0, "mambo.collection.Array.lastIndexOf: The length of the array was 0");
-	}
-	body
-	{
-		foreach_reverse (i, dchar e ; arr)
-			if (e is element)
-				return i;
+	U index = tango.text.Util.locatePrior(arr, element);
 
+	if (index == arr.length)
 		return U.max;
-	}
+
+	return index;
 }
 
 /**

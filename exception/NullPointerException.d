@@ -9,8 +9,7 @@
  */
 module mambo.exception.NullPointerException;
 
-version (Tango)
-	import tango.core.Exception;
+import tango.core.Exception;
 
 import mambo.string : string;
 

@@ -7,16 +7,10 @@
  */
 module mambo.io;
 
-version (Tango)
-{
-	import tango.io.Stdout;
-	import tango.io.Console;
-	
-	import mambo.core.string;
-}
+import tango.io.Stdout;
+import tango.io.Console;
 
-else 
-	import std.stdio;
+import mambo.core.string;
 
 /**
  * Print to the standard output
@@ -26,20 +20,13 @@ else
  */
 void print (A...)(A args)
 {
-	version (Tango)
-	{
-		static const string fmt = "{}{}{}{}{}{}{}{}"
-					        	  "{}{}{}{}{}{}{}{}"
-					        	  "{}{}{}{}{}{}{}{}";
-				
-		static assert (A.length <= fmt.length / 2, "mambo.io.print :: too many arguments");
-		
-		Stdout.format(fmt[0 .. args.length * 2], args).flush;
-	}
-		
+	static const string fmt = "{}{}{}{}{}{}{}{}"
+				        	  "{}{}{}{}{}{}{}{}"
+				        	  "{}{}{}{}{}{}{}{}";
+			
+	static assert (A.length <= fmt.length / 2, "mambo.io.print :: too many arguments");
 	
-	else
-		write(args);
+	Stdout.format(fmt[0 .. args.length * 2], args).flush;
 }
 
 /**
@@ -50,17 +37,11 @@ void print (A...)(A args)
  */
 void println (A...)(A args)
 {
-	version (Tango)
-	{
-		static const string fmt = "{}{}{}{}{}{}{}{}"
-					        	  "{}{}{}{}{}{}{}{}"
-					        	  "{}{}{}{}{}{}{}{}";
+	static const string fmt = "{}{}{}{}{}{}{}{}"
+				        	  "{}{}{}{}{}{}{}{}"
+				        	  "{}{}{}{}{}{}{}{}";
 
-		static assert (A.length <= fmt.length / 2, "mambo.io.println :: too many arguments");
-		
-		Stdout.formatln(fmt[0 .. args.length * 2], args);
-	}
-
-	else
-		writeln(args);
+	static assert (A.length <= fmt.length / 2, "mambo.io.println :: too many arguments");
+	
+	Stdout.formatln(fmt[0 .. args.length * 2], args);
 }

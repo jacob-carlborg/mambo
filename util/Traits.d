@@ -10,35 +10,16 @@ import orange.serialization.Serializable;
 import orange.serialization.archives.Archive;
 import orange.util._;
 
-version (Tango)
-{
-	import Tango = tango.core.Traits;
-	
-	///
-	alias Tango.BaseTypeTupleOf BaseTypeTupleOf;
-	
-	///
-	alias Tango.ParameterTupleOf ParameterTupleOf;
-	
-	///
-	alias Tango.ReturnTypeOf ReturnTypeOf;
-}
+import Tango = tango.core.Traits;
 
-else
-{
-	import Phobos = std.traits;
-	
-	///
-	alias Phobos.BaseTypeTuple BaseTypeTupleOf;
-	
-	///
-	alias Phobos.ParameterTypeTuple ParameterTupleOf;
-	
-	///
-	alias Phobos.ReturnType ReturnTypeOf;
-	
-	version = Phobos;
-}
+///
+alias Tango.BaseTypeTupleOf BaseTypeTupleOf;
+
+///
+alias Tango.ParameterTupleOf ParameterTupleOf;
+
+///
+alias Tango.ReturnTypeOf ReturnTypeOf;
 
 import orange.core.string;
 

@@ -70,21 +70,21 @@ private
  *     
  * Returns: the index of the element or size_t.max if the element was not found.
  */
+size_t indexOf (T) (T[] arr, dchar element) if (isChar!(T))
+{
+	foreach (i, dchar e ; arr)
+		if (e == element)
+			return i;
+	
+	return size_t.max;
+}
+
+/// Ditto
 size_t indexOf (T) (T[] arr, T element)
 {
-	static if (is(T == char) || is(T == wchar) || is(T == dchar))
-	{
-		foreach (i, e ; arr)
-			if (e == element)
-				return i;
-	}
-	
-	else
-	{
-		foreach (i, e ; arr)
-			if (e == element)
-				return i;
-	}
+	foreach (i, e ; arr)
+		if (e == element)
+			return i;
 	
 	return size_t.max;
 }

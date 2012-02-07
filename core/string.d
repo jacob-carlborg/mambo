@@ -27,24 +27,6 @@ alias tango.stdc.stringz.fromString32z fromString32z;
 alias tango.text.convert.Utf.toString16 toString16;
 alias tango.text.convert.Utf.toString32 toString32;
 
-static if (!PhobosCompatibility)
-{
-	/**
-	 * string alias
-	 */
-	alias char[] string;
-
-	/**
-	 * wstring alias
-	 */
-	alias wchar[] wstring;
-
-	/**
-	 * dstring alias
-	 */
-	alias dchar[] dstring;
-}
-
 /**
  * Compares the $(D_PSYMBOL string) to another $(D_PSYMBOL string), ignoring case
  * considerations.  Two strings are considered equal ignoring case if they are of the
@@ -250,7 +232,7 @@ in
 }
 body
 {
-	return str[beginIndex .. endIndex].dup;
+	return str[beginIndex .. endIndex]i.dup;
 }
 
 /**
@@ -286,7 +268,7 @@ in
 }
 body
 {
-	return str[beginIndex .. endIndex].dup;
+	return str[beginIndex .. endIndex].idup;
 }
 
 /**
@@ -322,7 +304,7 @@ in
 }
 body
 {
-	return str[beginIndex .. endIndex].dup;
+	return str[beginIndex .. endIndex].idup;
 }
 
 /**
@@ -463,7 +445,7 @@ body
 			end = str.length;
 	}
 	
-	return str[pos .. end].dup;
+	return str[pos .. end].idup;
 }
 
 /**
@@ -508,7 +490,7 @@ body
 			end = str.length;
 	}
 	
-	return str[pos .. end].dup;
+	return str[pos .. end].idup;
 }
 
 /**
@@ -553,7 +535,7 @@ body
 			end = str.length;
 	}
 	
-	return str[pos .. end].dup;
+	return str[pos .. end].idup;
 }
 
 /**
@@ -787,7 +769,7 @@ T[] replace (T) (T[] source, dchar match, dchar replacement)
  * 
  * See_Also: isPresent 
  */
-bool isBlank (T) (T[] str)
+@property bool isBlank (T) (T[] str)
 {
 	return str is null || str.length == 0 || str == "";
 }
@@ -811,7 +793,7 @@ bool isBlank (T) (T[] str)
  * 
  * See_Also: isBlank
  */
-bool isPresent (T) (T[] str)
+@property bool isPresent (T) (T[] str)
 {
 	return !str.isBlank();
 }

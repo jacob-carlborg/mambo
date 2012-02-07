@@ -278,7 +278,7 @@ bool contains (T) (T[] arr, T[] pattern)
  *
  * Returns: $(D_KEYWORD true) if this array contains no elements
  */
-bool isEmpty (T) (T[] arr)
+@property bool isEmpty (T) (T[] arr)
 {
 	return arr.length == 0;
 }
@@ -377,7 +377,7 @@ body
  *     
  * Returns: the number of elements in this list
  */
-U size (T, U = size_t) (T[] arr)
+@property U size (T, U = size_t) (T[] arr)
 {
 	return arr.length;
 }
@@ -635,7 +635,7 @@ T[] repeat (T) (T[] arr, int number)
  *
  * Returns: $(D_KEYWORD true) if this array contains elements
  */
-bool any (T) (T[] arr)
+@property bool any (T) (T[] arr)
 {
 	return arr.length > 0;
 }

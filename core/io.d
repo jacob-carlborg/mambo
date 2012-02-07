@@ -20,7 +20,7 @@ import mambo.core.string;
  */
 void print (A...)(A args)
 {
-	static const string fmt = "{}{}{}{}{}{}{}{}"
+	static enum string fmt = "{}{}{}{}{}{}{}{}"
 				        	  "{}{}{}{}{}{}{}{}"
 				        	  "{}{}{}{}{}{}{}{}";
 			
@@ -37,7 +37,7 @@ void print (A...)(A args)
  */
 void println (A...)(A args)
 {
-	static const string fmt = "{}{}{}{}{}{}{}{}"
+	static enum string fmt = "{}{}{}{}{}{}{}{}"
 				        	  "{}{}{}{}{}{}{}{}"
 				        	  "{}{}{}{}{}{}{}{}";
 

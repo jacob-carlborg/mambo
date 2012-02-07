@@ -20,10 +20,10 @@ import orange.util.CTFE;
 template functionNameOf (alias func)
 {
 	version(LDC)
-		const functionNameOf = (&func).stringof[1 .. $];
+		enum functionNameOf = (&func).stringof[1 .. $];
 	
 	else
-		const functionNameOf = (&func).stringof[2 .. $];
+		enum functionNameOf = (&func).stringof[2 .. $];
 }
 
 /**
@@ -36,7 +36,7 @@ template functionNameOf (alias func)
  */
 template parameterNamesOf (alias func)
 {
-	const parameterNamesOf = parameterNamesOfImpl!(func);
+	enum parameterNamesOf = parameterNamesOfImpl!(func);
 }
 
 /**
@@ -54,8 +54,8 @@ private string[] parameterNamesOfImpl (alias func) ()
 	auto start = funcStr.indexOf('(');
 	auto end = funcStr.indexOf(')');
 	
-	const firstPattern = ' ';
-	const secondPattern = ',';
+	enum firstPattern = ' ';
+	enum secondPattern = ',';
 	
 	funcStr = funcStr[start + 1 .. end];
 	
@@ -107,7 +107,7 @@ private string[] parameterNamesOfImpl (alias func) ()
  */
 private string buildFunction (alias func, string args) ()
 {
-	const str = split(args);
+	enum str = split(args);
 	string[] params;
 	string[] values;
 	auto mixinString = functionNameOf!(func) ~ "(";
@@ -119,7 +119,7 @@ private string buildFunction (alias func, string args) ()
 		values ~= s[index + 1 .. $];
 	}		
 
-	const parameterNames = parameterNamesOf!(func);
+	enum parameterNames = parameterNamesOf!(func);
 
 	foreach (i, s ; parameterNames)
 	{
@@ -153,7 +153,7 @@ void callWithNamedArguments (alias func, string args) ()
  */
 template hasInstanceMethod (T, string method)
 {
-	const hasInstanceMethod = is(typeof({
+	enum hasInstanceMethod = is(typeof({
 		T t;
 		mixin("auto f = &t." ~ method ~ ";");
 	}));
@@ -168,7 +168,7 @@ template hasInstanceMethod (T, string method)
  */
 template hasClassMethod (T, string method)
 {
-	const hasClassMethod = is(typeof({
+	enum hasClassMethod = is(typeof({
 		mixin("auto f = &T." ~ method ~ ";");
 	}));
 }
@@ -182,7 +182,7 @@ template hasClassMethod (T, string method)
  */
 template hasMethod (T, string method)
 {
-	const hasMethod = hasClassMethod!(T, method) || hasInstanceMethod!(T, method);
+	enum hasMethod = hasClassMethod!(T, method) || hasInstanceMethod!(T, method);
 }
 
 /**
@@ -194,19 +194,19 @@ template hasMethod (T, string method)
  */
 template hasField (T, string field)
 {
-	const hasField = hasFieldImpl!(T, field, 0);
+	enum hasField = hasFieldImpl!(T, field, 0);
 }
 
 private template hasFieldImpl (T, string field, size_t i)
 {
 	static if (T.tupleof.length == i)
-		const hasFieldImpl = false;
+		enum hasFieldImpl = false;
 	
 	else static if (T.tupleof[i].stringof[1 + T.stringof.length + 2 .. $] == field)
-		const hasFieldImpl = true;
+		enum hasFieldImpl = true;
 	
 	else
-		const hasFieldImpl = hasFieldImpl!(T, field, i + 1);		
+		enum hasFieldImpl = hasFieldImpl!(T, field, i + 1);		
 }
 
 /**
@@ -214,7 +214,7 @@ private template hasFieldImpl (T, string field, size_t i)
  */
 template fieldsOf (T)
 {
-	const fieldsOf = fieldsOfImpl!(T, 0);
+	enum fieldsOf = fieldsOfImpl!(T, 0);
 }
 
 /**
@@ -225,13 +225,13 @@ template fieldsOf (T)
 template fieldsOfImpl (T, size_t i)
 {
 	static if (T.tupleof.length == 0)
-		const fieldsOfImpl = [""];
+		enum fieldsOfImpl = [""];
 	
 	else static if (T.tupleof.length - 1 == i)
-		const fieldsOfImpl = [T.tupleof[i].stringof[1 + T.stringof.length + 2 .. $]];
+		enum fieldsOfImpl = [T.tupleof[i].stringof[1 + T.stringof.length + 2 .. $]];
 	
 	else
-		const fieldsOfImpl = T.tupleof[i].stringof[1 + T.stringof.length + 2 .. $] ~ fieldsOfImpl!(T, i + 1);
+		enum fieldsOfImpl = T.tupleof[i].stringof[1 + T.stringof.length + 2 .. $] ~ fieldsOfImpl!(T, i + 1);
 }
 
 /**
@@ -269,10 +269,10 @@ template nameOfFieldAt (T, size_t position)
     static assert (position < T.tupleof.length, format!(`The given position "`, position, `" is greater than the number of fields (`, T.tupleof.length, `) in the type "`, T, `"`));
     
 	static if (T.tupleof[position].stringof.length > T.stringof.length + 3)
-		const nameOfFieldAt = T.tupleof[position].stringof[1 + T.stringof.length + 2 .. $];
+		enum nameOfFieldAt = T.tupleof[position].stringof[1 + T.stringof.length + 2 .. $];
 	
 	else
-		const nameOfFieldAt = "";
+		enum nameOfFieldAt = "";
 }
 
 /**
@@ -289,11 +289,11 @@ in
 }
 body
 {
-	const len = T.stringof.length; 
+	enum len = T.stringof.length; 
 	
 	foreach (i, dummy ; typeof(T.tupleof))
 	{
-		const f = T.tupleof[i].stringof[1 + len + 2 .. $];
+		enum f = T.tupleof[i].stringof[1 + len + 2 .. $];
 		
 		static if (f == field)
 		{
@@ -318,11 +318,11 @@ in
 }
 body
 {
-	const len = T.stringof.length; 
+	enum len = T.stringof.length; 
 	
 	foreach (i, dummy ; typeof(T.tupleof))
 	{
-		const f = T.tupleof[i].stringof[1 + len + 2 .. $];
+		enum f = T.tupleof[i].stringof[1 + len + 2 .. $];
 		
 		static if (f == field)
 			return t.tupleof[i];
@@ -341,8 +341,8 @@ body
  */
 string[] getClassNames (string code) ()
 {
-	const fileContent = code;
-	const classString = "class";
+	enum fileContent = code;
+	enum classString = "class";
 	bool foundPossibleClass;
 	bool foundClass;
 	string[] classNames;

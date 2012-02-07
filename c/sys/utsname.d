@@ -16,7 +16,7 @@ extern (C):
 
 version (darwin)
 {
-	private const size_t len = 256;
+	private enum size_t len = 256;
 	
 	struct utsname
 	{
@@ -30,7 +30,7 @@ version (darwin)
 
 else version (freebsd)
 {
-	private const size_t len = 256;
+	private enum size_t len = 256;
 	
 	struct utsname
 	{
@@ -44,7 +44,7 @@ else version (freebsd)
 
 else version (linux)
 {
-	private const size_t len = 65;
+	private enum size_t len = 65;
 	
 	struct utsname
 	{

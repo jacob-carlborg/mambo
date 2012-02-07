@@ -4,11 +4,7 @@
  * Version: Initial created: Jan 26, 2010
  * License: $(LINK2 http://www.boost.org/LICENSE_1_0.txt, Boost Software License 1.0)
  */
-module orange.util.Traits;
-
-import orange.serialization.Serializable;
-import orange.serialization.archives.Archive;
-import orange.util._;
+module mambo.util.Traits;
 
 import Phobos = std.traits;
 
@@ -197,29 +193,4 @@ template ValueTypeOfAssociativeArray (T)
 {
 	static assert(isAssociativeArray!(T), "The type needs to be an associative array");
 	alias typeof(T.init.values[0]) ValueTypeOfAssociativeArray;
-}
-
-/// Evaluates to true if $(D_PARAM T) is an archive.
-template isArchive (T)
-{
-	enum isArchive = is(typeof({
-		alias T.DataType Foo;
-	})) &&
-
-	is(typeof(T.archive(0, TypeOfDataType!(T).init, {}))) &&
-	is(typeof(T.unarchive!(int))) && 
-	is(typeof(T.beginArchiving)) &&
-	is(typeof(T.beginUnarchiving(TypeOfDataType!(T).init))) &&
-	is(typeof(T.archiveBaseClass!(Object))) &&
-	is(typeof(T.unarchiveBaseClass!(Object))) &&
-	is(typeof(T.reset)) &&
-	is(typeof({TypeOfDataType!(T) a = T.data;})) &&
-	is(typeof(T.unarchiveAssociativeArrayVisitor!(int[string])));
-	
-}
-
-/// Evaluates to the type of the data type.
-template TypeOfDataType (T)
-{
-	alias T.DataType TypeOfDataType;
 }

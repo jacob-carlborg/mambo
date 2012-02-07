@@ -637,3 +637,8 @@ T[] repeat (T) (T[] arr, int number)
 {
 	return arr.length > 0;
 }
+
+@property T first (T) (T[] arr)
+{
+	return arr[0];
+}

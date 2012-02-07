@@ -5,13 +5,15 @@
  * License: $(LINK2 http://www.boost.org/LICENSE_1_0.txt, Boost Software License 1.0)
  * 
  */
-module mambo.string;
+module mambo.core.string;
 
+import std.array;
+import std.conv;
+import std.ctype : isxdigit;
 import std.string;
 import std.utf;
-import std.ctype : isxdigit;
 
-public import mambo.collection.Array;
+public import mambo.core.Array;
 import mambo.util.Version;
 import mambo.util.Traits;
 
@@ -24,7 +26,8 @@ alias std.utf.toUTF32 toString32;
 alias std.string.toStringz toStringz;
 alias std.utf.toUTF16z toString16z;
 
-alias std.string.toString fromStringz;
+alias to!(string) fromStringz;
+alias std.array.replace replace;
 
 /**
  * Compares the $(D_PSYMBOL string) to another $(D_PSYMBOL string), ignoring case
@@ -537,7 +540,7 @@ body
 	return str[pos .. end].idup;
 }
 
-/**
+/+/**
  * Finds the first occurence of sub in str
  * 
  * Params:
@@ -549,7 +552,7 @@ body
  */
 size_t find (string str, string sub, size_t start = 0)
 {
-	return std.string.find(str, sub, start);
+	return std.algorithm.find(str, sub, start);
 }
 
 /**
@@ -564,7 +567,7 @@ size_t find (string str, string sub, size_t start = 0)
  */
 size_t find (wstring str, wstring sub, size_t start = 0)
 {
-	return std.string.find(str, sub, start);
+	return std.algorithm.find(str, sub, start);
 }
 
 /**
@@ -579,8 +582,8 @@ size_t find (wstring str, wstring sub, size_t start = 0)
  */
 size_t find (dstring str, dstring sub, size_t start = 0)
 {
-	return std.string.find(str, sub, start);
-}
+	return std.algorithm.find(str, sub, start);
+}+/
 
 /**
  * Compares to strings, ignoring case differences. Returns 0 if the content
@@ -747,50 +750,6 @@ size_t strlen (dchar* str)
 			++i;
 	
 	return i;
-}
-
-T[] replace (T) (T[] source, dchar match, dchar replacement)
-{
-	static assert(isChar!(T), `The type "` ~ T.stringof ~ `" is not a valid type for this function only strings are accepted`);
-	
-	dchar endOfCodeRange;
-	
-	static if (is(T == wchar))
-	{
-		const encodedLength = 2;
-		endOfCodeRange = 0x00FFFF;
-	}
-	
-	else static if (is(T == char))
-	{
-		const encodedLength = 4;
-		endOfCodeRange = '\x7F';
-	}
-	
-	if (replacement <= endOfCodeRange && match <= endOfCodeRange)
-	{
-		foreach (ref c ; source)
-			if (c == match)
-				c = replacement;
-		
-		return source;
-	}
-	
-	else
-	{
-		static if (!is(T == dchar))
-		{
-			T[encodedLength] encodedMatch;
-			T[encodedLength] encodedReplacement;			
-
-			auto matchLength = encode(encodedMatch, match);
-			auto replacementLength = encode(encodedReplacement, replacement);
-			
-			return std.string.replace(source, encodedMatch[0 .. matchLength], encodedReplacement[0 .. replacementLength]);
-		}
-	}
-	
-	return source;
 }
 
 /**

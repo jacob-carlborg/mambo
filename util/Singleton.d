@@ -4,7 +4,7 @@
  * Version: Initial created: Aug 15, 2010
  * License: $(LINK2 http://www.boost.org/LICENSE_1_0.txt, Boost Software License 1.0)
  */
-module dvm.util.Singleton;
+module mambo.util.Singleton;
 
 template Singleton ()
 {

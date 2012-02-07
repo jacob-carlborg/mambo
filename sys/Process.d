@@ -6,20 +6,18 @@
  */
 module mambo.sys.Process;
 
-import mambo.core.string;
-
 version (darwin)
 {
-	import tango.stdc.posix.stdlib;
-	import tango.stdc.stringz;
+	import core.stdc.posix.stdlib;
+	import core.stdc.stringz;
 	private extern (C) int _NSGetExecutablePath(char* buf, uint* bufsize);
 }
 
 else version (freebsd)
-	import tango.stdc.posix.unistd;
+	import core.stdc.posix.unistd;
 
 else version (linux)
-	import tango.stdc.posix.unistd;
+	import core.stdc.posix.unistd;
 
 else version (Windows)
 {

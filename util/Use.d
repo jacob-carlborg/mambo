@@ -6,21 +6,12 @@
  */
 module orange.util.Use;
 
-version (Tango)
-{
-	import tango.core.Tuple;
-	import tango.core.Traits;
-}
+import std.typetuple;
+import std.typecons;
+import std.traits;
 
-else
-{
-	import std.typetuple;
-	import std.typecons;
-	import std.traits;
-	
-	alias ReturnType ReturnTypeOf;
-	alias ParameterTypeTuple ParameterTupleOf;
-}
+alias ReturnType ReturnTypeOf;
+alias ParameterTypeTuple ParameterTupleOf;
 
 /**
  * This struct can be used to implement, what looks similar to, new statements. This

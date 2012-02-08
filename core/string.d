@@ -684,7 +684,7 @@ bool isHexDigit (dchar ch)
  *     
  * Returns: the a C-style 0 terminated string.
  */
-dchar* toString32z (dstring str)
+immutable(dchar)* toString32z (dstring str)
 {
 	return (str ~ '\0').ptr;
 }
@@ -699,7 +699,7 @@ dchar* toString32z (dstring str)
  */
 wstring fromString16z (wchar* str)
 {
-	return str[0 .. strlen(str)];
+	return str[0 .. strlen(str)].idup;
 }
 
 /**
@@ -711,7 +711,7 @@ wstring fromString16z (wchar* str)
  */
 dstring fromString32z (dchar* str)
 {
-	return str[0 .. strlen(str)];
+	return str[0 .. strlen(str)].idup;
 }
 
 /**

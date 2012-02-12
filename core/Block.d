@@ -8,7 +8,7 @@ module mambo.core.Block;
 
 struct Block
 {
-	private void delegate (void delegate ()) dg;
+	void delegate (void delegate ()) dg;
 	
 	void opIn (void delegate () dg)
 	{

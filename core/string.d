@@ -29,6 +29,8 @@ alias std.utf.toUTF16z toString16z;
 alias to!(string) fromStringz;
 alias std.array.replace replace;
 
+alias std.string.join join;
+
 /**
  * Compares the $(D_PSYMBOL string) to another $(D_PSYMBOL string), ignoring case
  * considerations.  Two strings are considered equal ignoring case if they are of the

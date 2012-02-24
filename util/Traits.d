@@ -6,11 +6,9 @@
  */
 module orange.util.Traits;
 
-import orange.serialization.Serializable;
-import orange.serialization.archives.Archive;
-import orange.util._;
-
 import Tango = tango.core.Traits;
+
+import mambo.core.string;
 
 ///
 alias Tango.BaseTypeTupleOf BaseTypeTupleOf;
@@ -20,8 +18,6 @@ alias Tango.ParameterTupleOf ParameterTupleOf;
 
 ///
 alias Tango.ReturnTypeOf ReturnTypeOf;
-
-import orange.core.string;
 
 /// Evaluates to true if $(D_PARAM T) is a primitive type.
 template isPrimitive (T)

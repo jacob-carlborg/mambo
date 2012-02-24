@@ -4,10 +4,10 @@
  * Version: Initial created: Oct 5, 2009
  * License: $(LINK2 http://www.boost.org/LICENSE_1_0.txt, Boost Software License 1.0)
  */
-module orange.util.Reflection;
+module mambo.util.Reflection;
 
-import orange.core.string;
-import orange.util.CTFE;
+import mambo.core.string;
+import mambo.util.Ctfe;
 
 /**
  * Returns the name of the given function

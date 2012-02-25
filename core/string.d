@@ -9,7 +9,7 @@ module mambo.core.string;
 
 import std.array;
 import std.conv;
-import std.ctype : isxdigit;
+static import std.ascii;
 import std.string;
 import std.utf;
 
@@ -17,7 +17,7 @@ public import mambo.core.Array;
 import mambo.util.Version;
 import mambo.util.Traits;
 
-private alias std.string.tolower toFold;
+private alias std.string.toLower toFold;
 
 alias std.utf.toUTF8 toString;
 alias std.utf.toUTF16 toString16;
@@ -30,6 +30,8 @@ alias to!(string) fromStringz;
 alias std.array.replace replace;
 
 alias std.string.join join;
+
+alias std.ascii.isHexDigit isHexDigit;
 
 /**
  * Compares the $(D_PSYMBOL string) to another $(D_PSYMBOL string), ignoring case
@@ -663,20 +665,6 @@ int compareIgnoreCase (U = size_t) (dstring a, dstring b, U end = U.max)
  * See_Also: mambo.string.compareIgnoreCase
  */
 alias compareIgnoreCase icompare;
-
-/**
- * Checks if the given character is a hexdecimal digit character.
- * Hexadecimal digits are any of: 0 1 2 3 4 5 6 7 8 9 a b c d e f A B C D E F
- * 
- * Params:
- *     ch = the character to be checked
- *     
- * Returns: true if the given character is a hexdecimal digit character otherwise false
- */
-bool isHexDigit (dchar ch)
-{
-	return isxdigit(ch) != 0;
-}
 
 /**
  * Converts the given string to C-style 0 terminated string.

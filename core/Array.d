@@ -277,7 +277,7 @@ bool contains (T) (T[] arr, T[] pattern)
  *
  * Returns: $(D_KEYWORD true) if this array contains no elements
  */
-bool isEmpty (T) (T[] arr)
+@property bool isEmpty (T) (T[] arr)
 {
 	return arr.length == 0;
 }

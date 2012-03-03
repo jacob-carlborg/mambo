@@ -10,5 +10,6 @@ public:
 
 import mambo.core.Array;
 import mambo.core.Block;
+import mambo.core.core;
 import mambo.core.io;
 import mambo.core.string;

@@ -283,16 +283,6 @@ bool isEmpty (T) (T[] arr)
 }
 
 /**
- * Returns $(D_KEYWORD true) if this array contains no elements.
- * 
- * Params:
- *     arr = the array to check if it's empty
- *
- * Returns: $(D_KEYWORD true) if this array contains no elements
- */
-alias isEmpty empty;
-
-/**
  * Removes all of the elements from this array. The array will be empty after this call
  * returns.
  * 
@@ -312,30 +302,6 @@ body
 {
 	arr.length = 0;
 	return arr;
-}
-
-/**
- * Returns the element at the specified position in the array.
- * 
- * Params:
- * 	   arr = the array to get the element from
- *     index = index of the element to return
- *     
- * Returns: the element at the specified position in the array
- * 
- * Throws: AssertException if the length of the array is 0
- * Throws: AssertException if the $(D_PARAM index) argument is
- *         not less than the length of this array.
- */
-T get (T, U = size_t) (T[] arr, U index)
-in
-{
-	assert(arr.length > 0, "mambo.collection.Array.get: The length of the array was 0");
-	assert(index < arr.length, "mambo.collection.Array.get: The index was greater than the length of the array");
-}
-body
-{
-	return arr[index];
 }
 
 /**
@@ -365,19 +331,6 @@ body
 			return i;
 
 	return U.max;
-}
-
-/**
- * Returns the number of elements in the specified array. 
- * 
- * Params:
- *     arr = the array to get the number of elements from
- *     
- * Returns: the number of elements in this list
- */
-U size (T, U = size_t) (T[] arr)
-{
-	return arr.length;
 }
 
 /**
@@ -567,18 +520,6 @@ body
 }
 
 /**
- * Reserves the given amount of allocated storage for the given array.
- * 
- * Params:
- *     a = the array to reserve allocated storage for
- *     capacity = the amount of allocated storage to be reserved
- */
-void reserve (T) (ref T[] a, size_t amount = 0)
-{
-	a = (new T[amount])[0 .. 0]; 
-}
-
-/**
  * Returns true if a begins with b
  * 
  * Params:
@@ -638,6 +579,11 @@ T[] repeat (T) (T[] arr, int number)
 	return arr.length > 0;
 }
 
+/**
+ * Returns the first element of the given array.
+ *
+ * Returns: the first element of the given array
+ */
 @property T first (T) (T[] arr)
 {
 	return arr[0];

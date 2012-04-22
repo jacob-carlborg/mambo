@@ -13,6 +13,9 @@ import stdString = std.string;
 
 import mambo.util.Traits;
 
+alias algorithm.map map;
+alias algorithm.join join;
+
 /**
  * Inserts the specified element at the specified position in the array. Shifts the
  * element currently at that position (if any) and any subsequent elements to the right.
@@ -260,9 +263,15 @@ bool contains (T) (T[] arr, T[] pattern)
  *
  * Returns: $(D_KEYWORD true) if this array contains no elements
  */
-@property bool isEmpty (T) (T[] arr)
+@property bool isEmpty (T) (T arr)
+    if (__traits(compiles, { auto a = arr.length; }) ||
+        __traits(compiles, { bool b = arr.empty; }))
 {
-	return arr.length == 0;
+    static if (__traits(compiles, { auto a = arr.length; }))
+        return arr.length == 0;
+        
+    else
+        return arr.empty;
 }
 
 /**
@@ -557,9 +566,9 @@ T[] repeat (T) (T[] arr, int number)
  *
  * Returns: $(D_KEYWORD true) if this array contains elements
  */
-@property bool any (T) (T[] arr)
+@property bool any (T) (T arr) if (__traits(compiles, { bool a = arr.isEmpty; }))
 {
-	return arr.length > 0;
+	return !arr.isEmpty;
 }
 
 /**

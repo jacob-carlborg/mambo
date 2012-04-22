@@ -10,6 +10,7 @@ module mambo.core.Array;
 import std.c.string : memmove;
 import algorithm = std.algorithm;
 import stdString = std.string;
+import stdArray = std.array;
 
 import mambo.util.Traits;
 
@@ -571,12 +572,26 @@ T[] repeat (T) (T[] arr, int number)
 	return !arr.isEmpty;
 }
 
-/**
- * Returns the first element of the given array.
- *
- * Returns: the first element of the given array
- */
-@property T first (T) (T[] arr)
+/// Returns the first element of the given array.
+@property auto first (T) (T[] arr)
 {
-	return arr[0];
+	return stdArray.front(arr);
+}
+
+/// Returns the first element of the given array.
+@property auto last (T) (T[] arr)
+{
+	return stdArray.back(arr);
+}
+
+/// Strips all the trailing delimiters from the given array.
+T[] strip (T, C) (T[] arr, C delimiter)
+{
+	auto a = arr;
+	auto del = [delimiter];
+	
+	while (a.last == delimiter)
+		a = stdString.chomp(a, del);
+	
+	return a;
 }

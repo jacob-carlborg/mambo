@@ -171,34 +171,17 @@ body
 }
 
 /**
- * Removes the specified element from the array if it could find it and returns it.
- * Shifts any subsequent elements to the left.
+ * Removes the given elements from the given array.
  * 
  * Params:
- *     arr = the array to remove the element from
- *     element = the element to be removed
+ *     arr = the array to remove the elements from
+ *     elements = the elements to be removed
  *     
- * Returns: the element that was removed or T.max
- * 
- * Throws: AssertException if the length of the array is 0
+ * Returns: the array with the elements removed
  */
-T remove (T) (ref T[] arr, T element)
-in
+T[] remove (T) (T[] arr, T[] elements ...)
 {
-	assert(arr.length > 0, "mambo.collection.Array.remove: The length of the array was 0");
-}
-out (result)
-{
-	assert(result is element);
-}
-body
-{
-	size_t index = arr.indexOf(element);
-
-	if (index == size_t.max)
-		return T.max;
-
-	return arr.remove(index);
+    return algorithm.remove!((e) => elements.contains(e))(arr);
 }
 
 /**
@@ -223,11 +206,11 @@ in
 }
 body
 {
-	static if (isString!(T))
+	static if (isChar!(T))
 		return stdString.indexOf(arr, element);
 	
 	else
-		return algorithm.find(arr[start .. $], element);
+		return algorithm.countUntil(arr[start .. $], element);
 }
 
 /**

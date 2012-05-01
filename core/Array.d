@@ -587,6 +587,9 @@ T[] repeat (T) (T[] arr, int number)
 /// Strips all the trailing delimiters from the given array.
 T[] strip (T, C) (T[] arr, C delimiter)
 {
+	if (arr.isEmpty)
+		return arr;
+	
 	auto a = arr;
 	auto del = [delimiter];
 	

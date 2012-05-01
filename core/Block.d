@@ -6,11 +6,11 @@
  */
 module mambo.core.Block;
 
-struct Block
+struct Block (Args ...)
 {
-	void delegate (void delegate ()) dg;
+	void delegate (void delegate (Args)) dg;
 	
-	void opIn (void delegate () dg)
+	void opIn (void delegate (Args) dg)
 	{
 		this.dg(dg);
 	}

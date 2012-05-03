@@ -4,7 +4,7 @@
  * Version: Initial created: Jan 29, 2010
  * License: $(LINK2 http://www.boost.org/LICENSE_1_0.txt, Boost Software License 1.0)
  */
-module orange.util.Use;
+module mambo.util.Use;
 
 import tango.core.Tuple;
 import tango.core.Traits;

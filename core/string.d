@@ -5,16 +5,19 @@
  * License: $(LINK2 http://www.boost.org/LICENSE_1_0.txt, Boost Software License 1.0)
  * 
  */
-module mambo.string;
+module mambo.core.string;
 
-public import mambo.core.Array;
-import mambo.util.Version;
-import mambo.util.Traits;
+import std.array;
+static import std.ascii;
 
 static import tango.stdc.stringz;
 import tango.text.Unicode : toFold, isDigit;
 import tango.text.convert.Utf;
 import tango.text.Util;
+
+public import mambo.core.Array;
+import mambo.util.Version;
+import mambo.util.Traits;
 
 alias tango.stdc.stringz.toStringz toStringz;
 alias tango.stdc.stringz.toString16z toString16z;
@@ -26,6 +29,9 @@ alias tango.stdc.stringz.fromString32z fromString32z;
 
 alias tango.text.convert.Utf.toString16 toString16;
 alias tango.text.convert.Utf.toString32 toString32;
+
+alias std.array.replace replace;
+alias std.ascii.isHexDigit isHexDigit;
 
 /**
  * Compares the $(D_PSYMBOL string) to another $(D_PSYMBOL string), ignoring case
@@ -236,127 +242,4 @@ int compareIgnoreCase (U = size_t) (wstring a, wstring b, U end = U.max)
 int compareIgnoreCase (U = size_t) (dstring a, dstring b, U end = U.max)
 {
 	return a.toFold().compare(b.toFold(), end);
-}
-
-/**
- * Checks if the given character is a hexdecimal digit character.
- * Hexadecimal digits are any of: 0 1 2 3 4 5 6 7 8 9 a b c d e f A B C D E F
- * 
- * Params:
- *     ch = the character to be checked
- *     
- * Returns: true if the given character is a hexdecimal digit character otherwise false
- */
-bool isHexDigit (dchar ch)
-{
-	switch (ch)
-	{
-		case 'A': return true;				
-		case 'B': return true;
-		case 'C': return true;
-		case 'D': return true;
-		case 'E': return true;
-		case 'F': return true;
-		
-		case 'a': return true;
-		case 'b': return true;
-		case 'c': return true;
-		case 'd': return true;
-		case 'e': return true;
-		case 'f': return true;
-		
-		default: break;
-	}
-	
-	if (isDigit(ch))
-		return true;
-		
-	return false;
-}
-
-T[] replace (T) (T[] source, dchar match, dchar replacement)
-{
-	static assert(isChar!(T), `The type "` ~ T.stringof ~ `" is not a valid type for this function only strings are accepted`);
-	
-	dchar endOfCodeRange;
-	
-	static if (is(T == wchar))
-	{
-		const encodedLength = 2;
-		endOfCodeRange = 0x00FFFF;
-	}
-	
-	else static if (is(T == char))
-	{
-		const encodedLength = 4;
-		endOfCodeRange = '\x7F';
-	}
-	
-	if (replacement <= endOfCodeRange && match <= endOfCodeRange)
-	{
-		foreach (ref c ; source)
-			if (c == match)
-				c = replacement;
-		
-		return source;
-	}
-	
-	else
-	{
-		static if (!is(T == dchar))
-		{
-			T[encodedLength] encodedMatch;
-			T[encodedLength] encodedReplacement;
-
-			return source.substitute(encode(encodedMatch, match), encode(encodedReplacement, replacement));
-		}
-	}
-	
-	return source;
-}
-
-/**
- * Returns true if the given string is blank. A string is considered blank if any of
- * the following conditions are true:
- * 
- * $(UL
- * 	$(LI The string is null)
- * 	$(LI The length of the string is equal to 0)
- * 	$(LI The string is equal to the empty string, "")
- * )
- * 
- * Params:
- *     str = the string to test if it's blank
- *     
- * Returns: $(D_KEYWORD true) if any of the above conditions are met
- * 
- * See_Also: isPresent 
- */
-@property bool isBlank (T) (T[] str)
-{
-	return str is null || str.length == 0 || str == "";
-}
-
-/**
- * Returns true if the given string is present. A string is conditions present if all
- * of the following conditions are true:
- * 
- * $(UL
- * 	$(LI The string is not null)
- * 	$(LI The length of the string is greater than 0)
- * 	$(LI The string is not equal to the empty string, "")
- * )
- * 
- * The above conditions are basically the opposite of isBlank.
- * 
- * Params:
- *     str = the string to test if it's present
- *     
- * Returns: $(D_KEYWORD true) if all of the above conditions are met
- * 
- * See_Also: isBlank
- */
-@property bool isPresent (T) (T[] str)
-{
-	return !str.isBlank();
 }

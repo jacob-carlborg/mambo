@@ -5,7 +5,7 @@
  * License: $(LINK2 http://www.boost.org/LICENSE_1_0.txt, Boost Software License 1.0)
  * 
  */
-module mambo.io;
+module mambo.core.io;
 
 import tango.io.Stdout;
 import tango.io.Console;

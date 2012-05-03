@@ -4,7 +4,7 @@
  * Version: Initial created: Jan 26, 2010
  * License: $(LINK2 http://www.boost.org/LICENSE_1_0.txt, Boost Software License 1.0)
  */
-module orange.util.Traits;
+module mambo.util.Traits;
 
 import Tango = tango.core.Traits;
 
@@ -50,7 +50,12 @@ template isPrimitive (T)
 /// Evaluates to true if $(D_PARAM T) is a character type.
 template isChar (T)
 {
-	enum bool isChar = is(T == char) || is(T == wchar) || is(T == dchar);
+	enum bool isChar = is(T == char) ||
+		is(T == wchar) ||
+		is(T == dchar) ||
+		is(T == immutable(char)) ||
+		is(T == immutable(wchar)) ||
+		is(T == immutable(dchar));
 }
 
 /// Evaluates to true if $(D_PARAM T) is a floating point type.

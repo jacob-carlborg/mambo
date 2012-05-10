@@ -7,41 +7,71 @@
  */
 module mambo.core.io;
 
-import tango.io.Stdout;
-import tango.io.Console;
-
-import mambo.core.string;
-
-/**
- * Print to the standard output
- * 
- * Params:
- *     args = what to print
- */
-void print (A...)(A args)
+version (Tango)
 {
-	static enum string fmt = "{}{}{}{}{}{}{}{}"
-				        	  "{}{}{}{}{}{}{}{}"
-				        	  "{}{}{}{}{}{}{}{}";
-			
-	static assert (A.length <= fmt.length / 2, "mambo.io.print :: too many arguments");
-	
-	Stdout.format(fmt[0 .. args.length * 2], args).flush;
+	import tango.io.Stdout;
+	import tango.io.Console;
+
+	import mambo.core.string;
+
+	/**
+	 * Print to the standard output
+	 * 
+	 * Params:
+	 *     args = what to print
+	 */
+	void print (A...)(A args)
+	{
+		static enum string fmt = "{}{}{}{}{}{}{}{}"
+					        	  "{}{}{}{}{}{}{}{}"
+					        	  "{}{}{}{}{}{}{}{}";
+
+		static assert (A.length <= fmt.length / 2, "mambo.io.print :: too many arguments");
+
+		Stdout.format(fmt[0 .. args.length * 2], args).flush;
+	}
+
+	/**
+	 * Print to the standard output, adds a new line
+	 * 
+	 * Params:
+	 *     args = what to print
+	 */
+	void println (A...)(A args)
+	{
+		static enum string fmt = "{}{}{}{}{}{}{}{}"
+					        	  "{}{}{}{}{}{}{}{}"
+					        	  "{}{}{}{}{}{}{}{}";
+
+		static assert (A.length <= fmt.length / 2, "mambo.io.println :: too many arguments");
+
+		Stdout.formatln(fmt[0 .. args.length * 2], args);
+	}
 }
 
-/**
- * Print to the standard output, adds a new line
- * 
- * Params:
- *     args = what to print
- */
-void println (A...)(A args)
+else
 {
-	static enum string fmt = "{}{}{}{}{}{}{}{}"
-				        	  "{}{}{}{}{}{}{}{}"
-				        	  "{}{}{}{}{}{}{}{}";
+	import std.stdio;
 
-	static assert (A.length <= fmt.length / 2, "mambo.io.println :: too many arguments");
-	
-	Stdout.formatln(fmt[0 .. args.length * 2], args);
+	/**
+	 * Print to the standard output
+	 * 
+	 * Params:
+	 *     args = what to print
+	 */
+	void print (A...)(A args)
+	{
+		write(args);
+	}
+
+	/**
+	 * Print to the standard output, adds a new line
+	 * 
+	 * Params:
+	 *     args = what to print
+	 */
+	void println (A...)(A args)
+	{
+		writeln(args);
+	}
 }

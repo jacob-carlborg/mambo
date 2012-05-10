@@ -14,7 +14,6 @@ static import tango.stdc.stringz;
 import tango.text.Unicode : toFold, isDigit;
 import tango.text.convert.Utf;
 import tango.text.Util;
-import tango.util.Convert;
 
 public import mambo.core.Array;
 import mambo.util.Version;
@@ -248,5 +247,6 @@ int compareIgnoreCase (U = size_t) (dstring a, dstring b, U end = U.max)
 /// Converts the given value to a string.
 string toString (T) (T value)
 {
+	import std.conv;
 	return to!(string)(value);
 }

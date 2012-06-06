@@ -22,78 +22,40 @@ alias algorithm.join join;
 alias algorithm.map map;
 
 /**
- * Inserts the specified element at the specified position in the array. Shifts the
+ * Inserts the given element(s) or range at the given position into the array. Shifts the
  * element currently at that position (if any) and any subsequent elements to the right.
  * 
  * Params:
- *     arr = the array to insert the element into
- *     index = the index at which the specified element is to be inserted
- *     element = the element to be inserted
+ *     arr = the array to insert the element(s) or range into
+ *     index = the index at which the specified element(s) or range is to be inserted to
+ *     r = the element(s) or range to be inserted 
  *     
- * Returns: the modified array
- *     
- * Throws: AssertException if the length of the array is 0
- * Throws: AssertException if the $(D_PARAM index) argument is
- *         greater than the length of this array.
+ * Returns: a copy of the given array with the element(s) or range inserted
  */
-T[] insert (T, U = size_t) (ref T[] arr, U index, T element)
-in
+T[] insert (T, RangeOrElement...) (T[] arr, size_t index, RangeOrElement r)
 {
-	assert(arr.length > 0, "mambo.collection.Array.insert: The length of the array was 0");
-	assert(index <= arr.length, "mambo.collection.Array.insert: The index was greater than the length of the array");
-}
-body
-{
-	if (index == arr.length)
-	{
-		arr ~= element;
-		return arr;
-	}
-
-	else if (index == 0)
-		arr = element ~ arr;
-
-	else
-		arr = arr[0 .. index] ~ element ~ arr[index .. $];
-
-	return arr;
+	auto copy = arr.dup;
+	stdArray.insertInPlace(copy, index, r);
+	return copy;
 }
 
 /**
- * Inserts the specified elements at the specified position in the array. Shifts the
- * element currently at that position (if any) and any subsequent elements to the right.
- * 
- * Params:
- *     arr = the array to insert the element into
- *     index = the index at which the specified element is to be inserted
- *     element = the element to be inserted
+* Inserts the given element(s) or range, in place, at the given position into the array.
+* Shifts the element currently at that position (if any) and any subsequent elements to the
+* right.
+* 
+* This will modify the given array in place.
+* 
+* Params:
+*     arr = the array to insert the element(s) or range into
+*     index = the index at which the specified element(s) or range is to be inserted to
+*     r = the element(s) or range to be inserted
  *     
- * Returns: the modified array
- *     
- * Throws: AssertException if the length of the array is 0
- * Throws: AssertException if the $(D_PARAM index) argument is
- *         not less or equal than the length of this array. 
+ * Returns: the modified array with the element(s) or range inserted
  */
-T[] insert (T, U = size_t) (ref T[] arr, U index, T[] element)
-in
+T[] insertInPlace (T, RangeOrElement...) (ref T[] arr, size_t index, RangeOrElement r)
 {
-	assert(arr.length > 0, "mambo.collection.Array.insert: The length of the array was 0");
-	assert(index <= arr.length, "mambo.collection.Array.insert: The index was greater than the length of the array");
-}
-body
-{
-	if (index == arr.length)
-	{
-		arr ~= element;
-		return arr;
-	}
-
-	else if (index == 0)
-		arr = element ~ arr;
-
-	else
-		arr = arr[0 .. index] ~ element ~ arr[index .. $];
-
+	stdArray.insertInPlace(arr, index, r);
 	return arr;
 }
 

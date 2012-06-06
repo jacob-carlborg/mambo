@@ -20,6 +20,8 @@ import mambo.util.Traits;
 alias algorithm.filter filter;
 alias algorithm.join join;
 alias algorithm.map map;
+alias algorithm.canFind contains;
+alias algorithm.countUntil indexOf;
 
 /**
  * Inserts the given element(s) or range at the given position into the array. Shifts the
@@ -71,75 +73,6 @@ T[] insertInPlace (T, RangeOrElement...) (ref T[] arr, size_t index, RangeOrElem
 T[] remove (T) (T[] arr, T[] elements ...)
 {
     return algorithm.remove!((e) => elements.contains(e))(arr);
-}
-
-/**
- * Returns the index of the first occurrence of the specified element in the array, or
- * U.max if the array does not contain the element. 
- * 
- * Params:
- *     arr = the array to get the index of the element from
- *     element = the element to find
- *     start = the index where to begin the search
- *     
- * Returns: the index of the element or U.max if it's not in the array
- * 
- * Throws: AssertException if the length of the array is 0
- * Throws: AssertException if the return value is greater or   
- * 		   equal to the length of the array.
- */
-U indexOf (T, U = size_t) (T[] arr, T element, U start = 0)
-in
-{
-	assert(start >= 0, "mambo.collection.Array.indexOf: The start index was less than 0");
-}
-body
-{
-	U index = tango.text.Util.locate(arr, element, start);
-	
-	if (index == arr.length)
-		index = U.max;
-
-	return index;
-}
-
-/**
- * Returns $(D_KEYWORD true) if the array contains the specified element.
- * 
- * Params:
- *     arr = the array to check if it contains the element
- *     element = the element whose presence in the array is to be tested
- *     
- * Returns: $(D_KEYWORD true) if the array contains the specified element
- * 
- * Throws: AssertException if the length of the array is 0
- */
-bool contains (T) (T[] arr, T element)
-in
-{
-	assert(arr.length > 0, "mambo.collection.Array.contains: The length of the array was 0");
-}
-body
-{
-	return arr.indexOf!(T, size_t)(element) < size_t.max;
-}
-
-/**
- * Returns $(D_KEYWORD true) if the array contains the given pattern.
- * 
- * Params:
- *     arr = the array to check if it contains the element
- *     pattern = the pattern whose presence in the array is to be tested
- *     
- * Returns: $(D_KEYWORD true) if the array contains the given pattern
- */
-bool contains (T) (T[] arr, T[] pattern)
-{
-	static if (isChar!(T))
-		return tango.text.Util.containsPattern(arr, pattern);
-	
-	else
-		return tango.core.Array.contains(arr, pattern);
 }
 
 /**
@@ -271,6 +204,11 @@ T[] repeat (T) (T[] arr, int number)
 @property bool any (T) (T arr) if (__traits(compiles, { bool a = arr.isEmpty; }))
 {
 	return !arr.isEmpty;
+}
+
+bool any (alias predicate, Range) (Range range)
+{
+	return algorithm.any!(predicate)(range);
 }
 
 /// Returns the first element of the given array.

@@ -18,7 +18,7 @@ import mambo.util.Traits;
  * $(UL
  * 	$(LI The string is null)
  * 	$(LI The length of the string is equal to 0)
- * 	$(LI The string is equal to the empty string, "")
+ * 	$(LI The string only contains blank characters, i.e. space, newline or tab)
  * )
  * 
  * Params:

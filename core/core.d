@@ -9,6 +9,7 @@ module mambo.core.core;
 import std.regex;
 
 import mambo.core.Array;
+import mambo.core.AssociativeArray;
 import mambo.util.Traits;
 
 /**

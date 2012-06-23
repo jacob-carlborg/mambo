@@ -134,7 +134,7 @@ body
  *     
  * Returns: the index of the substring or size_t.max when nothing was found
  */
-size_t find (string str, string sub, size_t start = 0)
+/+size_t find (string str, string sub, size_t start = 0)
 {
 	size_t index = str.locatePattern(sub, start);
 	
@@ -182,7 +182,7 @@ size_t find (dstring str, dstring sub, size_t start = 0)
 		return size_t.max;
 	
 	return index;
-}
+}+/
 
 /**
  * Compares to strings, ignoring case differences. Returns 0 if the content

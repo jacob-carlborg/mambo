@@ -1,14 +1,14 @@
 /**
- * Copyright: Copyright (c) 2008-2009 Jacob Carlborg. All rights reserved.
+ * Copyright: Copyright (c) 2008-2012 Jacob Carlborg. All rights reserved.
  * Authors: Jacob Carlborg
  * Version: Initial created: 2008
  * License: $(LINK2 http://www.boost.org/LICENSE_1_0.txt, Boost Software License 1.0)
  */
-module mambo.collection.AssociativeArray;
+module mambo.core.AssociativeArray;
 
-import tango.core.Exception : ArrayBoundsException, NoSuchElementException;
+import tango.core.Exception : NoSuchElementException;
 
-import mambo.collection.Array : reserve;
+import mambo.util.Traits;
 
 /**
  * Returns the value to which the specified key is mapped,
@@ -208,42 +208,6 @@ int size (K, V) (V[K] aa)
 }
 
 /**
- * Finds the given key in the given associative array. If the key is found
- * a pointer to the value associated with the key is returned, otherwise
- * null is returned.
- * 
- * Params:
- *     aa = the associative array to find the key in 
- *     key = the key to find
- *     
- * Returns: a pointer to the value associated with the give key
- */
-V* find (K, V) (V[K] aa, K key)
-{
-	return key in aa; 
-}
-
-/**
- * Finds the given key in the given multimap. If the key is found
- * a pointer to the first value associated with the key is returned, 
- * otherwise null is returned.
- * 
- * Params:
- *     aa = the associative array to find the key in 
- *     key = the key to find
- *     
- * Returns: a pointer to the value associated with the give key
- */
-V* find (K, V) (V[][K] aa, K key)
-{
-	if (auto v = key in aa)
-		if (v.length > 0)
-			return &(*v)[0];
-	
-	return null;
-}
-
-/**
  * Returns value to lower bound
  * 
  * associative array. If the associative array previously contained a mapping for
@@ -314,4 +278,46 @@ V[] equalRange (K, V) (V[K] aa, K key)
 	
 	else
 		return [];
+}
+
+// This is a function private to this package. From some reason it cannot be accessible if
+// it's marked with "package".
+bool _anyAA (alias predicate, AA) (AA aa)
+	if (isAssociativeArray!(AA) && isAssociativeArrayPredicate!(predicate, AA))
+{
+	foreach (k, v ; aa)
+		if (predicate(k, v))
+			return true;
+
+	return false;
+}
+
+// This is a function private to this package. From some reason it cannot be accessible if
+// it's marked with "package".
+auto _findAA (alias predicate, AA) (AA aa)
+	if (isAssociativeArray!(AA) && isAssociativeArrayPredicate!(predicate, AA))
+{
+	alias KeyTypeOfAssociativeArray!(AA) K;
+	alias ValueTypeOfAssociativeArray!(AA) V;
+	alias KeyValue!(K, V) Pair;
+
+	foreach (k, v ; aa)
+		if (predicate(k, v))
+			return Pair(k, v, false);
+
+	return Pair.init;
+}
+
+struct KeyValue (K, V)
+{
+	K key;
+	V value;
+	private bool isEmpty_ = true;
+	
+	alias isEmpty this;
+
+	@property bool isEmpty ()
+	{
+		return isEmpty_;
+	}
 }

@@ -15,6 +15,8 @@ static import tango.core.Array;
 import tango.stdc.string : memmove;
 static import tango.text.Util;
 
+import mambo.core.AssociativeArray;
+import mambo.core.core;
 import mambo.util.Traits;
 
 alias algorithm.filter filter;
@@ -208,7 +210,11 @@ T[] repeat (T) (T[] arr, int number)
 
 bool any (alias predicate, Range) (Range range)
 {
-	return algorithm.any!(predicate)(range);
+	static if (isAssociativeArray!(Range))
+		return _anyAA!(predicate)(range);
+
+	else
+		return algorithm.any!(predicate)(range);
 }
 
 /// Returns the first element of the given array.
@@ -236,4 +242,13 @@ T[] strip (T, C) (T[] arr, C delimiter)
 		a = stdString.chomp(a, del);
 	
 	return a;
+}
+
+auto find (alias predicate, Range) (Range range)
+{
+	static if (isAssociativeArray!(Range))
+		return _findAA!(predicate)(range);
+
+	else
+		return algorithm.find!(predicate)(range);
 }

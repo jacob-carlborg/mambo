@@ -10,6 +10,7 @@ module mambo.core._;
 public:
 
 import mambo.core.Array;
+import mambo.core.AssociativeArray;
 import mambo.core.Block;
 import mambo.core.core;
 import mambo.core.io;

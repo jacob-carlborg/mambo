@@ -10,6 +10,7 @@ module mambo.core.Array;
 import stdString = std.string;
 import stdArray = std.array;
 import algorithm = std.algorithm;
+import stdRange = std.range;
 
 static import tango.core.Array;
 import tango.stdc.string : memmove;
@@ -19,11 +20,16 @@ import mambo.core.AssociativeArray;
 import mambo.core.core;
 import mambo.util.Traits;
 
+alias algorithm.array toArray;
+alias algorithm.canFind contains;
+alias algorithm.countUntil indexOf;
 alias algorithm.filter filter;
 alias algorithm.join join;
 alias algorithm.map map;
-alias algorithm.canFind contains;
-alias algorithm.countUntil indexOf;
+alias algorithm.sort sort;
+alias algorithm.uniq unique;
+
+alias stdRange.chain append;
 
 /**
  * Inserts the given element(s) or range at the given position into the array. Shifts the

@@ -314,10 +314,15 @@ struct KeyValue (K, V)
 	V value;
 	private bool isEmpty_ = true;
 	
-	alias isEmpty this;
+	alias any this;
 
 	@property bool isEmpty ()
 	{
 		return isEmpty_;
+	}
+
+	@property bool any ()
+	{
+		return !isEmpty;
 	}
 }

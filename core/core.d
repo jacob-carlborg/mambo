@@ -42,7 +42,7 @@ import mambo.util.Traits;
 	static if (__traits(compiles, t.isEmpty))
 		return t.isEmpty;
 		
-	else static if (isPrimitive!(T) || isStruct!(T))
+	else static if (isPrimitive!(T) || isStruct!(T) || isUnion!(T))
 		return false;
 
 	return T.init == t;

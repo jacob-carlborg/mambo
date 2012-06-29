@@ -90,6 +90,12 @@ template isStruct (T)
 	enum bool isStruct = is(T == struct);
 }
 
+/// Evaluates to true if $(D_PARAM T) is a union.
+template isUnion (T)
+{
+	enum bool isUnion = is(T == union);
+}
+
 /// Evaluates to true if $(D_PARAM T) is an array.
 template isArray (T)
 {

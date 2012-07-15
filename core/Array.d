@@ -27,6 +27,7 @@ alias algorithm.filter filter;
 alias algorithm.join join;
 alias algorithm.map map;
 alias algorithm.sort sort;
+alias algorithm.startsWith startsWith;
 alias algorithm.uniq unique;
 
 alias stdRange.chain append;
@@ -81,6 +82,20 @@ T[] insertInPlace (T, RangeOrElement...) (ref T[] arr, size_t index, RangeOrElem
 T[] remove (T) (T[] arr, T[] elements ...)
 {
     return algorithm.remove!((e) => elements.contains(e))(arr);
+}
+
+/**
+ * Removes the elements with the given indexes from the given range.
+ * 
+ * Params:
+ *     range = the range to remove the elements from
+ *     indexes = the index of the elements to be remove
+ *     
+ * Returns: the range with the indexes removed
+ */
+Range remove (Range, Index ...) (Range range, Index indexes)
+{
+	return algorithm.remove(range, indexes);
 }
 
 /**

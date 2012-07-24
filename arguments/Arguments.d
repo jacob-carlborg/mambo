@@ -8,6 +8,7 @@ module mambo.arguments.Arguments;
 
 import std.conv;
 
+import tango.io.Stdout;
 import tango.util.container.HashMap;
 import tango.util.container.more.Stack;
 
@@ -84,10 +85,16 @@ class Arguments
 		arguments.passThrough = passThrough;
 
 		if (!arguments.parse(originalArgs, sloppy))
+		{
+			stderr(arguments.errors(&stderr.layout.sprint));
 			assert(0, "throw InvalidArgumentException");
+		}
 
-		args = cast(string[]) arguments(null).assigned;
-		parsePositionalArguments();
+		else
+		{
+			args = cast(string[]) arguments(null).assigned;
+			parsePositionalArguments();
+		}
 	}
 
 	@property string first ()
@@ -212,7 +219,7 @@ class ArgumentBase
 
 		else
 		{
-			assert(hasValue);
+			assert(hasValue, "Missing value");
 			return to!(U)(rawValue);
 		}
 	}

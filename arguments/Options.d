@@ -77,7 +77,7 @@ struct Option (T)
 	@property U as (U) ()
 	{
 		assert(hasValue);
-		return to!(U)(value);
+		return to!(U)(rawValue);
 	}
 
 	@property string rawValue ()
@@ -140,7 +140,7 @@ struct Option (T)
 
 	Option restrict (string[] options ...)
 	{
-		argument.restrict(options);
+		argument.restrict(options.dup);
 		return this;
 	}
 

@@ -60,6 +60,11 @@ struct Option (T)
 
 	alias value this;
 
+	this (Internal.Arguments.Argument argument)
+	{
+		this.argument = argument;
+	}
+
 	@property T value ()
 	{
 		static if (is(T == bool))
@@ -91,9 +96,19 @@ struct Option (T)
 		return argument.set;
 	}
 
+	@property bool isSet ()
+	{
+		return isPresent;
+	}
+
 	bool opCast (T : bool) ()
 	{
 		return isPresent;
+	}
+
+	private T opCast (T) ()
+	{
+		return cast(T) this;
 	}
 
 	Option aliased (char name)
@@ -150,5 +165,25 @@ struct Option (T)
 
 		argument.bind(cast(Inspector) dg);
 		return this;
+	}
+
+package:
+
+	@property string name ()
+	{
+		auto r = argument.name;
+		return r.assumeUnique;
+	}
+
+	@property char shortOption ()
+	{
+		auto aliases = argument.aliases;
+		return aliases.any ? aliases[0] : char.init;
+	}
+
+	@property string helpText ()
+	{
+		auto r = argument.text;
+		return r.assumeUnique;
 	}
 }

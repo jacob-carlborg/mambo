@@ -326,3 +326,19 @@ struct KeyValue (K, V)
 		return !isEmpty;
 	}
 }
+
+auto _mapAA (alias func, AA) (AA aa) if (isAssociativeArray!(AA))
+{
+	alias KeyTypeOfAssociativeArray!(AA) K;
+	alias ValueTypeOfAssociativeArray!(AA) V;
+
+	alias typeof(func(K.init, V.init)) ReturnType;
+
+	ReturnType[] result;
+	result.reserve(aa.length);
+
+	foreach (k, v ; aa)
+		result ~= func(k, v);
+
+	return result;
+}

@@ -205,7 +205,7 @@ class Arguments
 		public bool passThrough;
 
         private Stack!(Argument)        stack;          // args with params
-        private Argument[const(char)[]] args;           // the set of args
+        Argument[const(char)[]] args;           // the set of args
         private Argument[const(char)[]] aliases;        // set of aliases
         private char                    eq;             // '=' or ':'
         private const(char)[]           sp,             // short prefix

@@ -7,10 +7,9 @@
 module mambo.arguments.Arguments;
 
 import std.conv;
+import std.exception;
 
-import tango.io.Stdout;
 import tango.util.container.HashMap;
-import tango.util.container.more.Stack;
 
 import Internal = mambo.arguments.internal.Arguments;
 import mambo.arguments.Options;
@@ -22,8 +21,12 @@ class Arguments
 	immutable string shortPrefix;
 	immutable string longPrefix;
 	immutable char assignment;
+
 	bool sloppy;
 	bool passThrough;
+
+	string header;
+	string footer = "Use the `-h' flag for help.";
 
 	package Internal.Arguments arguments;
 
@@ -32,9 +35,21 @@ class Arguments
 		Options options;
 		HashMap!(string, ArgumentBase) positionalArguments;
 		ArgumentProxy proxy;
-		
+		ArgumentBase[] sortedPosArgs_;
+
 		string[] originalArgs_;
 		string[] args_;
+		string[] errorMessages_ = defaultErrorMessages;
+		enum defaultErrorMessages = [
+			"argument '{0}' expects {2} parameter(s) but has {1}\n",
+			"argument '{0}' expects {3} parameter(s) but has {1}\n",
+			"argument '{0}' is missing\n",
+			"argument '{0}' requires '{4}'\n",
+			"argument '{0}' conflicts with '{4}'\n",
+			"unexpected argument '{0}'\n",
+			"argument '{0}' expects one of {5}\n",
+			"invalid parameter for argument '{0}': {4}\n",
+		];
 	}
 
 	alias option this;
@@ -79,22 +94,17 @@ class Arguments
 		return proxy.opCall!(T)(name, helpText);
 	}
 
-	void parse (string[] input)
+	bool parse (string[] input)
 	{
 		originalArgs = input;
 		arguments.passThrough = passThrough;
+		auto result = arguments.parse(originalArgs, sloppy);
 
-		if (!arguments.parse(originalArgs, sloppy))
-		{
-			stderr(arguments.errors(&stderr.layout.sprint));
-			assert(0, "throw InvalidArgumentException");
-		}
+		if (!result)
+			return false;
 
-		else
-		{
-			args = cast(string[]) arguments(null).assigned;
-			parsePositionalArguments();
-		}
+		args = cast(string[]) arguments(null).assigned;
+		return result && parsePositionalArguments();
 	}
 
 	@property string first ()
@@ -119,7 +129,7 @@ class Arguments
 
 	@property string helpText ()
 	{
-		return "Help Text";
+		return buildHelpText;
 	}
 
 	@property string[] args ()
@@ -142,13 +152,55 @@ class Arguments
 		return originalArgs_ = args;
 	}
 
-	private void parsePositionalArguments ()
+	string errors (char[] delegate (char[] buffer, const(char)[] format, ...) dg)
 	{
-		if (args.isEmpty)
-			return;
+		auto res = arguments.errors(dg);
+		string result = res.assumeUnique;
+		char[256] buffer;
+		auto msg = errorMessages;
 
-		auto posArgs = positionalArguments.toArray;
-		posArgs.sort!((a, b) => a.position < b.position)();
+		foreach (arg ; sortedPosArgs)
+		{
+			if (arg.error)
+				result ~= dg(buffer, msg[arg.error - 1], arg.name, arg.rawValues.length,
+					arg.min, arg.max);
+		}
+
+		return result;
+	}
+
+	@property string[] errorMessages ()
+	{
+		return errorMessages_;
+	}
+
+	@property string[] errorMessages (string[] errors)
+	in
+	{
+		assert(errors.length == defaultErrorMessages.length);
+	}
+	body
+	{
+		return errorMessages_ = errors;
+	}
+
+private:
+
+	@property ArgumentBase[] sortedPosArgs ()
+	{
+		if (sortedPosArgs_.any)
+			return sortedPosArgs_;
+
+		sortedPosArgs_ = positionalArguments.toArray;
+		sortedPosArgs_.sort!((a, b) => a.position < b.position)();
+
+		return sortedPosArgs_;
+	}
+
+	bool parsePositionalArguments ()
+	{
+		int error;
+		auto posArgs = sortedPosArgs;
 
 		auto arg = posArgs.first;
 		size_t numArgs;
@@ -179,8 +231,65 @@ class Arguments
 			}
 		}
 
-		if (arg.min > arg.rawValues.length)
-			assert(0, "too few arguments, throw here instead.");
+		foreach (e ; posArgs)
+			error |= e.validate();
+
+		return error == 0;
+	}
+
+	string buildHelpText ()
+	{
+		static @property char shortOption (Internal.Arguments.Argument argument)
+		{
+			return argument.aliases.any ? argument.aliases[0] : char.init;
+		}
+
+		string help;
+		auto len = lengthOfLongestOption;
+		auto indentation = "    ";
+		auto numberOfIndentations = 1;
+
+		foreach (argument ; arguments.args)
+		{
+			auto text = argument.text ~ '.';
+			auto name = argument.name;
+
+			if (argument.min == 1)
+				name ~= " <arg>";
+
+			else if (argument.min > 1)
+				name ~= " <arg0>";
+
+			if (argument.max > 1)
+				name ~= " .. <arg" ~ argument.max.toString ~ '>';
+
+			if (argument.name.count == 0 && shortOption(argument) == char.init)
+				help ~= format("{}\n", argument.text);
+
+			else if (shortOption(argument) == char.init)
+				help ~= format("{}--{}{}{}{}\n",
+							indentation ~ indentation,
+							name,
+							" ".repeat(len - name.count),
+							indentation.repeat(numberOfIndentations),
+							argument.text);
+
+			else
+				help ~= format("{}-{}, --{}{}{}{}\n",
+							indentation,
+							shortOption(argument),
+							name,
+							" ".repeat(len - name.count),
+							indentation.repeat(numberOfIndentations),
+							argument.text);
+		}
+
+		return help;
+	}
+
+	@property size_t lengthOfLongestOption ()
+	{
+		return arguments.args.values.reduce!((a, b) => a.name.count > b.name.count ? a : b).name.count;
 	}
 }
 
@@ -193,12 +302,12 @@ class ArgumentBase
 	{
 		enum maxParams = 42;
 		size_t position;
+		string[] values_;
+		int error;
 
 		string name;
 		string helpText;
 		string defaults_;
-
-		string[] values_;
 	}
 
 	private this (size_t position, string name)
@@ -232,6 +341,17 @@ class ArgumentBase
 	@property string[] rawValues ()
 	{
 		return values_;
+	}
+
+	private int validate ()
+	{
+		if (rawValues.length < min)
+			error = Internal.Arguments.Argument.ParamLo;
+
+		else if (rawValues.length > max)
+			error = Internal.Arguments.Argument.ParamHi;
+
+		return error;
 	}
 }
 

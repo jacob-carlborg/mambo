@@ -22,10 +22,10 @@ import mambo.util.Traits;
 
 alias algorithm.array toArray;
 alias algorithm.canFind contains;
+alias algorithm.count count;
 alias algorithm.countUntil indexOf;
 alias algorithm.filter filter;
 alias algorithm.join join;
-alias algorithm.map map;
 alias algorithm.sort sort;
 alias algorithm.startsWith startsWith;
 alias algorithm.uniq unique;
@@ -209,9 +209,9 @@ bool endsWith (T) (T[] a, T[] b)
 T[] repeat (T) (T[] arr, int number)
 {
 	T[] result;
-	
-	for (int i = 0; i <= number; i++)
-		result ~= a;
+
+	foreach (_ ; 0 .. number + 1)
+		result ~= arr;
 	
 	return result;
 }
@@ -272,4 +272,23 @@ auto find (alias predicate, Range) (Range range)
 
 	else
 		return algorithm.find!(predicate)(range);
+}
+
+auto reduce (alias func, Range) (Range range)
+{
+	return algorithm.reduce!(func)(range);
+}
+
+auto reduce (alias func, Range, Seed) (Range range, Seed seed)
+{
+	return algorithm.reduce!(func)(seed, range);
+}
+
+auto map (alias func, Range) (Range range)
+{
+	static if (isAssociativeArray!(Range))
+		return _mapAA!(func)(range);
+
+	else
+		return algorithm.map!(func)(range);
 }

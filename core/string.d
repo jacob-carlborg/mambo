@@ -12,8 +12,10 @@ static import std.ascii;
 
 static import tango.stdc.stringz;
 import tango.text.Unicode : toFold, isDigit;
+import tango.text.convert.Format;
 import tango.text.convert.Utf;
 import tango.text.Util;
+
 
 public import mambo.core.Array;
 import mambo.util.Version;
@@ -32,6 +34,8 @@ alias tango.text.convert.Utf.toString32 toString32;
 
 alias std.array.replace replace;
 alias std.ascii.isHexDigit isHexDigit;
+
+alias Format format;
 
 /**
  * Compares the $(D_PSYMBOL string) to another $(D_PSYMBOL string), ignoring case

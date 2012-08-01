@@ -55,7 +55,9 @@ struct Options
 
 	package @property Option!(int)[] options ()
 	{
-		return arguments.internalArguments.args.map!((k, v) => Option!(int)(v));
+		return arguments.internalArguments.args.map!((k, v) => Option!(int)(v))
+			.filter!(e => e.name.any)
+			.toArray;
 	}
 }
 

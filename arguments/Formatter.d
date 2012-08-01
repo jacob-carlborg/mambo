@@ -11,16 +11,43 @@ import std.exception;
 import mambo.arguments.Arguments;
 import mambo.arguments.Options;
 import mambo.core._;
+import mambo.text.Inflections;
 
-interface Formatter
+abstract class Formatter
 {
+	protected
+	{
+		string appName_;
+		string appVersion_;
+	}
+
 	@property static Formatter instance (Arguments arguments)
 	{
 		return new DefaultFormatter(arguments);
 	}
 
-	@property string helpText ();
-	string errors (char[] delegate (char[] buffer, const(char)[] format, ...) dg);
+	@property string appName ()
+	{
+		return appName_;
+	}
+
+	@property string appName (string value)
+	{
+		return appName_ = value;
+	}
+
+	@property string appVersion ()
+	{
+		return appVersion_;
+	}
+
+	@property string appVersion (string value)
+	{
+		return appVersion_ = value;
+	}
+
+	abstract @property string helpText ();
+	abstract string errors (char[] delegate (char[] buffer, const(char)[] format, ...) dg);
 }
 
 class DefaultFormatter : Formatter
@@ -28,7 +55,10 @@ class DefaultFormatter : Formatter
 	private
 	{
 		Arguments arguments;
+		ArgumentBase[] positionalArguments_;
 		Option!(int)[] options_;
+		enum indentation = "    ";
+
 		string[] errorMessages_ = defaultErrorMessages;
 		enum defaultErrorMessages = [
 			"argument '{0}' expects {2} parameter(s) but has {1}\n",
@@ -83,10 +113,26 @@ class DefaultFormatter : Formatter
 
 	@property string helpText ()
 	{
+		string help = header;
+
+		if (positionalArguments.any)
+			help ~= "\n\n" ~ positionalArgumentsText;
+
+		if (options.any)
+			help ~= "\nOptions:\n";
+
+		help ~= format("{}\n{}", optionsText, footer);
+
+		return help;
+	}
+
+private:
+
+	@property string optionsText ()
+	{
 		string help;
-		auto len = lengthOfLongestOption;
-		auto indentation = "    ";
-		auto numberOfIndentations = 1;
+		immutable len = lengthOfLongestOption;
+		enum numberOfIndentations = 1;
 
 		foreach (option ; options)
 		{
@@ -103,7 +149,7 @@ class DefaultFormatter : Formatter
 				name ~= " .. <arg" ~ option.max.toString ~ '>';
 
 			if (option.name.count == 0 && shortOption(option) == char.init)
-				help ~= format("{}\n", option.helpText);
+				help ~= format("{}\n", text);
 
 			else if (shortOption(option) == char.init)
 				help ~= format("{}--{}{}{}{}\n",
@@ -111,7 +157,7 @@ class DefaultFormatter : Formatter
 							name,
 							" ".repeat(len - name.count),
 							indentation.repeat(numberOfIndentations),
-							option.helpText);
+							text);
 
 			else
 				help ~= format("{}-{}, --{}{}{}{}\n",
@@ -120,13 +166,11 @@ class DefaultFormatter : Formatter
 							name,
 							" ".repeat(len - name.count),
 							indentation.repeat(numberOfIndentations),
-							option.helpText);
+							text);
 		}
 
 		return help;
 	}
-
-private:
 
 	@property Option!(int)[] options ()
 	{
@@ -141,5 +185,56 @@ private:
 	@property size_t lengthOfLongestOption ()
 	{
 		return options.reduce!((a, b) => a.name.count > b.name.count ? a : b).name.count;
+	}
+
+	@property ArgumentBase[] positionalArguments ()
+	{
+		return positionalArguments_.any ? positionalArguments_ : positionalArguments_ = arguments.positionalArguments;
+	}
+
+	@property string header ()
+	{
+		string str = "Usage: " ~ appName;
+
+		if (options.any)
+			str ~= " [options]";
+
+		if (positionalArguments.any)
+			str ~= format(" <{}>", "arg".pluralize(positionalArguments.length));
+
+		str ~= "\nVersion " ~ appVersion;
+
+		return str;
+	}
+
+	@property string footer ()
+	{
+		return "Use the `-h' flag for help.";
+	}
+
+	@property string positionalArgumentsText ()
+	{
+		immutable len = lengthOfLongestPositionalArgument;
+		auto str = "Positional Arguments:\n";
+		enum numberOfIndentations = 1;
+
+		foreach (arg ; positionalArguments)
+		{
+			immutable text = arg.helpText ~ '.';
+
+			str ~= format("{}{}{}{}{}\n",
+				indentation,
+				arg.name,
+				" ".repeat(len - arg.name.count),
+				indentation.repeat(numberOfIndentations),
+				text);
+		}
+
+		return str;
+	}
+
+	@property size_t lengthOfLongestPositionalArgument ()
+	{
+		return positionalArguments.reduce!((a, b) => a.name.count > b.name.count ? a : b).name.count;
 	}
 }

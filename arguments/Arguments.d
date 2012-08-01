@@ -58,7 +58,7 @@ class Arguments
 
 	@property Formatter formatter ()
 	{
-		return formatter_ ? formatter_ : formatter_ = Formatter.instance(this);
+		return formatter_ = formatter_ ? formatter_ : Formatter.instance(this);
 	}
 
 	Option!(T) opIndex (T = string) (string name)
@@ -216,6 +216,43 @@ private:
 	}
 }
 
+struct ArgumentProxy
+{
+	private Arguments arguments;
+
+	static ArgumentProxy create (Arguments arguments)
+	{
+		ArgumentProxy proxy;
+		proxy.arguments = arguments;
+
+		return proxy;
+	}
+
+	Argument!(T) opCall (T = string) (string name, string helpText)
+	{
+		assert(!arguments.positionalArguments_.containsKey(name));
+
+		auto arg = new Argument!(T)(arguments.positionalArguments_.size, name);
+		arg.help(helpText);
+		arguments.positionalArguments_[name] = arg;
+
+		return arg;
+	}
+
+	template opDispatch (string name)
+	{
+		@property Argument!(T) opDispatch (T = string) ()
+		{
+			return opIndex!(T)(name);
+		}
+	}
+
+	Argument!(T) opIndex (T = string) (string name)
+	{
+		return cast(Argument!(T)) arguments.positionalArguments_[name];
+	}
+}
+
 class ArgumentBase 
 {
 	int min = 1;
@@ -229,7 +266,7 @@ class ArgumentBase
 		int error_;
 
 		string name_;
-		string helpText;
+		string helpText_;
 		string defaults_;
 	}
 
@@ -242,6 +279,16 @@ class ArgumentBase
 	@property string name ()
 	{
 		return name_;
+	}
+
+	@property string helpText ()
+	{
+		return helpText_;
+	}
+
+	private @property string helpText (string value)
+	{
+		return helpText_ = value;
 	}
 
 	@property size_t position ()
@@ -295,42 +342,6 @@ class ArgumentBase
 			error = Internal.Arguments.Argument.ParamHi;
 
 		return error;
-	}
-}
-
-struct ArgumentProxy
-{
-	private Arguments arguments;
-
-	static ArgumentProxy create (Arguments arguments)
-	{
-		ArgumentProxy proxy;
-		proxy.arguments = arguments;
-
-		return proxy;
-	}
-
-	Argument!(T) opCall (T = string) (string name, string helpText)
-	{
-		assert(!arguments.positionalArguments_.containsKey(name));
-
-		auto arg = new Argument!(T)(arguments.positionalArguments_.size, name);
-		arguments.positionalArguments_[name] = arg;
-
-		return arg;
-	}
-
-	template opDispatch (string name)
-	{
-		@property Argument!(T) opDispatch (T = string) ()
-		{
-			return opIndex!(T)(name);
-		}
-	}
-
-	Argument!(T) opIndex (T = string) (string name)
-	{
-		return cast(Argument!(T)) arguments.positionalArguments_[name];
 	}
 }
 

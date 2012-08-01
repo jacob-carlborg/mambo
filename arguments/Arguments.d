@@ -7,11 +7,11 @@
 module mambo.arguments.Arguments;
 
 import std.conv;
-import std.exception;
 
 import tango.util.container.HashMap;
 
 import Internal = mambo.arguments.internal.Arguments;
+import mambo.arguments.Formatter;
 import mambo.arguments.Options;
 import mambo.core._;
 import mambo.util.Traits;
@@ -28,28 +28,18 @@ class Arguments
 	string header;
 	string footer = "Use the `-h' flag for help.";
 
-	package Internal.Arguments arguments;
+	package Internal.Arguments internalArguments;
 
 	private
 	{
-		Options options;
-		HashMap!(string, ArgumentBase) positionalArguments;
+		Options optionProxy;
+		HashMap!(string, ArgumentBase) positionalArguments_;
 		ArgumentProxy proxy;
 		ArgumentBase[] sortedPosArgs_;
+		Formatter formatter_;
 
 		string[] originalArgs_;
 		string[] args_;
-		string[] errorMessages_ = defaultErrorMessages;
-		enum defaultErrorMessages = [
-			"argument '{0}' expects {2} parameter(s) but has {1}\n",
-			"argument '{0}' expects {3} parameter(s) but has {1}\n",
-			"argument '{0}' is missing\n",
-			"argument '{0}' requires '{4}'\n",
-			"argument '{0}' conflicts with '{4}'\n",
-			"unexpected argument '{0}'\n",
-			"argument '{0}' expects one of {5}\n",
-			"invalid parameter for argument '{0}': {4}\n",
-		];
 	}
 
 	alias option this;
@@ -60,10 +50,15 @@ class Arguments
 		this.longPrefix = longPrefix;
 		this.assignment = assignment;
 
-		arguments = new Internal.Arguments(shortPrefix, longPrefix, assignment);
-		options = Options(this);
-		positionalArguments = new HashMap!(string, ArgumentBase);
+		internalArguments = new Internal.Arguments(shortPrefix, longPrefix, assignment);
+		optionProxy = Options(this);
+		positionalArguments_ = new HashMap!(string, ArgumentBase);
 		proxy = ArgumentProxy.create(this);
+	}
+
+	@property Formatter formatter ()
+	{
+		return formatter_ ? formatter_ : formatter_ = Formatter.instance(this);
 	}
 
 	Option!(T) opIndex (T = string) (string name)
@@ -81,7 +76,7 @@ class Arguments
 	
 	@property Options option ()
 	{
-		return options;
+		return optionProxy;
 	}
 
 	@property ArgumentProxy argument () ()
@@ -97,13 +92,13 @@ class Arguments
 	bool parse (string[] input)
 	{
 		originalArgs = input;
-		arguments.passThrough = passThrough;
-		auto result = arguments.parse(originalArgs, sloppy);
+		internalArguments.passThrough = passThrough;
+		auto result = internalArguments.parse(originalArgs, sloppy);
 
 		if (!result)
 			return false;
 
-		args = cast(string[]) arguments(null).assigned;
+		args = cast(string[]) internalArguments(null).assigned;
 		return result && parsePositionalArguments();
 	}
 
@@ -129,7 +124,17 @@ class Arguments
 
 	@property string helpText ()
 	{
-		return buildHelpText;
+		return formatter.helpText();
+	}
+
+	@property ArgumentBase[] positionalArguments ()
+	{
+		return positionalArguments_.toArray();
+	}
+
+	@property Option!(int)[] options ()
+	{
+		return optionProxy.options;
 	}
 
 	@property string[] args ()
@@ -154,34 +159,7 @@ class Arguments
 
 	string errors (char[] delegate (char[] buffer, const(char)[] format, ...) dg)
 	{
-		auto res = arguments.errors(dg);
-		string result = res.assumeUnique;
-		char[256] buffer;
-		auto msg = errorMessages;
-
-		foreach (arg ; sortedPosArgs)
-		{
-			if (arg.error)
-				result ~= dg(buffer, msg[arg.error - 1], arg.name, arg.rawValues.length,
-					arg.min, arg.max);
-		}
-
-		return result;
-	}
-
-	@property string[] errorMessages ()
-	{
-		return errorMessages_;
-	}
-
-	@property string[] errorMessages (string[] errors)
-	in
-	{
-		assert(errors.length == defaultErrorMessages.length);
-	}
-	body
-	{
-		return errorMessages_ = errors;
+		return formatter.errors(dg);
 	}
 
 private:
@@ -191,7 +169,7 @@ private:
 		if (sortedPosArgs_.any)
 			return sortedPosArgs_;
 
-		sortedPosArgs_ = positionalArguments.toArray;
+		sortedPosArgs_ = positionalArguments;
 		sortedPosArgs_.sort!((a, b) => a.position < b.position)();
 
 		return sortedPosArgs_;
@@ -236,61 +214,6 @@ private:
 
 		return error == 0;
 	}
-
-	string buildHelpText ()
-	{
-		static @property char shortOption (Internal.Arguments.Argument argument)
-		{
-			return argument.aliases.any ? argument.aliases[0] : char.init;
-		}
-
-		string help;
-		auto len = lengthOfLongestOption;
-		auto indentation = "    ";
-		auto numberOfIndentations = 1;
-
-		foreach (argument ; arguments.args)
-		{
-			auto text = argument.text ~ '.';
-			auto name = argument.name;
-
-			if (argument.min == 1)
-				name ~= " <arg>";
-
-			else if (argument.min > 1)
-				name ~= " <arg0>";
-
-			if (argument.max > 1)
-				name ~= " .. <arg" ~ argument.max.toString ~ '>';
-
-			if (argument.name.count == 0 && shortOption(argument) == char.init)
-				help ~= format("{}\n", argument.text);
-
-			else if (shortOption(argument) == char.init)
-				help ~= format("{}--{}{}{}{}\n",
-							indentation ~ indentation,
-							name,
-							" ".repeat(len - name.count),
-							indentation.repeat(numberOfIndentations),
-							argument.text);
-
-			else
-				help ~= format("{}-{}, --{}{}{}{}\n",
-							indentation,
-							shortOption(argument),
-							name,
-							" ".repeat(len - name.count),
-							indentation.repeat(numberOfIndentations),
-							argument.text);
-		}
-
-		return help;
-	}
-
-	@property size_t lengthOfLongestOption ()
-	{
-		return arguments.args.values.reduce!((a, b) => a.name.count > b.name.count ? a : b).name.count;
-	}
 }
 
 class ArgumentBase 
@@ -301,19 +224,39 @@ class ArgumentBase
 	private
 	{
 		enum maxParams = 42;
-		size_t position;
+		size_t position_;
 		string[] values_;
-		int error;
+		int error_;
 
-		string name;
+		string name_;
 		string helpText;
 		string defaults_;
 	}
 
 	private this (size_t position, string name)
 	{
-		this.position = position;
-		this.name = name;
+		this.position_ = position;
+		this.name_ = name;
+	}
+
+	@property string name ()
+	{
+		return name_;
+	}
+
+	@property size_t position ()
+	{
+		return position_;
+	}
+
+	@property int error ()
+	{
+		return error_;
+	}
+
+	private @property int error (int value)
+	{
+		return error_ = value;
 	}
 
 	@property bool hasValue ()
@@ -369,10 +312,10 @@ struct ArgumentProxy
 
 	Argument!(T) opCall (T = string) (string name, string helpText)
 	{
-		assert(!arguments.positionalArguments.containsKey(name));
+		assert(!arguments.positionalArguments_.containsKey(name));
 
-		auto arg = new Argument!(T)(arguments.positionalArguments.size, name);
-		arguments.positionalArguments[name] = arg;
+		auto arg = new Argument!(T)(arguments.positionalArguments_.size, name);
+		arguments.positionalArguments_[name] = arg;
 
 		return arg;
 	}
@@ -387,7 +330,7 @@ struct ArgumentProxy
 
 	Argument!(T) opIndex (T = string) (string name)
 	{
-		return cast(Argument!(T)) arguments.positionalArguments[name];
+		return cast(Argument!(T)) arguments.positionalArguments_[name];
 	}
 }
 

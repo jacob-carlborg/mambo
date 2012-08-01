@@ -50,7 +50,12 @@ struct Options
 
 	Option!(T) opIndex (T = string) (string name)
 	{
-		return Option!(T)(arguments.arguments[name]);
+		return Option!(T)(arguments.internalArguments[name]);
+	}
+
+	package @property Option!(int)[] options ()
+	{
+		return arguments.internalArguments.args.map!((k, v) => Option!(int)(v));
 	}
 }
 
@@ -91,6 +96,28 @@ struct Option (T)
 		return value.any ? cast(string) value.first : "";
 	}
 
+	@property string name ()
+	{
+		auto r = argument.name;
+		return r.assumeUnique;
+	}
+
+	@property char[] aliases ()
+	{
+		return argument.aliases;
+	}
+
+	@property string helpText ()
+	{
+		auto r = argument.text;
+		return r.assumeUnique;
+	}
+
+	@property int error ()
+	{
+		return argument.error;
+	}
+
 	@property bool isPresent ()
 	{
 		return argument.set;
@@ -99,6 +126,26 @@ struct Option (T)
 	@property bool isSet ()
 	{
 		return isPresent;
+	}
+
+	@property int min ()
+	{
+		return argument.min;
+	}
+
+	@property int min (int value)
+	{
+		return argument.min = value;
+	}
+
+	@property int max ()
+	{
+		return argument.max;
+	}
+
+	@property int max (int value)
+	{
+		return argument.max = value;
 	}
 
 	bool opCast (T : bool) ()
@@ -165,25 +212,5 @@ struct Option (T)
 
 		argument.bind(cast(Inspector) dg);
 		return this;
-	}
-
-package:
-
-	@property string name ()
-	{
-		auto r = argument.name;
-		return r.assumeUnique;
-	}
-
-	@property char shortOption ()
-	{
-		auto aliases = argument.aliases;
-		return aliases.any ? aliases[0] : char.init;
-	}
-
-	@property string helpText ()
-	{
-		auto r = argument.text;
-		return r.assumeUnique;
 	}
 }

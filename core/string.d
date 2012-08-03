@@ -11,7 +11,7 @@ import std.array;
 static import std.ascii;
 
 static import tango.stdc.stringz;
-import tango.text.Unicode : toFold, isDigit;
+import tango.text.Unicode;
 import tango.text.convert.Format;
 import tango.text.convert.Utf;
 import tango.text.Util;
@@ -31,6 +31,9 @@ alias tango.stdc.stringz.fromString32z fromString32z;
 
 alias tango.text.convert.Utf.toString16 toString16;
 alias tango.text.convert.Utf.toString32 toString32;
+
+alias tango.text.Unicode.toUpper toUpper;
+alias tango.text.Unicode.toLower toLower;
 
 alias std.array.replace replace;
 alias std.ascii.isHexDigit isHexDigit;

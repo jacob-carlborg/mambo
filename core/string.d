@@ -35,6 +35,9 @@ alias tango.text.convert.Utf.toString32 toString32;
 alias tango.text.Unicode.toUpper toUpper;
 alias tango.text.Unicode.toLower toLower;
 
+alias tango.text.Unicode.isUpper isUpper;
+alias tango.text.Unicode.isLower isLower;
+
 alias std.array.replace replace;
 alias std.ascii.isHexDigit isHexDigit;
 

@@ -7,6 +7,7 @@
 module mambo.arguments.Arguments;
 
 import std.conv;
+import std.exception;
 
 import tango.util.container.HashMap;
 
@@ -159,7 +160,8 @@ class Arguments
 
 	string errors (char[] delegate (char[] buffer, const(char)[] format, ...) dg)
 	{
-		return formatter.errors(dg);
+		auto r = internalArguments.errors(dg);
+		return r.assumeUnique;
 	}
 
 private:

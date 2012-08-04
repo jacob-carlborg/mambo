@@ -452,10 +452,7 @@ class Arguments
                    s = s [p.length..$];
 
                    if (passThrough && !(s in args) && !(s in aliases))
-				   {
-					   get(null).append(str, true);
-					   get(s).params().enable(false);
-				   }
+					   return false;
 
                    else
                    {

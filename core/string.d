@@ -9,6 +9,7 @@ module mambo.core.string;
 
 import std.array;
 static import std.ascii;
+import std.exception;
 
 static import tango.stdc.stringz;
 import tango.text.Unicode;
@@ -31,9 +32,6 @@ alias tango.stdc.stringz.fromString32z fromString32z;
 
 alias tango.text.convert.Utf.toString16 toString16;
 alias tango.text.convert.Utf.toString32 toString32;
-
-alias tango.text.Unicode.toUpper toUpper;
-alias tango.text.Unicode.toLower toLower;
 
 alias tango.text.Unicode.isUpper isUpper;
 alias tango.text.Unicode.isLower isLower;
@@ -259,4 +257,18 @@ string toString (T) (T value)
 {
 	import std.conv;
 	return to!(string)(value);
+}
+
+/// Converts the given string to lowercase.
+inout(T) toLower (T) (inout(T) value)
+{
+	auto r = tango.text.Unicode.toLower(value);
+	return r.assumeUnique;
+}
+
+/// Converts the given string to uppercase.
+inout(T) toUpper (T) (inout(T) value)
+{
+	auto r = tango.text.Unicode.toUpper(value);
+	return r.assumeUnique;
 }

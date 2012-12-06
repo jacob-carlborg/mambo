@@ -71,7 +71,7 @@ import Convert = tango.util.Convert;
  * char[] value = doc.attribute["attrib1"];
  * ---
  */
-class SimpleXML (T) : protected Document!(T)
+class SimpleXML (T) : Document!(T)
 {	
 	private DocPrinter!(T) printer;
 	

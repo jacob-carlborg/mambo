@@ -4,7 +4,7 @@
  * Version: Initial created: Nov 5, 2010
  * License: $(LINK2 http://www.boost.org/LICENSE_1_0.txt, Boost Software License 1.0)
  */
-module spec;
+module spec.spec;
 
 import dspec.ExampleGroup;
 

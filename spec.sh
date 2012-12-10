@@ -1,7 +1,7 @@
 #!/bin/sh
 
-dmd -I../ -m32 -L-ltango -unittest -ofspec `find . -name '*.d'`
+dmd -I../ -m32 -L-ltango -unittest -ofspec_bin `find spec -name '*.d'`
 
 if [ "$?" = 0 ] ; then
-  ./spec
+  ./spec_bin
 fi

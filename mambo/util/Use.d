@@ -76,13 +76,7 @@ struct Use (ARGS...)
 			return args[0](dg);
 			
 		else
-		{
-			version (Tango)
-				return args[0](dg, args[1 .. $]);
-			
-			else
-				return args[0](dg, args.expand[1 .. $]);
-		}
+			return args[0](dg, args[1 .. $]);
 	}
 }
 

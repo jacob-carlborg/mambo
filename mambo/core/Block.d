@@ -10,8 +10,8 @@ struct Block (Args ...)
 {
 	void delegate (void delegate (Args)) dg;
 	
-	void opIn (void delegate (Args) dg)
+	void opIn (void delegate (Args) block)
 	{
-		this.dg(dg);
+		this.dg(block);
 	}
 }

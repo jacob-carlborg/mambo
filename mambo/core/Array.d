@@ -206,7 +206,7 @@ bool endsWith (T) (T[] a, T[] b)
  *     
  * Returns: a new array containing $(D_PARAM arr) $(D_PARAM number) of times
  */
-T[] repeat (T) (T[] arr, int number)
+T[] repeat (T) (T[] arr, size_t number)
 {
 	T[] result;
 

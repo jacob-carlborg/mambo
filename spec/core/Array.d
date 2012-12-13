@@ -13,32 +13,13 @@ import mambo.core.io;
 
 unittest
 {
-println("asd");
-
-	/**
-	 * Inserts the given element(s) or range at the given position into the array. Shifts the
-	 * element currently at that position (if any) and any subsequent elements to the right.
-	 * 
-	 * Params:
-	 *     arr = the array to insert the element(s) or range into
-	 *     index = the index at which the specified element(s) or range is to be inserted to
-	 *     r = the element(s) or range to be inserted 
-	 *     
-	 * Returns: a copy of the given array with the element(s) or range inserted
-	 */
-	// T[] insert (T, RangeOrElement...) (T[] arr, size_t index, RangeOrElement r)
-	// {
-	// 	auto copy = arr.dup;
-	// 	stdArray.insertInPlace(copy, index, r);
-	// 	return copy;
-	// }
 
 describe! "Array" in {
 	it! "insert a value into an array at a given index" in {
 		auto arr = [1, 2, 3];
-		arr.insert(1, 4);
+		auto r = arr.insert(1, 4);
 
-		assert(arr == [1, 4, 2, 3]);
+		assert(r == [1, 4, 2, 3]);
 	};
 };
 

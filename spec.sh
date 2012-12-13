@@ -8,7 +8,7 @@ mambo=`all_files mambo`
 dspec=`all_files dspec`
 specs=`all_files spec`
 
-dmd -I. -L-ltango -unittest -ofspec_bin $mambo $dspec $specs
+dmd -I. -m32 -L-ltango -unittest -ofspec_bin $mambo $dspec $specs
 
 if [ "$?" = 0 ] ; then
   ./spec_bin

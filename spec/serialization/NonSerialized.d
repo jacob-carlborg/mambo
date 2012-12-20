@@ -50,9 +50,9 @@ unittest
 			serializer.serialize(foo);
 
 			assert(archive.data().containsDefaultXmlContent());
-			assert(archive.data().containsXmlTag("object", `runtimeType="tests.NonSerialized.Foo" type="tests.NonSerialized.Foo" key="0" id="0"`));
+			assert(archive.data().containsXmlTag("object", `runtimeType="spec.serialization.NonSerialized.Foo" type="spec.serialization.NonSerialized.Foo" key="0" id="0"`));
 			assert(archive.data().containsXmlTag("int", `key="b" id="1"`, "4"));
-			assert(!archive.data().containsXmlTag("object", `runtimeType="tests.NonSerialized.Bar" type="Bar" key="bar" id="2"`));
+			assert(!archive.data().containsXmlTag("object", `runtimeType="spec.serialization.NonSerialized.Bar" type="Bar" key="bar" id="2"`));
 		};
 	};
 	

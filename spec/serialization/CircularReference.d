@@ -52,9 +52,9 @@ unittest
 			serializer.serialize(a);
 
 			assert(archive.data().containsDefaultXmlContent());
-			assert(archive.data().contains(`<object runtimeType="tests.CircularReference.A" type="tests.CircularReference.A" key="0" id="0">`));
+			assert(archive.data().contains(`<object runtimeType="spec.serialization.CircularReference.A" type="spec.serialization.CircularReference.A" key="0" id="0">`));
 
-			assert(archive.data().contains(`<object runtimeType="tests.CircularReference.B" type="tests.CircularReference.B" key="b" id="1">`));
+			assert(archive.data().contains(`<object runtimeType="spec.serialization.CircularReference.B" type="spec.serialization.CircularReference.B" key="b" id="1">`));
 			assert(archive.data().containsXmlTag("int", `key="y" id="3"`, "4"));
 
 			assert(archive.data().containsXmlTag("int", `key="x" id="4"`, "3"));

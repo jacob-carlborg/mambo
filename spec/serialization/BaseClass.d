@@ -56,20 +56,20 @@ unittest
 	base = sub;
 
 	describe("serialize subclass through a base class reference") in {
-		it("should return serialized subclass with the static type \"Base\" and the runtime type \"tests.BaseClass.Sub\"") in {
+		it("should return serialized subclass with the static type \"Base\" and the runtime type \"spec.serialization.BaseClass.Sub\"") in {
 			Serializer.register!(Sub);
 			serializer.serialize(base);
 	
 			assert(archive.data().containsDefaultXmlContent());
-			assert(archive.data().containsXmlTag("object", `runtimeType="tests.BaseClass.Sub" type="tests.BaseClass.Base" key="0" id="0"`));
+			assert(archive.data().containsXmlTag("object", `runtimeType="spec.serialization.BaseClass.Sub" type="spec.serialization.BaseClass.Base" key="0" id="0"`));
 			assert(archive.data().containsXmlTag("int", `key="b" id="1"`, "4"));
-			assert(archive.data().containsXmlTag("base", `type="tests.BaseClass.Base" key="1" id="2"`));
+			assert(archive.data().containsXmlTag("base", `type="spec.serialization.BaseClass.Base" key="1" id="2"`));
 			assert(archive.data().containsXmlTag("int", `key="a" id="3"`, "3"));
 		};
 	};
 	
 	describe("deserialize subclass through a base class reference") in {
-		it("should return a deserialized subclass with the static type \"Base\" and the runtime type \"tests.BaseClass.Sub\"") in {
+		it("should return a deserialized subclass with the static type \"Base\" and the runtime type \"spec.serialization.BaseClass.Sub\"") in {
 			auto subDeserialized = serializer.deserialize!(Base)(archive.untypedData);
 
 			assert(sub.a == subDeserialized.getA);

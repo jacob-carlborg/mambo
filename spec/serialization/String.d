@@ -43,7 +43,7 @@ unittest
 			serializer.serialize(c);
 	
 			assert(archive.data().containsDefaultXmlContent());
-			assert(archive.data().containsXmlTag("object", `runtimeType="tests.String.C" type="tests.String.C" key="0" id="0"`));
+			assert(archive.data().containsXmlTag("object", `runtimeType="spec.serialization.String.C" type="spec.serialization.String.C" key="0" id="0"`));
 			
 			version (Tango) string type = "char";
 			else string type = "immutable(char)";
@@ -83,7 +83,7 @@ unittest
 			serializer.serialize(u);
 
 			assert(archive.data().containsDefaultXmlContent());
-			assert(archive.data().containsXmlTag("object", `runtimeType="tests.String.C" type="tests.String.C" key="0" id="0"`));
+			assert(archive.data().containsXmlTag("object", `runtimeType="spec.serialization.String.C" type="spec.serialization.String.C" key="0" id="0"`));
 			
 			version (Tango) string type = "char";
 			else string type = "immutable(char)";

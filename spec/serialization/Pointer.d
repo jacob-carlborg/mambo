@@ -62,7 +62,7 @@ unittest
 			serializer.serialize(f);
 
 			assert(archive.data().containsDefaultXmlContent());
-			assert(archive.data().containsXmlTag("object", `runtimeType="tests.Pointer.F" type="tests.Pointer.F" key="0" id="0"`));
+			assert(archive.data().containsXmlTag("object", `runtimeType="spec.serialization.Pointer.F" type="spec.serialization.Pointer.F" key="0" id="0"`));
 			assert(archive.data().containsXmlTag("int", `key="value" id="1"`, "9"));
 			assert(archive.data().containsXmlTag("pointer", `key="ptr" id="2"`));
 			assert(archive.data().containsXmlTag("reference", `key="1"`, "1"));
@@ -89,7 +89,7 @@ unittest
 			serializer.serialize(outOfOrder);
 
 			assert(archive.data().containsDefaultXmlContent());
-			assert(archive.data().containsXmlTag("object", `runtimeType="tests.Pointer.OutOfOrder" type="tests.Pointer.OutOfOrder" key="0" id="0"`));
+			assert(archive.data().containsXmlTag("object", `runtimeType="spec.serialization.Pointer.OutOfOrder" type="spec.serialization.Pointer.OutOfOrder" key="0" id="0"`));
 			assert(archive.data().containsXmlTag("pointer", `key="ptr" id="1"`));
 			assert(archive.data().containsXmlTag("int", `key="1" id="2"`, "9"));
 			assert(archive.data().containsXmlTag("reference", `key="value"`, "1"));

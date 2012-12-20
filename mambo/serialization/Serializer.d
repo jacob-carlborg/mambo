@@ -22,7 +22,7 @@ import mambo.util._;
 
 private
 {
-	alias orange.util.CTFE.contains ctfeContains;
+	alias mambo.util.Ctfe.contains ctfeContains;
 
 	enum Mode
 	{
@@ -993,7 +993,7 @@ class Serializer
 		if (!hasBegunDeserializing)
 			hasBegunDeserializing = true;
 		
-		if (key.empty())
+		if (key.isEmpty)
 			key = nextKey;
 
 		archive.beginUnarchiving(data);

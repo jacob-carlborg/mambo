@@ -292,3 +292,11 @@ auto map (alias func, Range) (Range range)
 	else
 		return algorithm.map!(func)(range);
 }
+
+inout(T)[] assumeUnique (T) (ref T[] source, ref inout(T)[] destination)
+{
+	destination = cast(inout(T)[]) source;
+	source = null;
+
+	return destination;
+}

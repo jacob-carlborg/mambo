@@ -134,7 +134,7 @@ template NonSerialized (Fields ...)
 			static const __nonSerialized = ["this"[]];
 
 		else
-			static const __nonSerialized = toArray!(Fields)();
+			static const __nonSerialized = mambo.serialization.Serializable.toArray!(Fields)();
 	}
 
 	else
@@ -143,9 +143,12 @@ template NonSerialized (Fields ...)
 			static enum __nonSerialized = ["this"[]];
 
 		else
-			static enum __nonSerialized = toArray!(Fields)();`);
+			static enum __nonSerialized = mambo.serialization.Serializable.toArray!(Fields)();`);
 	}
 }
+
+///
+alias mambo.util.Ctfe.toArray toArray;
 
 /**
  * 
@@ -154,32 +157,6 @@ template NonSerialized (Fields ...)
 struct NonSerializedField (string name)
 {
 	const field = name;
-}
-
-/**
- * Converts a tuple of aliases to an array of strings containing the names of the given
- * aliases.
- * 
- * Examples:
- * ---
- * int a;
- * int b;
- * 
- * const names = toArray!(a, b);
- * 
- * static assert(names == ["a", "b"]);
- * ---
- * 
- * Returns: an array containing the names of the given aliases
- */
-static string[] toArray (Args ...) ()
-{
-	string[] args;
-	
-	foreach (i, _ ; typeof(Args))
-		args ~= Args[i].stringof;
-	
-	return args;
 }
 
 package:

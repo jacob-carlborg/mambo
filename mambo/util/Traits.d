@@ -6,6 +6,8 @@
  */
 module mambo.util.Traits;
 
+import Phobos = std.traits;
+
 import Tango = tango.core.Traits;
 
 import mambo.core.string;
@@ -209,6 +211,7 @@ template ValueTypeOfAssociativeArray (T)
 	alias typeof(T.init.values[0]) ValueTypeOfAssociativeArray;
 }
 
+/// Evaluates true if the given arguments resolves to a predicated
 template isPredicate (alias predicate, Args...)
 {
 	enum isPredicate = __traits(compiles, {
@@ -216,9 +219,26 @@ template isPredicate (alias predicate, Args...)
 	});
 }
 
+/// Evaluates true if the given arguments resolves to a predicated associative arrays
 template isAssociativeArrayPredicate (alias predicate, T)
 {
 	enum isAssociativeArrayPredicate = isPredicate!(predicate,
 		KeyTypeOfAssociativeArray!(T),
 		ValueTypeOfAssociativeArray!(T));
+}
+
+/// Evaluates to the type of the data type.
+template TypeOfDataType (T)
+{
+	alias T.DataType TypeOfDataType;
+}
+
+/// Unqualifies the given type, i.e. removing const, immutable and so on.
+template Unqual (T)
+{
+	version (Tango)
+		alias T Unqual;
+
+	else
+		alias Phobos.Unqual!(T) Unqual;
 }

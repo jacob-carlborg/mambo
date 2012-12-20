@@ -138,6 +138,32 @@ T[][] split (T) (T[] str, T splitChar = ',')
 	return arr;
 }
 
+/**
+ * Converts a tuple of aliases to an array of strings containing the names of the given
+ * aliases.
+ *
+ * Examples:
+ * ---
+ * int a;
+ * int b;
+ *
+ * const names = toArray!(a, b);
+ *
+ * static assert(names == ["a", "b"]);
+ * ---
+ *
+ * Returns: an array containing the names of the given aliases
+ */
+static string[] toArray (Args ...) ()
+{
+	string[] args;
+
+	foreach (i, _ ; typeof(Args))
+		args ~= Args[i].stringof;
+
+	return args;
+}
+
 private:
 	
 template decimalDigit (int n)	// [3]

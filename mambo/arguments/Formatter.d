@@ -77,7 +77,7 @@ class DefaultFormatter : Formatter
 		this.arguments = arguments;
 	}
 
-	string errors (char[] delegate (char[] buffer, const(char)[] format, ...) dg)
+	override string errors (char[] delegate (char[] buffer, const(char)[] format, ...) dg)
 	{
 		auto res = arguments.errors(dg);
 		string result = res.assumeUnique;
@@ -111,7 +111,7 @@ class DefaultFormatter : Formatter
 		return errorMessages_ = errors;
 	}
 
-	@property string helpText ()
+	override @property string helpText ()
 	{
 		string help = header;
 

@@ -209,8 +209,9 @@ bool endsWith (T) (T[] a, T[] b)
 T[] repeat (T) (T[] arr, size_t number)
 {
 	T[] result;
+	result.reserve(arr.length * number);
 
-	foreach (_ ; 0 .. number + 1)
+	foreach (_ ; 0 .. number)
 		result ~= arr;
 	
 	return result;

@@ -114,6 +114,7 @@ class DefaultFormatter : Formatter
 	override @property string helpText ()
 	{
 		string help = header;
+		auto optionNames = generateOptionNames();
 
 		if (positionalArguments.any)
 			help ~= "\n\n" ~ positionalArgumentsText;
@@ -131,22 +132,16 @@ private:
 	@property string optionsText ()
 	{
 		string help;
-		immutable len = lengthOfLongestOption;
+		const optionNames = generateOptionNames();
+		immutable len = lengthOfLongestOption(optionNames);
 		enum numberOfIndentations = 1;
 
-		foreach (option ; options)
+		assert(options.length == optionNames.length);
+
+		foreach (i, option ; options)
 		{
 			auto text = option.helpText ~ '.';
-			auto name = option.name;
-
-			if (option.min == 1)
-				name ~= " <arg>";
-
-			else if (option.min > 1)
-				name ~= " <arg0>";
-
-			if (option.max > 1)
-				name ~= " .. <arg" ~ option.max.toString ~ '>';
+			auto name = optionNames[i];
 
 			if (option.name.count == 0 && shortOption(option) == char.init)
 				help ~= format("{}\n", text);
@@ -182,9 +177,9 @@ private:
 		return option.aliases.any ? option.aliases[0] : char.init;
 	}
 
-	@property size_t lengthOfLongestOption ()
+	@property size_t lengthOfLongestOption (const string[] names)
 	{
-		return options.reduce!((a, b) => a.name.count > b.name.count ? a : b).name.count;
+		return names.reduce!((a, b) => a.count > b.count ? a : b).count;
 	}
 
 	@property ArgumentBase[] positionalArguments ()
@@ -237,4 +232,22 @@ private:
 	{
 		return positionalArguments.reduce!((a, b) => a.name.count > b.name.count ? a : b).name.count;
 	}
+
+    string[] generateOptionNames ()
+    {
+		return options.map!((option) {
+			string name = option.name;
+
+			if (option.min == 1)
+				name ~= " <arg>";
+
+			else if (option.min > 1)
+				name ~= " <arg0>";
+
+			if (option.max > 1)
+				name ~= " .. <arg" ~ option.max.toString ~ '>';
+
+			return name;
+		}).toArray;
+    }
 }

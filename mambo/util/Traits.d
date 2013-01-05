@@ -7,6 +7,7 @@
 module mambo.util.Traits;
 
 import Tango = tango.core.Traits;
+import Phobos = std.traits;
 
 import mambo.core.string;
 
@@ -222,3 +223,6 @@ template isAssociativeArrayPredicate (alias predicate, T)
 		KeyTypeOfAssociativeArray!(T),
 		ValueTypeOfAssociativeArray!(T));
 }
+
+/// Unqualifies the given type, i.e. removing const, immutable and so on.
+alias Phobos.Unqual Unqual;

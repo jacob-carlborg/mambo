@@ -993,7 +993,7 @@ class Serializer
 		if (!hasBegunDeserializing)
 			hasBegunDeserializing = true;
 		
-		if (key.empty())
+		if (key.isEmpty)
 			key = nextKey;
 
 		archive.beginUnarchiving(data);

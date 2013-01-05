@@ -61,8 +61,8 @@ unittest
 	foo.x = 5;
 	i = 3;
 
-	describe("serialize object using a non-intrusive method") in {
-		it("should return a custom serialized object") in {
+	describe! "serialize object using a non-intrusive method" in {
+		it! "should return a custom serialized object" in {
 			Serializer.registerSerializer!(Foo)(&toData);
 			Serializer.registerDeserializer!(Foo)(&fromData);
 			
@@ -80,8 +80,8 @@ unittest
 		};
 	};
 	
-	describe("deserialize object using a non-intrusive method") in {
-		it("short return a custom deserialized object equal to the original object") in {
+	describe! "deserialize object using a non-intrusive method" in {
+		it! "short return a custom deserialized object equal to the original object" in {
 			auto f = serializer.deserialize!(Foo)(archive.untypedData);
 
 			assert(foo.a == f.a);

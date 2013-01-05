@@ -54,8 +54,8 @@ unittest
 	outOfOrder.ptr = &outOfOrder.value;
 	outOfOrder.ptr2 = &outOfOrderPointee;
 
-	describe("serialize pointer") in {
-		it("should return a serialized pointer") in {
+	describe! "serialize pointer" in {
+		it! "should return a serialized pointer" in {
 			serializer.reset();
 			serializer.serialize(f);
 
@@ -69,20 +69,20 @@ unittest
 		};
 	};
 	
-	describe("deserialize pointer") in {
+	describe! "deserialize pointer" in {
 		fDeserialized = serializer.deserialize!(F)(archive.untypedData);
 	
-		it("should return a deserialized pointer equal to the original pointer") in {
+		it! "should return a deserialized pointer equal to the original pointer" in {
 			assert(*f.ptr == *fDeserialized.ptr);
 		};
 		
-		it("the pointer should point to the deserialized value") in {
+		it! "the pointer should point to the deserialized value" in {
 			assert(fDeserialized.ptr == &fDeserialized.value);
 		};
 	};
 
-	describe("serialize pointer out of order") in {
-		it("should return a serialized pointer") in {
+	describe! "serialize pointer out of order" in {
+		it! "should return a serialized pointer" in {
 			serializer.reset();
 			serializer.serialize(outOfOrder);
 
@@ -96,14 +96,14 @@ unittest
 		};
 	};
 
-	describe("deserialize pointer out of order") in {
+	describe! "deserialize pointer out of order" in {
 		outOfOrderDeserialized = serializer.deserialize!(OutOfOrder)(archive.untypedData);
 
-		it("should return a deserialized pointer equal to the original pointer") in {
+		it! "should return a deserialized pointer equal to the original pointer" in {
 			assert(*outOfOrder.ptr == *outOfOrderDeserialized.ptr);
 		};
 
-		it("the pointer should point to the deserialized value") in {
+		it! "the pointer should point to the deserialized value" in {
 			assert(outOfOrderDeserialized.ptr == &outOfOrderDeserialized.value);
 		};
 	};

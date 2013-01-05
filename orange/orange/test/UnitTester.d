@@ -34,8 +34,8 @@
  * 
  * unittest ()
  * {
- * 	describe("sum") in {
- * 		it("should return the sum of the two given arguments") in {
+ * 	describe! "sum" in {
+ * 		it! "should return the sum of the two given arguments" in {
  * 			assert(sum(1, 2) == 3);
  * 		}
  * 	}
@@ -58,8 +58,8 @@
  *        tango.core.Exception.AssertException@main(44): Assertion failure
  * 
  * 	
- * describe("sum") in {
- * 	it("should return the sum of the given arguments") in {
+ * describe! "sum" in {
+ * 	it! "should return the sum of the given arguments" in {
  * 		assert(sum(1, 2) == 3);
  * 	};
  * };
@@ -99,7 +99,7 @@ import orange.util._;
  * ---
  * unittest ()
  * {
- * 	describe("the description of the tests") in {
+ * 	describe! "the description of the tests" in {
  * 
  * 	};
  * }
@@ -122,12 +122,12 @@ Use!(void delegate (), string) describe (string message)
  * ---
  * unittest ()
  * {
- * 	describe("the description of the tests") in {
- * 		it("should do something") in {
+ * 	describe! "the description of the tests" in {
+ * 		it! "should do something" in {
  * 			// put your assert here
  * 		};
  * 
- * 		it("should do something else") in {
+ * 		it! "should do something else" in {
  * 			// put another assert here
  * 		}
  * 	};

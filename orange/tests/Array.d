@@ -30,8 +30,8 @@ unittest
 	d = new D;
 	d.arr = [27, 382, 283, 3820, 32, 832].dup;
 
-	describe("serialize array") in {
-		it("should return a serialized array") in {
+	describe! "serialize array" in {
+		it! "should return a serialized array" in {
 			serializer.reset;
 			serializer.serialize(d);
 
@@ -47,8 +47,8 @@ unittest
 		};
 	};
 	
-	describe("deserialize array") in {
-		it("should return a deserialize array equal to the original array") in {
+	describe! "deserialize array" in {
+		it! "should return a deserialize array equal to the original array" in {
 			auto dDeserialized = serializer.deserialize!(D)(archive.untypedData);
 			assert(d.arr == dDeserialized.arr);
 		};

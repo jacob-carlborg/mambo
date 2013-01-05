@@ -108,8 +108,8 @@ unittest
 	version (Tango) const zero = "0";
 	else mixin(`enum zero = "0x0p+0";`);
 
-	describe("serialize primitives") in {
-		it("should return serialized primitives") in {
+	describe! "serialize primitives" in {
+		it! "should return serialized primitives" in {
 			serializer.reset;
 			serializer.serialize(h);
 
@@ -133,8 +133,8 @@ unittest
 		};
 	};
 	
-	describe("deserialize primitives") in {
-		it("should return deserialized primitives equal to the original primitives") in {
+	describe! "deserialize primitives" in {
+		it! "should return deserialized primitives equal to the original primitives" in {
 			auto hDeserialized = serializer.deserialize!(H)(archive.untypedData);
 			assert(h == hDeserialized);
 		};

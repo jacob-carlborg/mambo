@@ -33,8 +33,8 @@ unittest
 	k.a = [3 : 4, 1 : 2, 39 : 472, 6 : 7];
 	k.b = k.a;
 
-	describe("serialize associative array references") in {
-		it("should return a serialized associative array and a serialized reference") in {
+	describe! "serialize associative array references" in {
+		it! "should return a serialized associative array and a serialized reference" in {
 			serializer.reset();
 			serializer.serialize(k);
 	
@@ -66,8 +66,8 @@ unittest
 		};
 	};
 	
-	describe("deserialize associative array references") in {
-		it("should return two deserialized associative arrays pointing to the same data") in {
+	describe! "deserialize associative array references" in {
+		it! "should return two deserialized associative arrays pointing to the same data" in {
 			auto kDeserialized = serializer.deserialize!(K)(archive.untypedData);
 			
 			assert(kDeserialized.a is kDeserialized.b);

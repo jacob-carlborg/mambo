@@ -74,8 +74,8 @@ unittest
 
 	a = new A(1, 2, "str", new immutable(B)(3), &ptr);
 
-	describe("serialize object with immutable and const fields") in {
-		it("should return a serialized object") in {
+	describe! "serialize object with immutable and const fields" in {
+		it! "should return a serialized object" in {
 			serializer.reset;
 			serializer.serialize(a);
 
@@ -96,8 +96,8 @@ unittest
 		};
 	};
 	
-	describe("deserialize object") in {
-		it("should return a deserialized object equal to the original object") in {
+	describe! "deserialize object" in {
+		it! "should return a deserialized object equal to the original object" in {
 			auto aDeserialized = serializer.deserialize!(A)(archive.untypedData);
 			assert(a == aDeserialized);
 		};

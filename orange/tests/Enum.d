@@ -37,8 +37,8 @@ unittest
 	g = new G;
 	g.foo = Foo.b;
 
-	describe("serialize enum") in {
-		it("should return a serialized enum") in {
+	describe! "serialize enum" in {
+		it! "should return a serialized enum" in {
 			serializer.reset();
 			serializer.serialize(g);
 	
@@ -49,8 +49,8 @@ unittest
 	};
 	
 	
-	describe("deserialize enum") in {
-		it("should return an enum equal to the original enum") in {
+	describe! "deserialize enum" in {
+		it! "should return an enum equal to the original enum" in {
 			auto gDeserialized = serializer.deserialize!(G)(archive.untypedData);
 			assert(g.foo == gDeserialized.foo);
 		};

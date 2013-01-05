@@ -30,8 +30,8 @@ unittest
 	e = new E;
 	e.aa = [3 : 4, 1 : 2, 39 : 472, 6 : 7];
 
-	describe("serialize associative array") in {
-		it("should return a serialized associative array") in {
+	describe! "serialize associative array" in {
+		it! "should return a serialized associative array" in {
 			serializer.reset();
 			serializer.serialize(e);
 	
@@ -61,8 +61,8 @@ unittest
 		};
 	};
 	
-	describe("deserialize associative array") in {
-		it("should return an associative array equal to the original associative array") in {
+	describe! "deserialize associative array" in {
+		it! "should return an associative array equal to the original associative array" in {
 			auto eDeserialized = serializer.deserialize!(E)(archive.untypedData);
 			
 			foreach (k, v ; eDeserialized.aa)

@@ -63,8 +63,8 @@ unittest
 	
 	events = new Events;
 	
-	describe("serialize a class with event handlers") in {
-		it("should return serialized class with the correct values set by the event handlers") in {
+	describe! "serialize a class with event handlers" in {
+		it! "should return serialized class with the correct values set by the event handlers" in {
 			serializer.reset;
 			serializer.serialize(events);
 	
@@ -77,8 +77,8 @@ unittest
 		};
 	};
 	
-	describe("deserialize class with a base class") in {
-		it("should return a deserialized string equal to the original string") in {
+	describe! "deserialize class with a base class" in {
+		it! "should return a deserialized string equal to the original string" in {
 			auto eventsDeserialized = serializer.deserialize!(Events)(archive.untypedData);
 	
 			assert(eventsDeserialized.a == 3);

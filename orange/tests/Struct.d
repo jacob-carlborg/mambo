@@ -41,8 +41,8 @@ unittest
 	archive = new XmlArchive!(char);
 	serializer = new Serializer(archive);
 
-	describe("serialize struct") in {
-		it("should return a serialized struct") in {
+	describe! "serialize struct" in {
+		it! "should return a serialized struct" in {
 			serializer.reset;
 			serializer.serialize(B());
 	
@@ -51,8 +51,8 @@ unittest
 		};
 	};
 	
-	describe("deserialize struct") in {
-		it("should return a deserialized struct equal to the original struct") in {
+	describe! "deserialize struct" in {
+		it! "should return a deserialized struct equal to the original struct" in {
 			auto bDeserialized = serializer.deserialize!(B)(archive.untypedData);
 			assert(b == bDeserialized);
 		};

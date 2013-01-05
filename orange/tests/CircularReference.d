@@ -44,8 +44,8 @@ unittest
 	b.a = a;
 	a.b = b;
 
-	describe("serialize objects with circular reference") in {
-		it("should return a serialized object") in {
+	describe! "serialize objects with circular reference" in {
+		it! "should return a serialized object" in {
 			serializer.reset;
 			serializer.serialize(a);
 
@@ -59,8 +59,8 @@ unittest
 		};
 	};
 	
-	describe("deserialize objects with circular reference") in {
-		it("should return a deserialized object equal to the original object") in {
+	describe! "deserialize objects with circular reference" in {
+		it! "should return a deserialized object equal to the original object" in {
 			auto aDeserialized = serializer.deserialize!(A)(archive.untypedData);
 
 			assert(a is a.b.a);

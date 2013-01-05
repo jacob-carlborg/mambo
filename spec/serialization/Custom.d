@@ -47,8 +47,8 @@ unittest
 	foo.b = 4;
 	i = 3;
 
-	describe("serialize object using custom serialization methods") in {
-		it("should return a custom serialized object") in {
+	describe! "serialize object using custom serialization methods" in {
+		it! "should return a custom serialized object" in {
 			serializer.serialize(foo);
 
 			assert(archive.data().containsDefaultXmlContent());
@@ -59,8 +59,8 @@ unittest
 		};
 	};
 	
-	describe("deserialize object using custom serialization methods") in {
-		it("short return a custom deserialized object equal to the original object") in {
+	describe! "deserialize object using custom serialization methods" in {
+		it! "short return a custom deserialized object equal to the original object" in {
 			auto f = serializer.deserialize!(Foo)(archive.untypedData);
 
 			assert(foo.a == f.a);

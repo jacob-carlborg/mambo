@@ -35,8 +35,8 @@ unittest
 	c.wstr = "bar";
 	c.dstr = "foobar";
 
-	describe("serialize strings") in {
-		it("should return serialized strings") in {
+	describe! "serialize strings" in {
+		it! "should return serialized strings" in {
 			serializer.reset;
 			serializer.serialize(c);
 	
@@ -60,8 +60,8 @@ unittest
 		};
 	};
 	
-	describe("deserialize string") in {
-		it("should return a deserialized string equal to the original string") in {
+	describe! "deserialize string" in {
+		it! "should return a deserialized string equal to the original string" in {
 			auto cDeserialized = serializer.deserialize!(C)(archive.untypedData);
 
 			assert(c.str == cDeserialized.str);
@@ -75,8 +75,8 @@ unittest
 	u.wstr = "foo ÅÄÖ";
 	u.dstr = "foo åäö ÅÄÖ";
 	
-	describe("serialize Unicode strings") in {
-		it("should return a serialized string containing proper Unicode") in {
+	describe! "serialize Unicode strings" in {
+		it! "should return a serialized string containing proper Unicode" in {
 			serializer.reset;
 			serializer.serialize(u);
 
@@ -100,8 +100,8 @@ unittest
 		};
 	};
 	
-	describe("deserialize Unicode string") in {
-		it("should return a deserialize Unicode string equal to the original strings") in {
+	describe! "deserialize Unicode string" in {
+		it! "should return a deserialize Unicode string equal to the original strings" in {
 			auto uDeserialized = serializer.deserialize!(C)(archive.untypedData);
 
 			assert(u.str == uDeserialized.str);

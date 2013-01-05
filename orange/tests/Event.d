@@ -52,8 +52,8 @@ unittest
 	archive = new XmlArchive!(char);
 	serializer = new Serializer(archive);
 
-	describe("serialization events") in {
-		it("all four events should be triggered when serializing and deserializing") in {
+	describe! "serialization events" in {
+		it! "all four events should be triggered when serializing and deserializing" in {
 			serializer.serialize(new Foo);
 			serializer.deserialize!(Foo)(archive.untypedData);
 

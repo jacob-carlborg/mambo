@@ -134,7 +134,7 @@ template NonSerialized (Fields ...)
 			static const __nonSerialized = ["this"[]];
 
 		else
-			static const __nonSerialized = toArray!(Fields)();
+			static const __nonSerialized = mambo.serialization.Serializable.toArray!(Fields)();
 	}
 
 	else
@@ -143,7 +143,7 @@ template NonSerialized (Fields ...)
 			static enum __nonSerialized = ["this"[]];
 
 		else
-			static enum __nonSerialized = toArray!(Fields)();`);
+			static enum __nonSerialized = mambo.serialization.Serializable.toArray!(Fields)();`);
 	}
 }
 

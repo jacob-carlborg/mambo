@@ -36,8 +36,8 @@ unittest
 	sub.a = 3;
 	sub.b = 4;
 
-	describe("serialize a subclass") in {
-		it("should return serialized subclass") in {
+	describe! "serialize a subclass" in {
+		it! "should return serialized subclass" in {
 			serializer.reset;
 			serializer.serialize(sub);
 
@@ -49,8 +49,8 @@ unittest
 		};
 	};
 	
-	describe("deserialize class with a base class") in {
-		it("should return a deserialized string equal to the original string") in {
+	describe! "deserialize class with a base class" in {
+		it! "should return a deserialized string equal to the original string" in {
 			auto subDeserialized = serializer.deserialize!(Sub)(archive.untypedData);
 	
 			assert(sub.a == subDeserialized.a);

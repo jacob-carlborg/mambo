@@ -53,8 +53,8 @@ unittest
 	sub.b = 4;
 	base = sub;
 
-	describe("serialize subclass through a base class reference") in {
-		it("should return serialized subclass with the static type \"Base\" and the runtime type \"tests.BaseClass.Sub\"") in {
+	describe! "serialize subclass through a base class reference" in {
+		it! "should return serialized subclass with the static type \"Base\" and the runtime type \"tests.BaseClass.Sub\"" in {
 			Serializer.register!(Sub);
 			serializer.serialize(base);
 	
@@ -66,8 +66,8 @@ unittest
 		};
 	};
 	
-	describe("deserialize subclass through a base class reference") in {
-		it("should return a deserialized subclass with the static type \"Base\" and the runtime type \"tests.BaseClass.Sub\"") in {
+	describe! "deserialize subclass through a base class reference" in {
+		it! "should return a deserialized subclass with the static type \"Base\" and the runtime type \"tests.BaseClass.Sub\"" in {
 			auto subDeserialized = serializer.deserialize!(Base)(archive.untypedData);
 
 			assert(sub.a == subDeserialized.getA);

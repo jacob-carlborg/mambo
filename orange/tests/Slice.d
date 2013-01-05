@@ -44,11 +44,11 @@ unittest
 	j.secondSource = [10, 11, 12, 13, 14, 15].dup;
 	j.secondSlice = j.secondSource[1 .. 4];
 
-	describe("serialize slices") in {
+	describe! "serialize slices" in {
 		serializer.reset();
 		serializer.serialize(j);
 		
-		it("should return serialized slices") in {
+		it! "should return serialized slices" in {
 
 			assert(archive.data().containsDefaultXmlContent());
 			assert(archive.data().containsXmlTag("object", `runtimeType="tests.Slice.J" type="tests.Slice.J" key="0" id="0"`));
@@ -85,27 +85,27 @@ unittest
 			assert(archive.data().containsXmlTag("array", `type="int[]" length="0" key="thirdEmpty" id="30"`, true));
 		};
 		
-		it("should not contain slices to empty arrays") in {
+		it! "should not contain slices to empty arrays" in {
 			assert(!archive.data().containsXmlTag("slice", `key="firstEmpty" offset="0" length="0"`, "30"));
 			assert(!archive.data().containsXmlTag("slice", `key="secondEmpty" offset="0" length="0"`, "30"));
 			assert(!archive.data().containsXmlTag("slice", `key="thirdEmpty" offset="0" length="0"`, "28"));
 		};
 	};
 	
-	describe("deserialize slices") in {
+	describe! "deserialize slices" in {
 		jDeserialized = serializer.deserialize!(J)(archive.untypedData);
 	
-		it("should return deserialized strings equal to the original strings") in {
+		it! "should return deserialized strings equal to the original strings" in {
 			assert(j.firstSource == jDeserialized.firstSource);
 			assert(j.secondSource == jDeserialized.secondSource);
 		};
 	
-		it("should return deserialized slices equal to the original slices") in {
+		it! "should return deserialized slices equal to the original slices" in {
 			assert(j.firstSlice == jDeserialized.firstSlice);
 			assert(j.secondSlice == jDeserialized.secondSlice);
 		};
 	
-		it("the slices should be equal to a slice of the original sources") in {
+		it! "the slices should be equal to a slice of the original sources" in {
 			assert(jDeserialized.firstSource[3 .. 7] == jDeserialized.firstSlice);
 			assert(jDeserialized.secondSource[1 .. 4] == jDeserialized.secondSlice);
 	
@@ -113,7 +113,7 @@ unittest
 			assert(j.secondSource[1 .. 4] == jDeserialized.secondSlice);
 		};
 	
-		it("the slices should be able to modify the sources") in {
+		it! "the slices should be able to modify the sources" in {
 			jDeserialized.firstSlice[0] = 55;
 			jDeserialized.secondSlice[0] = 3;
 	

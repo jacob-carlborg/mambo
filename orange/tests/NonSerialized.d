@@ -44,8 +44,8 @@ unittest
 	foo.b = 4;
 	foo.bar = new Bar;
 
-	describe("serialize object with a non-serialized field") in {
-		it("should return serialized object with only one serialized field") in {
+	describe! "serialize object with a non-serialized field" in {
+		it! "should return serialized object with only one serialized field" in {
 			serializer.serialize(foo);
 
 			assert(archive.data().containsDefaultXmlContent());
@@ -55,8 +55,8 @@ unittest
 		};
 	};
 	
-	describe("deserialize object with a non-serialized field") in {
-		it("short return deserialized object equal to the original object, where only one field is deserialized") in {
+	describe! "deserialize object with a non-serialized field" in {
+		it! "short return deserialized object equal to the original object, where only one field is deserialized" in {
 			auto f = serializer.deserialize!(Foo)(archive.untypedData);
 
 			assert(foo.b == f.b);

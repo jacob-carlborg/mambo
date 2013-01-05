@@ -4,7 +4,7 @@
  * Version: Initial created: Jan 26, 2010
  * License: $(LINK2 http://www.boost.org/LICENSE_1_0.txt, Boost Software License 1.0)
  */
-module orange.serialization.Serializer;
+module mambo.serialization.Serializer;
 
 version (Tango)
 	import tango.util.Convert : to, ConversionException;
@@ -15,10 +15,10 @@ else
 	alias ConvException ConversionException;
 }
 
-import orange.core._;
-import orange.serialization._;
-import orange.serialization.archives.Archive;
-import orange.util._;
+import mambo.core._;
+import mambo.serialization._;
+import mambo.serialization.archives.Archive;
+import mambo.util._;
 
 private
 {
@@ -66,9 +66,9 @@ private
  * 
  * Examples:
  * ---
- * import orange.serialization._;
- * import orange.serialization.archives._;
- * import orange.core._;
+ * import mambo.serialization._;
+ * import mambo.serialization.archives._;
+ * import mambo.core._;
  * 
  * class Foo
  * {

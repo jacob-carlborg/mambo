@@ -4,9 +4,9 @@
  * Version: Initial created: Feb 4, 2010
  * License: $(LINK2 http://www.boost.org/LICENSE_1_0.txt, Boost Software License 1.0)
  */
-module orange.serialization.RegisterWrapper;
+module mambo.serialization.RegisterWrapper;
 
-import orange.serialization.Serializer;
+import mambo.serialization.Serializer;
 
 /**
  * This class is the base of all register wrappers. A register wrapper wraps a function

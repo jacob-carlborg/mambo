@@ -4,7 +4,7 @@
  * Version: Initial created: Feb 6, 2010
  * License: $(LINK2 http://www.boost.org/LICENSE_1_0.txt, Boost Software License 1.0)
  */
-module orange.serialization.archives.Archive;
+module mambo.serialization.archives.Archive;
 
 version (Tango)
 	import tango.util.Convert;
@@ -19,10 +19,10 @@ else
 	private alias ConvException ConversionException;
 }
 
-import orange.core.string;
-import orange.serialization.SerializationException;
-import orange.serialization.Serializer;
-import orange.util.Traits;
+import mambo.core.string;
+import mambo.serialization.SerializationException;
+import mambo.serialization.Serializer;
+import mambo.util.Traits;
 
 /**
  * This interface represents an archive. This is the interface all archive

@@ -4,7 +4,7 @@
  * Version: Initial created: Jan 26, 2010
  * License: $(LINK2 http://www.boost.org/LICENSE_1_0.txt, Boost Software License 1.0)
  */
-module orange.serialization.archives.XmlArchive;
+module mambo.serialization.archives.XmlArchive;
 
 version (Tango)
 	import tango.util.Convert : to;
@@ -12,11 +12,11 @@ version (Tango)
 else
 	import std.conv;
 
-import orange.core._;
-import orange.serialization.archives._;
-import orange.serialization.Serializer;
-import orange.util._;
-import orange.xml.XmlDocument;
+import mambo.core._;
+import mambo.serialization.archives._;
+import mambo.serialization.Serializer;
+import mambo.util._;
+import mambo.xml.XmlDocument;
 
 private enum ArchiveMode
 {

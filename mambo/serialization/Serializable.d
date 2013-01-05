@@ -4,13 +4,13 @@
  * Version: Initial created: Jan 26, 2010
  * License: $(LINK2 http://www.boost.org/LICENSE_1_0.txt, Boost Software License 1.0)
  */
-module orange.serialization.Serializable;
+module mambo.serialization.Serializable;
 
-import orange.core.string;
-import orange.serialization.archives.Archive;
-import orange.serialization.Events;
-import orange.serialization.Serializer;
-import orange.util.CTFE;
+import mambo.core.string;
+import mambo.serialization.archives.Archive;
+import mambo.serialization.Events;
+import mambo.serialization.Serializer;
+import mambo.util.CTFE;
 
 /**
  * This interface represents a type that this is serializable. To implement this interface

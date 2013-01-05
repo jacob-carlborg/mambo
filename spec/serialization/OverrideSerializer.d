@@ -83,11 +83,11 @@ unittest
 			serializer.serialize(foo);
 
 			assert(archive.data().containsDefaultXmlContent());
-			assert(archive.data().containsXmlTag("object", `runtimeType="tests.OverrideSerializer.Foo" type="tests.OverrideSerializer.Foo" key="0" id="0"`));
+			assert(archive.data().containsXmlTag("object", `runtimeType="spec.serialization.OverrideSerializer.Foo" type="spec.serialization.OverrideSerializer.Foo" key="0" id="0"`));
 			assert(archive.data().containsXmlTag("int", `key="a" id="1"`, "3"));
 			assert(archive.data().containsXmlTag("int", `key="b" id="2"`, "4"));
 			
-			assert(archive.data().containsXmlTag("base", `type="tests.OverrideSerializer.Base" key="1" id="3"`));
+			assert(archive.data().containsXmlTag("base", `type="spec.serialization.OverrideSerializer.Base" key="1" id="3"`));
 			assert(archive.data().containsXmlTag("int", `key="x" id="4"`, "5"));
 			
 			assert(i == 4);

@@ -48,7 +48,7 @@ unittest
 			serializer.serialize(B());
 	
 			assert(archive.data().containsDefaultXmlContent());
-			assert(archive.data().contains(`<struct type="tests.Struct.B" key="0" id="0"/>`));
+			assert(archive.data().contains(`<struct type="spec.serialization.Struct.B" key="0" id="0"/>`));
 		};
 	};
 	

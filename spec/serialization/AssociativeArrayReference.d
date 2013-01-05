@@ -39,7 +39,7 @@ unittest
 			serializer.serialize(k);
 	
 			assert(archive.data().containsDefaultXmlContent());
-			assert(archive.data().containsXmlTag("object", `runtimeType="tests.AssociativeArrayReference.K" type="tests.AssociativeArrayReference.K" key="0" id="0"`));
+			assert(archive.data().containsXmlTag("object", `runtimeType="spec.serialization.AssociativeArrayReference.K" type="spec.serialization.AssociativeArrayReference.K" key="0" id="0"`));
 			version (Tango) assert(archive.data().containsXmlTag("associativeArray", `keyType="int" valueType="int" length="4" key="a" id="1"`));
 	
 			assert(archive.data().containsXmlTag("key", `key="0"`));

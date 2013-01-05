@@ -42,7 +42,7 @@ unittest
 			serializer.serialize(a);
 	
 			assert(archive.data().containsDefaultXmlContent());
-			assert(archive.data().contains(`<object runtimeType="tests.Object.A" type="tests.Object.A" key="0" id="0"/>`));
+			assert(archive.data().contains(`<object runtimeType="spec.serialization.Object.A" type="spec.serialization.Object.A" key="0" id="0"/>`));
 		};
 	};
 	

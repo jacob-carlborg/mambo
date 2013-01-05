@@ -83,13 +83,13 @@ unittest
 			else string stringElementType = "char";
 
 			assert(archive.data().containsDefaultXmlContent());
-			assert(archive.data().contains(`<object runtimeType="tests.NonMutable.A" type="tests.NonMutable.A" key="0" id="0">`));
+			assert(archive.data().contains(`<object runtimeType="spec.serialization.NonMutable.A" type="spec.serialization.NonMutable.A" key="0" id="0">`));
 
 			assert(archive.data().containsXmlTag("int", `key="a" id="1"`, "1"));
 			assert(archive.data().containsXmlTag("int", `key="b" id="2"`, "2"));
 			assert(archive.data().containsXmlTag("string", `type="` ~ stringElementType ~ `" length="3" key="c" id="3"`, "str"));
 
-			assert(archive.data().contains(`<object runtimeType="tests.NonMutable.B" type="immutable(tests.NonMutable.B)" key="d" id="4">`));
+			assert(archive.data().contains(`<object runtimeType="spec.serialization.NonMutable.B" type="immutable(spec.serialization.NonMutable.B)" key="d" id="4">`));
 
 			assert(archive.data().containsXmlTag("pointer", `key="e" id="6"`));
 			assert(archive.data().containsXmlTag("int", `key="1" id="7"`, "3"));

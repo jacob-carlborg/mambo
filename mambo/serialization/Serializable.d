@@ -10,7 +10,7 @@ import mambo.core.string;
 import mambo.serialization.archives.Archive;
 import mambo.serialization.Events;
 import mambo.serialization.Serializer;
-import mambo.util.CTFE;
+import mambo.util.Ctfe;
 
 /**
  * This interface represents a type that this is serializable. To implement this interface

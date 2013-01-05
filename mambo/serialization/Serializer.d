@@ -22,7 +22,7 @@ import mambo.util._;
 
 private
 {
-	alias orange.util.CTFE.contains ctfeContains;
+	alias mambo.util.Ctfe.contains ctfeContains;
 
 	enum Mode
 	{

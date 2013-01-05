@@ -4,7 +4,7 @@
  * Version: Initial created: Jun 26, 2010
  * License: $(LINK2 http://www.boost.org/LICENSE_1_0.txt, Boost Software License 1.0)
  */
-module orange.xml.XmlDocument;
+module mambo.xml.XmlDocument;
 
 version (Tango)
 {
@@ -12,7 +12,7 @@ version (Tango)
 	import tango.text.xml.Document;
 	import tango.io.Stdout;
 	
-	import orange.core.string;
+	import mambo.core.string;
 }
 
 else
@@ -20,12 +20,12 @@ else
 	import std.string;
 	import std.stdio;
 	
-	import orange.xml.PhobosXml;
+	import mambo.xml.PhobosXml;
 	
 	version = Phobos;
 }
 
-import orange.core.io;
+import mambo.core.io;
 
 /**
  * Evaluates to $(D_PARAM T) if $(D_PARAM T) is a character type. Otherwise this

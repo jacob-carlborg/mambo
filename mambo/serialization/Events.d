@@ -17,7 +17,7 @@ import mambo.util._;
  */
 template OnDeserialized (alias method)
 {
-	static orange.serialization.Events.Event!(method) __onDeserialized;
+	static mambo.serialization.Events.Event!(method) __onDeserialized;
 }
 
 /**
@@ -29,7 +29,7 @@ template OnDeserialized (alias method)
  */
 template OnDeserializing (alias method)
 {
-	static orange.serialization.Events.Event!(method) __onDeserializing;
+	static mambo.serialization.Events.Event!(method) __onDeserializing;
 }
 
 /**
@@ -41,7 +41,7 @@ template OnDeserializing (alias method)
  */
 template OnSerialized (alias method)
 {
-	static orange.serialization.Events.Event!(method) __onSerialized;
+	static mambo.serialization.Events.Event!(method) __onSerialized;
 }
 
 /**
@@ -53,7 +53,7 @@ template OnSerialized (alias method)
  */
 template OnSerializing (alias method)
 {
-	static orange.serialization.Events.Event!(method) __onSerializing;
+	static mambo.serialization.Events.Event!(method) __onSerializing;
 }
 
 /**

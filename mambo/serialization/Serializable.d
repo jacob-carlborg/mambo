@@ -6,7 +6,7 @@
  */
 module mambo.serialization.Serializable;
 
-import mambo.core.string;
+import mambo.core._;
 import mambo.serialization.archives.Archive;
 import mambo.serialization.Events;
 import mambo.serialization.Serializer;
@@ -146,6 +146,9 @@ template NonSerialized (Fields ...)
 			static enum __nonSerialized = mambo.serialization.Serializable.toArray!(Fields)();`);
 	}
 }
+
+/// Indicates that the declaration this attribute is attached to should not be (de)serialized.
+@attribute struct nonSerialized { }
 
 /**
  * 

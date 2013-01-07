@@ -226,3 +226,31 @@ template isAssociativeArrayPredicate (alias predicate, T)
 
 /// Unqualifies the given type, i.e. removing const, immutable and so on.
 alias Phobos.Unqual Unqual;
+
+/// Evaluates to true if the given symbol is a type.
+template isType (alias symbol)
+{
+	enum isType = __traits(compiles, expectType!(symbol));
+}
+
+private template expectType (T) {}
+
+/**
+ * Evaluates to the type of the given expression or type. The built-in $(D_KEYWORD typeof)
+ * only accepts expressions, not types. If given a type, this will just evaluate to the given
+ * type as is.
+ */
+template TypeOf (alias expr)
+{
+	static if (isType!(expr))
+		alias expr TypeOf;
+
+	else
+		alias typeof(expr) TypeOf;
+}
+
+/// Evaluates to true if the given argument is a symbol.
+template isSymbol (alias arg)
+{
+	enum isSymbol = __traits(compiles, __traits(getAttributes, arg));
+}

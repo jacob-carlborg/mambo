@@ -1489,36 +1489,42 @@ class Serializer
 			else
 				mixin(`enum field = nameOfFieldAt!(T, i);`);
 
-			static if (!ctfeContains!(string)(internalFields, field) && !ctfeContains!(string)(nonSerializedFields, field))
+			mixin(`alias getAttributes!(value.` ~ field ~ `) attributes;`);
+
+			static if (attributes.contains!(nonSerialized) ||
+				ctfeContains!(string)(internalFields, field) ||
+				ctfeContains!(string)(nonSerializedFields, field))
 			{
-				alias typeof(T.tupleof[i]) Type;				
+				continue;
+			}
 
-				auto v = value.tupleof[i];
-				auto id = nextId;
+			alias typeof(T.tupleof[i]) Type;				
 
-				static if (isPointer!(Type))
-					auto pointer = v;
+			auto v = value.tupleof[i];
+			auto id = nextId;
 
-				else
-					auto pointer = &value.tupleof[i];
+			static if (isPointer!(Type))
+				auto pointer = v;
 
-				auto reference = getSerializedReference(v);
+			else
+				auto pointer = &value.tupleof[i];
 
-				if (reference != Id.max)
-					archive.archiveReference(field, reference);
+			auto reference = getSerializedReference(v);
+
+			if (reference != Id.max)
+				archive.archiveReference(field, reference);
+
+			else
+			{
+				auto valueMeta = getSerializedValue(pointer);
+
+				if (valueMeta.isValid)
+					serializePointer(pointer, toData(field), id);
 
 				else
 				{
-					auto valueMeta = getSerializedValue(pointer);
-
-					if (valueMeta.isValid)
-						serializePointer(pointer, toData(field), id);
-
-					else
-					{
-						serializeInternal(v, toData(field), id);
-						addSerializedValue(pointer, id, toData(keyCounter));
-					}
+					serializeInternal(v, toData(field), id);
+					addSerializedValue(pointer, id, toData(keyCounter));
 				}
 			}
 		}

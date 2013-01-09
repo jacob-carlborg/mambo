@@ -64,11 +64,7 @@ template OnSerializing (alias method)
  */
 struct Event (alias m)
 {
-	version (Tango)
-		private const method = &m;
-		
-	else
-		mixin("private enum method = &m;");
+	private enum method = &m;
 	
 	/**
 	 * Triggers the event on the given value.

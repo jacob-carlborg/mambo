@@ -43,21 +43,10 @@ unittest
 	
 			assert(archive.data().containsDefaultXmlContent());
 			assert(archive.data().containsXmlTag("object", `runtimeType="spec.serialization.String.C" type="spec.serialization.String.C" key="0" id="0"`));
-			
-			version (Tango) string type = "char";
-			else string type = "immutable(char)";
-	
-			assert(archive.data().containsXmlTag("string", `type="` ~ type ~ `" length="3" key="str" id="1"`, "foo"));
-			
-			version (Tango) type = "wchar";
-			else type = "immutable(wchar)";
-	
-			assert(archive.data().containsXmlTag("string", `type="` ~ type ~ `" length="3" key="wstr" id="2"`, "bar"));
-			
-			version (Tango) type = "dchar";
-			else type = "immutable(dchar)";
-			
-			assert(archive.data().containsXmlTag("string", `type="` ~ type ~ `" length="6" key="dstr" id="3"`, "foobar"));
+
+			assert(archive.data().containsXmlTag("string", `type="immutable(char)" length="3" key="str" id="1"`, "foo"));
+			assert(archive.data().containsXmlTag("string", `type="immutable(wchar)" length="3" key="wstr" id="2"`, "bar"));
+			assert(archive.data().containsXmlTag("string", `type="immutable(dchar)" length="6" key="dstr" id="3"`, "foobar"));
 		};
 	};
 	
@@ -83,21 +72,10 @@ unittest
 
 			assert(archive.data().containsDefaultXmlContent());
 			assert(archive.data().containsXmlTag("object", `runtimeType="spec.serialization.String.C" type="spec.serialization.String.C" key="0" id="0"`));
-			
-			version (Tango) string type = "char";
-			else string type = "immutable(char)";
-	
-			assert(archive.data().containsXmlTag("string", `type="` ~ type ~ `" length="10" key="str" id="1"`, "foo åäö"));
-			
-			version (Tango) type = "wchar";
-			else type = "immutable(wchar)";
-	
-			assert(archive.data().containsXmlTag("string", `type="` ~ type ~ `" length="7" key="wstr" id="2"`, "foo ÅÄÖ"));
-			
-			version (Tango) type = "dchar";
-			else type = "immutable(dchar)";
-			
-			assert(archive.data().containsXmlTag("string", `type="` ~ type ~ `" length="11" key="dstr" id="3"`, "foo åäö ÅÄÖ"));
+
+			assert(archive.data().containsXmlTag("string", `type="immutable(char)" length="10" key="str" id="1"`, "foo åäö"));
+			assert(archive.data().containsXmlTag("string", `type="immutable(wchar)" length="7" key="wstr" id="2"`, "foo ÅÄÖ"));
+			assert(archive.data().containsXmlTag("string", `type="immutable(dchar)" length="11" key="dstr" id="3"`, "foo åäö ÅÄÖ"));
 		};
 	};
 	

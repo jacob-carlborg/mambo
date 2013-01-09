@@ -6,23 +6,15 @@
  */
 module mambo.serialization.archives.Archive;
 
-version (Tango)
-	import tango.util.Convert;
+import std.conv;
+import std.utf;
 
-else
-{
-	import std.array;
-	import std.conv;
-	import std.utf;
-	static import std.string;
-
-	private alias ConvException ConversionException;
-}
-
-import mambo.core.string;
+import mambo.core._;
 import mambo.serialization.SerializationException;
 import mambo.serialization.Serializer;
 import mambo.util.Traits;
+
+private alias ConvException ConversionException;
 
 /**
  * This interface represents an archive. This is the interface all archive
@@ -97,13 +89,8 @@ interface Archive
 	/// The type of an ID.
 	alias size_t Id;
 	
-	version (Tango)
-		/// The typed used to represent the archived data in an untyped form.
-		alias void[] UntypedData;
-	
-	else
-		/// The typed used to represent the archived data in an untyped form.
-		mixin ("alias immutable(void)[] UntypedData;");
+	/// The typed used to represent the archived data in an untyped form.
+	alias immutable(void)[] UntypedData;
 	
 	
 	/**
@@ -1287,8 +1274,7 @@ interface Archive
 abstract class ArchiveBase (U) : Archive
 {
 	/// The typed used to represent the archived data in a typed form.
-	version (Tango) alias U[] Data;
-	else mixin ("alias immutable(U)[] Data;");
+	alias immutable(U)[] Data;
 	
 	private ErrorCallback errorCallback_;
 	
@@ -1373,7 +1359,7 @@ abstract class ArchiveBase (U) : Archive
 		
 		return Data.init;
 	}
-	
+
 	/**
 	 * Converts the given value from the type used for archiving to $(I T).
 	 * 
@@ -1392,7 +1378,7 @@ abstract class ArchiveBase (U) : Archive
 	 * Throws: SerializationException if the conversion failed
 	 * See_Also: toData
 	 */
-	protected T fromData (T) (Data value)
+	protected T fromData (T, U) (const(U)[] value)
 	{
 		try
 		{
@@ -1408,7 +1394,7 @@ abstract class ArchiveBase (U) : Archive
 		
 		return T.init;
 	}
-	
+
 	/**
 	 * The archive is responsible for archiving primitive types in the format chosen by
 	 * Converts the given floating point value to the type used for archiving.
@@ -1434,11 +1420,7 @@ abstract class ArchiveBase (U) : Archive
 		static assert(isFloatingPoint!(T), format!(`The given value of the type "`, T,
 			`" is not a valid type, the only valid types for this method are floating point types.`));
 		
-		version (Tango)
-			return to!(Data)(value);
-			
-		else
-			return to!(Data)(std.string.format("%a", value));
+		return to!(Data)(std.string.format("%a", value));
 	}
 	
 	/**
@@ -1455,7 +1437,7 @@ abstract class ArchiveBase (U) : Archive
 	 * Throws: SerializationException if the converted failed
 	 * See_Also: fromData
 	 */
-	protected Id toId (Data value)
+	protected Id toId (const(U)[] value)
 	{
 		return fromData!(Id)(value);
 	}
@@ -1489,22 +1471,16 @@ abstract class ArchiveBase (U) : Archive
 		if (errorCallback)
 			errorCallback()(new SerializationException(exception));
 	}
-	
-	private wchar toWchar (Data value)
+
+	private wchar toWchar (const(U)[] value)
 	{
-		version (Tango)
-			return to!(wchar)(value);
-		
-		else
-		{
-			auto c = value.front;
+		auto c = value.first;
 
-			if (codeLength!(wchar)(c) > 2)
-				throw new ConversionException("Could not convert `" ~
-					to!(string)(value) ~ "` of type " ~
-					Data.stringof ~ " to type wchar.");
+		if (codeLength!(wchar)(c) > 2)
+		    throw new ConversionException("Could not convert `" ~
+		        to!(string)(value) ~ "` of type " ~
+		        Data.stringof ~ " to type wchar.");
 
-			return cast(wchar) c;
-		}
+		return cast(wchar) c;
 	}
 }

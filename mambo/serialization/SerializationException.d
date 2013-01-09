@@ -8,11 +8,7 @@ module mambo.serialization.SerializationException;
 
 import mambo.core.string;
 
-version (Tango)
-	alias Exception ExceptionBase;
-
-else
-	alias Throwable ExceptionBase;
+alias Throwable ExceptionBase;
 
 /**
  * This class represents an exception, it's the base class of all exceptions used
@@ -39,44 +35,21 @@ class SerializationException : ExceptionBase
 	 *     file = the file where the exception occurred
 	 *     line = the line in the file where the exception occurred
 	 */
-	this (string message, string file, long line)
+	this (string message, string file, size_t line)
 	{
-		version (Tango)
-			super(message, file, line);
-		
-		else
-			super(message);
+		super(message, file, line);
 	}
-	
-	version (Tango)
+
+	/**
+	 * Creates a new exception out of the given exception. Used for wrapping already existing
+	 * exceptions as SerializationExceptions.
+	 *
+	 *
+	 * Params:
+	 *     exception = the exception exception to wrap
+	 */
+	this (ExceptionBase exception)
 	{
-		/**
-		 * Creates a new exception out of the given exception. Used for wrapping already existing
-		 * exceptions as SerializationExceptions.
-		 * 
-		 * 
-		 * Params:
-		 *     exception = the exception exception to wrap
-		 */
-		this (ExceptionBase exception)
-		{
-			super(exception.msg, exception.file, exception.line, exception.next, exception.info);
-		}
-	}
-	
-	else
-	{
-		/**
-		 * Creates a new exception out of the given exception. Used for wrapping already existing
-		 * exceptions as SerializationExceptions.
-		 * 
-		 * 
-		 * Params:
-		 *     exception = the exception exception to wrap
-		 */
-		this (ExceptionBase exception)
-		{
-			super(exception.msg, exception.file, exception.line);
-		}
+		super(exception.msg, exception.file, exception.line, exception.next);
 	}
 }

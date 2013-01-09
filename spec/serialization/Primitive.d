@@ -105,8 +105,7 @@ unittest
 	h.ushort_ = 1U;
 	h.wchar_ = 'c';
 
-	version (Tango) const zero = "0";
-	else mixin(`enum zero = "0x0p+0";`);
+	enum zero = "0x0p+0";
 
 	describe! "serialize primitives" in {
 		it! "should return serialized primitives" in {

@@ -65,13 +65,10 @@ unittest
 			assert(archive.data().containsXmlTag("int", `key="7" id="9"`, "7"));
 			assert(archive.data().containsXmlTag("int", `key="8" id="10"`, "8"));
 			assert(archive.data().containsXmlTag("int", `key="9" id="11"`, "9"));
-	
-			version (Tango)
-			{
-				assert(archive.data().containsXmlTag("slice", `key="firstSlice" offset="3" length="4"`, "1"));
-				assert(archive.data().containsXmlTag("slice", `key="secondSlice" offset="1" length="3"`, "21"));
-			}
-	
+
+			assert(archive.data().containsXmlTag("slice", `key="firstSlice" offset="3" length="4"`, "1"));
+			assert(archive.data().containsXmlTag("slice", `key="secondSlice" offset="1" length="3"`, "21"));
+
 			assert(archive.data().containsXmlTag("array", `type="int" length="6" key="secondSource" id="21"`));
 	
 			assert(archive.data().containsXmlTag("int", `key="0" id="22"`, "10"));

@@ -18,20 +18,9 @@ XmlArchive!(char) archive;
 
 struct B
 {
-	version (Tango)
+	bool opEquals (ref const B) const
 	{
-		equals_t opEquals (B b)
-		{
-			return true;
-		}
-	}
-	
-	else
-	{
-		mixin(`bool opEquals (ref const B) const
-		{
-			return true;
-		}`);
+		return true;
 	}
 }
 

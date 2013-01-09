@@ -128,23 +128,11 @@ template isSerializable (T)
  */
 template NonSerialized (Fields ...)
 {
-	version (Tango)
-	{
-		static if (Fields.length == 0)
-			static const __nonSerialized = ["this"[]];
-
-		else
-			static const __nonSerialized = mambo.serialization.Serializable.toArray!(Fields)();
-	}
+	static if (Fields.length == 0)
+		static enum __nonSerialized = ["this"[]];
 
 	else
-	{
-		mixin(`static if (Fields.length == 0)
-			static enum __nonSerialized = ["this"[]];
-
-		else
-			static enum __nonSerialized = mambo.serialization.Serializable.toArray!(Fields)();`);
-	}
+		static enum __nonSerialized = mambo.serialization.Serializable.toArray!(Fields)();
 }
 
 /// Indicates that the declaration this attribute is attached to should not be (de)serialized.
@@ -187,17 +175,6 @@ static string[] toArray (Args ...) ()
 
 package:
 
-version (Tango)
-{
-	const nonSerializedField = "__nonSerialized";
-	const serializedField = "__serialized";
-	const internalFields = [nonSerializedField[], onDeserializedField, onDeserializingField, onSerializedField, onSerializingField];
-}
-
-else
-{
-	mixin(
-	`enum nonSerializedField = "__nonSerialized";
-	enum serializedField = "__serialized";
-	enum internalFields = [nonSerializedField[], onDeserializedField, onDeserializingField, onSerializedField, onSerializingField];`);
-}
+enum nonSerializedField = "__nonSerialized";
+enum serializedField = "__serialized";
+enum internalFields = [nonSerializedField[], onDeserializedField, onDeserializingField, onSerializedField, onSerializingField];

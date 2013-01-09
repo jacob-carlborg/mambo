@@ -6,14 +6,7 @@
  */
 module mambo.serialization.Serializer;
 
-version (Tango)
-	import tango.util.Convert : to, ConversionException;
-
-else
-{
-	import std.conv;
-	alias ConvException ConversionException;
-}
+import std.conv;
 
 import mambo.core._;
 import mambo.serialization._;
@@ -23,6 +16,7 @@ import mambo.util._;
 private
 {
 	alias mambo.util.Ctfe.contains ctfeContains;
+	alias ConvException ConversionException;
 
 	enum Mode
 	{
@@ -1475,19 +1469,11 @@ class Serializer
 	{
 		static assert(isStruct!(T) || isObject!(T), format!(`The given value of the type "`, T, `" is not a valid type, the only valid types for this method are objects and structs.`));
 		
-		version (Tango)
-			const nonSerializedFields = collectAnnotations!(T);
-			
-		else
-			mixin(`enum nonSerializedFields = collectAnnotations!(T);`);
+		enum nonSerializedFields = collectAnnotations!(T);
 		
 		foreach (i, dummy ; typeof(T.tupleof))
 		{
-			version (Tango)
-				const field = nameOfFieldAt!(T, i);
-				
-			else
-				mixin(`enum field = nameOfFieldAt!(T, i);`);
+			enum field = nameOfFieldAt!(T, i);
 
 			mixin(`alias getAttributes!(value.` ~ field ~ `) attributes;`);
 
@@ -1537,11 +1523,7 @@ class Serializer
 	{		
 		static assert(isStruct!(T) || isObject!(T), format!(`The given value of the type "`, T, `" is not a valid type, the only valid types for this method are objects and structs.`));
 				
-		version (Tango)
-			const nonSerializedFields = collectAnnotations!(T);
-			
-		else
-			mixin(`enum nonSerializedFields = collectAnnotations!(T);`);
+		enum nonSerializedFields = collectAnnotations!(T);
 
 		static if (isObject!(T))
 			auto rawObject = cast(void*) value;
@@ -1551,11 +1533,7 @@ class Serializer
 
 		foreach (i, dummy ; typeof(T.tupleof))
 		{
-			version (Tango)
-				const field = nameOfFieldAt!(T, i);
-				
-			else
-				mixin(`enum field = nameOfFieldAt!(T, i);`);
+			enum field = nameOfFieldAt!(T, i);
 						
 			static if (!ctfeContains!(string)(internalFields, field) && !ctfeContains!(string)(nonSerializedFields, field))
 			{
@@ -1878,18 +1856,14 @@ class Serializer
 	
 	private static bool isNonSerialized (T) ()
 	{
-		version (Tango)
-			const nonSerializedFields = collectAnnotations!(T);
-
-		else
-			mixin(`enum nonSerializedFields = collectAnnotations!(T);`);
+		enum nonSerializedFields = collectAnnotations!(T);
 
 		return ctfeContains(nonSerializedFields, "this");
 	}
 	
 	private static template hasAnnotation (T, string annotation)
 	{
-		const hasAnnotation = is(typeof({ mixin("const a = T." ~ annotation ~ ";"); }));
+		enum hasAnnotation = is(typeof({ mixin("auto a = T." ~ annotation ~ ";"); }));
 	}
 	
 	private static string[] collectAnnotations (T) ()
@@ -1928,13 +1902,8 @@ class Serializer
  */
 struct Array
 {
-	version (Tango)
-		/// The start address of the array.
-		void* ptr;
-		
-	else
-		/// The start address of the array.
-		mixin(`const(void)* ptr;`);
+	/// The start address of the array.
+	const(void)* ptr;
 
 	/// The length of the array
 	size_t length;

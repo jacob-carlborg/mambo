@@ -1534,49 +1534,55 @@ class Serializer
 		foreach (i, dummy ; typeof(T.tupleof))
 		{
 			enum field = nameOfFieldAt!(T, i);
-						
-			static if (!ctfeContains!(string)(internalFields, field) && !ctfeContains!(string)(nonSerializedFields, field))
+
+			mixin(`alias getAttributes!(value.` ~ field ~ `) attributes;`);
+
+			static if (attributes.contains!(nonSerialized) ||
+				ctfeContains!(string)(internalFields, field) ||
+				ctfeContains!(string)(nonSerializedFields, field))
 			{
-				alias TypeOfField!(T, field) QualifiedType;
-				alias Unqual!(QualifiedType) Type;
+				continue;
+			}
 
-				auto id = deserializeReference(field);
-				auto isReference = id != Id.max;
-				auto offset = value.tupleof[i].offsetof;
-				auto fieldAddress = cast(Type*) (rawObject + offset);
+			alias TypeOfField!(T, field) QualifiedType;
+			alias Unqual!(QualifiedType) Type;
 
-				static if (isPointer!(Type))
+			auto id = deserializeReference(field);
+			auto isReference = id != Id.max;
+			auto offset = value.tupleof[i].offsetof;
+			auto fieldAddress = cast(Type*) (rawObject + offset);
+
+			static if (isPointer!(Type))
+			{
+				auto pointer = deserializePointer!(Type)(toData(field));
+				Type pointerValue;
+
+				if (pointer.hasPointee)
+					pointerValue = getDeserializedValue!(Type)(pointer.pointee);
+
+				else
+					pointerValue = pointer.value;
+
+				*fieldAddress = pointerValue;
+				addDeserializedPointer(value.tupleof[i], pointer.id);
+			}
+
+			else
+			{
+				auto pointer = getDeserializedPointer!(Type*)(id);
+
+				if (isReference && pointer)
 				{
-					auto pointer = deserializePointer!(Type)(toData(field));
-					Type pointerValue;
-
-					if (pointer.hasPointee)
-						pointerValue = getDeserializedValue!(Type)(pointer.pointee);
-
-					else
-						pointerValue = pointer.value;
-
-					*fieldAddress = pointerValue;
-					addDeserializedPointer(value.tupleof[i], pointer.id);
+					*fieldAddress = **pointer;
+					*pointer = cast(Type*) &value.tupleof[i];
 				}
 
 				else
 				{
-					auto pointer = getDeserializedPointer!(Type*)(id);
-
-					if (isReference && pointer)
-					{
-						*fieldAddress = **pointer;
-						*pointer = cast(Type*) &value.tupleof[i];
-					}
-
-					else
-					{
-    					*fieldAddress = deserializeInternal!(Type)(toData(field));
-                        addDeserializedValue(value.tupleof[i], nextId);
-					}
+   					*fieldAddress = deserializeInternal!(Type)(toData(field));
+                       addDeserializedValue(value.tupleof[i], nextId);
 				}
-			}			
+			}	
 		}
 
 		static if (isObject!(T) && !is(T == Object))

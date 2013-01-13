@@ -7,10 +7,10 @@
  */
 module mambo.core.Array;
 
-import stdString = std.string;
 import stdArray = std.array;
 import algorithm = std.algorithm;
 import stdRange = std.range;
+import stdString = std.string;
 
 static import tango.core.Array;
 import tango.stdc.string : memmove;
@@ -300,4 +300,22 @@ inout(T)[] assumeUnique (T) (ref T[] source, ref inout(T)[] destination)
 	source = null;
 
 	return destination;
+}
+
+immutable(T)[] assumeUnique (T) (ref T[] array)
+{
+	auto result = cast(immutable(T)[]) array;
+	array = null;
+
+	return result;
+}
+
+immutable(T)[] assumeUnique (T) (T[] array)
+{
+	return array.assumeUnique;
+}
+
+T[] toMutable (T) (const(T)[] array)
+{
+	return cast(T[]) array;
 }

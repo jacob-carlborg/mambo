@@ -260,15 +260,19 @@ string toString (T) (T value)
 }
 
 /// Converts the given string to lowercase.
-inout(T) toLower (T) (inout(T) value)
+inout(T)[] toLower (T) (inout(T)[] value)
 {
 	auto r = tango.text.Unicode.toLower(value);
-	return r.assumeUnique;
+	inout(T)[] dest;
+
+	return assumeUnique(r, dest);
 }
 
 /// Converts the given string to uppercase.
-inout(T) toUpper (T) (inout(T) value)
+inout(T)[] toUpper (T) (inout(T)[] value)
 {
 	auto r = tango.text.Unicode.toUpper(value);
-	return r.assumeUnique;
+	inout(T)[] dest;
+
+	return assumeUnique(r, dest);
 }

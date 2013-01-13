@@ -1886,7 +1886,7 @@ class Serializer
 	private void error (string message, long line)
 	{
 		if (errorCallback)
-			errorCallback()(new SerializationException(message, __FILE__, line));
+			errorCallback()(new SerializationException(message));
 	}
 
 	struct Pointer (T)

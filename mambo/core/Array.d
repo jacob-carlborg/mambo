@@ -31,6 +31,7 @@ alias algorithm.startsWith startsWith;
 alias algorithm.uniq unique;
 
 alias stdRange.chain append;
+alias stdArray.split split;
 
 /**
  * Inserts the given element(s) or range at the given position into the array. Shifts the
@@ -302,7 +303,7 @@ inout(T)[] assumeUnique (T) (ref T[] source, ref inout(T)[] destination)
 	return destination;
 }
 
-immutable(T)[] assumeUnique (T) (ref T[] array)
+immutable(T)[] assumeUnique (T) (ref const(T)[] array)
 {
 	auto result = cast(immutable(T)[]) array;
 	array = null;
@@ -310,7 +311,7 @@ immutable(T)[] assumeUnique (T) (ref T[] array)
 	return result;
 }
 
-immutable(T)[] assumeUnique (T) (T[] array)
+immutable(T)[] assumeUnique (T) (const(T)[] array)
 {
 	return array.assumeUnique;
 }

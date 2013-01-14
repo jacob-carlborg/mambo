@@ -6,8 +6,6 @@
  */
 module mambo.xml.XmlDocument;
 
-import std.exception;
-
 import tango.text.xml.DocPrinter;
 import tango.text.xml.Document;
 import tango.io.Stdout;
@@ -146,7 +144,7 @@ final class XmlDocument (T = char)
 		printer.indent = indentation;
 		auto str = printer.print(doc);
 
-		return assumeUnique(str);
+		return str.assumeUnique;
 	}
 	
 	/**

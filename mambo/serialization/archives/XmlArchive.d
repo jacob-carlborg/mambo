@@ -7,7 +7,6 @@
 module mambo.serialization.archives.XmlArchive;
 
 import std.conv;
-import std.exception;
 
 import mambo.core._;
 import mambo.serialization.archives._;

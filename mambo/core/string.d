@@ -9,7 +9,6 @@ module mambo.core.string;
 
 import std.array;
 static import std.ascii;
-import std.exception;
 
 static import tango.stdc.stringz;
 import tango.text.Unicode;
@@ -38,8 +37,6 @@ alias tango.text.Unicode.isLower isLower;
 
 alias std.array.replace replace;
 alias std.ascii.isHexDigit isHexDigit;
-
-alias Format format;
 
 /**
  * Compares the $(D_PSYMBOL string) to another $(D_PSYMBOL string), ignoring case
@@ -275,4 +272,9 @@ inout(T)[] toUpper (T) (inout(T)[] value)
 	inout(T)[] dest;
 
 	return assumeUnique(r, dest);
+}
+
+string format (Args ...) (Args args)
+{
+	return Format(args).assumeUnique;
 }

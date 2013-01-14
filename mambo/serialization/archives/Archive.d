@@ -1455,7 +1455,7 @@ abstract class ArchiveBase (U) : Archive
 	protected void error (string message, string file, long line, string[] data = null)
 	{	
 		if (errorCallback)
-			errorCallback()(new SerializationException(message, file, line));
+			errorCallback()(new SerializationException(message));
 	}
 	
 	/**

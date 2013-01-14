@@ -16,6 +16,7 @@ import mambo.util._;
 private
 {
 	alias mambo.util.Ctfe.contains ctfeContains;
+	alias mambo.util.Ctfe.format format;
 	alias ConvException ConversionException;
 
 	enum Mode
@@ -1147,6 +1148,8 @@ class Serializer
 		{
 			error:
 			error(format!(`The type "`, T, `" cannot be deserialized.`), __LINE__);
+
+			return T.init;
 		}			
 	}
 	

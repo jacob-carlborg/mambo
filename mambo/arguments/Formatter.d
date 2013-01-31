@@ -6,8 +6,6 @@
  */
 module mambo.arguments.Formatter;
 
-import std.exception;
-
 import mambo.arguments.Arguments;
 import mambo.arguments.Options;
 import mambo.core._;
@@ -79,8 +77,7 @@ class DefaultFormatter : Formatter
 
 	override string errors (char[] delegate (char[] buffer, const(char)[] format, ...) dg)
 	{
-		auto res = arguments.errors(dg);
-		string result = res.assumeUnique;
+		auto result = arguments.errors(dg).assumeUnique;
 		char[256] buffer;
 		auto msg = errorMessages;
 		auto posArgs = arguments.positionalArguments;

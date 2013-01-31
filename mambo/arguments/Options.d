@@ -8,7 +8,6 @@
 module mambo.arguments.Options;
 
 import std.conv;
-import std.exception;
 
 import mambo.core._;
 import mambo.arguments.Arguments;
@@ -100,8 +99,7 @@ struct Option (T)
 
 	@property string name ()
 	{
-		auto r = argument.name;
-		return r.assumeUnique;
+		return argument.name.assumeUnique;
 	}
 
 	@property char[] aliases ()
@@ -111,8 +109,7 @@ struct Option (T)
 
 	@property string helpText ()
 	{
-		auto r = argument.text;
-		return r.assumeUnique;
+		return argument.text.assumeUnique;
 	}
 
 	@property int error ()

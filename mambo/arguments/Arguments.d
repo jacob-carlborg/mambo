@@ -7,7 +7,6 @@
 module mambo.arguments.Arguments;
 
 import std.conv;
-import std.exception;
 
 import tango.util.container.HashMap;
 
@@ -74,7 +73,7 @@ class Arguments
 
 		return args[index];
 	}
-	
+
 	@property Options option ()
 	{
 		return optionProxy;
@@ -160,8 +159,7 @@ class Arguments
 
 	string errors (char[] delegate (char[] buffer, const(char)[] format, ...) dg)
 	{
-		auto r = internalArguments.errors(dg);
-		return r.assumeUnique;
+		return internalArguments.errors(dg).assumeUnique;
 	}
 
 private:
@@ -181,6 +179,9 @@ private:
 	{
 		int error;
 		auto posArgs = sortedPosArgs;
+
+		if (posArgs.isEmpty)
+			return true;
 
 		auto arg = posArgs.first;
 		size_t numArgs;
@@ -255,7 +256,7 @@ struct ArgumentProxy
 	}
 }
 
-class ArgumentBase 
+class ArgumentBase
 {
 	int min = 1;
 	int max = 1;

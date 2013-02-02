@@ -99,7 +99,7 @@ struct Option (T)
 
 	@property string name ()
 	{
-		return argument.name.assumeUnique;
+		return cast(string) argument.name;
 	}
 
 	@property char[] aliases ()
@@ -109,7 +109,7 @@ struct Option (T)
 
 	@property string helpText ()
 	{
-		return argument.text.assumeUnique;
+		return cast(string) argument.text;
 	}
 
 	@property int error ()

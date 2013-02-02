@@ -111,15 +111,14 @@ class DefaultFormatter : Formatter
 	override @property string helpText ()
 	{
 		string help = header;
-		auto optionNames = generateOptionNames();
 
 		if (positionalArguments.any)
 			help ~= "\n\n" ~ positionalArgumentsText;
 
 		if (options.any)
-			help ~= "\nOptions:\n";
+			help ~= "\n\n" ~ optionsText;
 
-		help ~= format("{}\n{}", optionsText, footer);
+		help ~= '\n' ~ footer;
 
 		return help;
 	}
@@ -128,7 +127,7 @@ private:
 
 	@property string optionsText ()
 	{
-		string help;
+		string help = "Option:\n";
 		const optionNames = generateOptionNames();
 		immutable len = lengthOfLongestOption(optionNames);
 		enum numberOfIndentations = 1;
@@ -166,7 +165,7 @@ private:
 
 	@property Option!(int)[] options ()
 	{
-		return options_.any ? options_ : options_ = arguments.options;
+		return options_ = options_.any ? options_ : arguments.options;
 	}
 
 	@property char shortOption (Option!(int) option)

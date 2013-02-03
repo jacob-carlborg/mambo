@@ -3,7 +3,7 @@
  * Authors: Jacob Carlborg
  * Version: Initial created: 2008
  * License: $(LINK2 http://www.boost.org/LICENSE_1_0.txt, Boost Software License 1.0)
- * 
+ *
  */
 module mambo.core.Array;
 
@@ -36,12 +36,12 @@ alias stdArray.split split;
 /**
  * Inserts the given element(s) or range at the given position into the array. Shifts the
  * element currently at that position (if any) and any subsequent elements to the right.
- * 
+ *
  * Params:
  *     arr = the array to insert the element(s) or range into
  *     index = the index at which the specified element(s) or range is to be inserted to
- *     r = the element(s) or range to be inserted 
- *     
+ *     r = the element(s) or range to be inserted
+ *
  * Returns: a copy of the given array with the element(s) or range inserted
  */
 T[] insert (T, RangeOrElement...) (T[] arr, size_t index, RangeOrElement r)
@@ -55,14 +55,14 @@ T[] insert (T, RangeOrElement...) (T[] arr, size_t index, RangeOrElement r)
 * Inserts the given element(s) or range, in place, at the given position into the array.
 * Shifts the element currently at that position (if any) and any subsequent elements to the
 * right.
-* 
+*
 * This will modify the given array in place.
-* 
+*
 * Params:
 *     arr = the array to insert the element(s) or range into
 *     index = the index at which the specified element(s) or range is to be inserted to
 *     r = the element(s) or range to be inserted
- *     
+ *
  * Returns: the modified array with the element(s) or range inserted
  */
 T[] insertInPlace (T, RangeOrElement...) (ref T[] arr, size_t index, RangeOrElement r)
@@ -73,11 +73,11 @@ T[] insertInPlace (T, RangeOrElement...) (ref T[] arr, size_t index, RangeOrElem
 
 /**
  * Removes the given elements from the given array.
- * 
+ *
  * Params:
  *     arr = the array to remove the elements from
  *     elements = the elements to be removed
- *     
+ *
  * Returns: the array with the elements removed
  */
 T[] remove (T) (T[] arr, T[] elements ...)
@@ -87,11 +87,11 @@ T[] remove (T) (T[] arr, T[] elements ...)
 
 /**
  * Removes the elements with the given indexes from the given range.
- * 
+ *
  * Params:
  *     range = the range to remove the elements from
  *     indexes = the index of the elements to be remove
- *     
+ *
  * Returns: the range with the indexes removed
  */
 Range remove (Range, Index ...) (Range range, Index indexes)
@@ -101,7 +101,7 @@ Range remove (Range, Index ...) (Range range, Index indexes)
 
 /**
  * Returns $(D_KEYWORD true) if this array contains no elements.
- * 
+ *
  * Params:
  *     arr = the array to check if it's empty
  *
@@ -121,10 +121,10 @@ Range remove (Range, Index ...) (Range range, Index indexes)
 /**
  * Removes all of the elements from this array. The array will be empty after this call
  * returns.
- * 
+ *
  * Params:
  *     arr = the array to clear
- * 
+ *
  * Returns: the cleared array
  *
  * Throws: AssertException if length of the return array isn't 0
@@ -142,16 +142,16 @@ body
 
 /**
  * Returns the index of the last occurrence of the specifed element
- * 
+ *
  * Params:
  *     arr = the array to get the index of the element from
  *     element = the element to find the index of
- *     
+ *
  * Returns: the index of the last occurrence of the element in the
- *          specified array, or U.max 
+ *          specified array, or U.max
  *          if the element does not occur.
- *          
- * Throws: AssertException if the length of the array is 0 
+ *
+ * Throws: AssertException if the length of the array is 0
  * Throws: AssertException if the return value is less than -1 or
  * 		   greater than the length of the array - 1.
  */
@@ -172,11 +172,11 @@ body
 
 /**
  * Returns true if a begins with b
- * 
+ *
  * Params:
  *     a = the array to
- *     b = 
- *     
+ *     b =
+ *
  * Returns: true if a begins with b, otherwise false
  */
 bool beginsWith (T) (T[] a, T[] b)
@@ -186,11 +186,11 @@ bool beginsWith (T) (T[] a, T[] b)
 
 /**
  * Returns true if a ends with b
- * 
+ *
  * Params:
  *     a = the array to
- *     b = 
- *     
+ *     b =
+ *
  * Returns: true if a ends with b, otherwise false
  */
 bool endsWith (T) (T[] a, T[] b)
@@ -200,11 +200,11 @@ bool endsWith (T) (T[] a, T[] b)
 
 /**
  * Repests $(D_PARAM arr) $(D_PARAM number) of times.
- * 
+ *
  * Params:
  *     arr = the array to repeat
  *     number = the number of times to repeat
- *     
+ *
  * Returns: a new array containing $(D_PARAM arr) $(D_PARAM number) of times
  */
 T[] repeat (T) (T[] arr, size_t number)
@@ -214,13 +214,13 @@ T[] repeat (T) (T[] arr, size_t number)
 
 	foreach (_ ; 0 .. number)
 		result ~= arr;
-	
+
 	return result;
 }
 
 /**
  * Returns $(D_KEYWORD true) if this array contains any elements.
- * 
+ *
  * Params:
  *     arr = the array to check if it contains elements
  *
@@ -257,13 +257,13 @@ T[] strip (T, C) (T[] arr, C delimiter)
 {
 	if (arr.isEmpty)
 		return arr;
-	
+
 	auto a = arr;
 	auto del = [delimiter];
-	
+
 	while (a.last == delimiter)
 		a = stdString.chomp(a, del);
-	
+
 	return a;
 }
 
@@ -282,6 +282,11 @@ auto reduce (alias func, Range) (Range range)
 }
 
 auto reduce (alias func, Range, Seed) (Range range, Seed seed)
+{
+	return algorithm.reduce!(func)(seed, range);
+}
+
+auto reduce (alias seed, alias func, Range) (Range range)
 {
 	return algorithm.reduce!(func)(seed, range);
 }

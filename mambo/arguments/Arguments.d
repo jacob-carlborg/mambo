@@ -39,7 +39,7 @@ class Arguments
 		Formatter formatter_;
 
 		string[] originalArgs_;
-		string[] args_;
+		string[] rawArgs_;
 	}
 
 	alias option this;
@@ -68,10 +68,10 @@ class Arguments
 
 	string opIndex () (size_t index)
 	{
-		if (index > args.length || isEmpty)
+		if (index > rawArgs.length || isEmpty)
 			assert(0, "throw MissingArgumentException - Missing argument(s)");
 
-		return args[index];
+		return rawArgs[index];
 	}
 
 	@property Options option ()
@@ -98,7 +98,7 @@ class Arguments
 		if (!result)
 			return false;
 
-		args = cast(string[]) internalArguments(null).assigned;
+		rawArgs = cast(string[]) internalArguments(null).assigned;
 		return result && parsePositionalArguments();
 	}
 
@@ -109,17 +109,17 @@ class Arguments
 
 	@property string last ()
 	{
-		return this[args.length - 1];
+		return this[rawArgs.length - 1];
 	}
 
 	@property bool isEmpty ()
 	{
-		return args.isEmpty;
+		return rawArgs.isEmpty;
 	}
 
 	@property bool any ()
 	{
-		return args.any;
+		return rawArgs.any;
 	}
 
 	@property string helpText ()
@@ -137,14 +137,14 @@ class Arguments
 		return optionProxy.options;
 	}
 
-	@property string[] args ()
+	@property string[] rawArgs ()
 	{
-		return args_;
+		return rawArgs_;
 	}
 
-	private @property string[] args (string[] args)
+	private @property string[] rawArgs (string[] rawArgs)
 	{
-		return args_ = args;
+		return rawArgs_ = rawArgs;
 	}
 
 	@property string[] originalArgs ()
@@ -185,11 +185,11 @@ private:
 
 		auto arg = posArgs.first;
 		size_t numArgs;
-		auto len = args.length;
+		auto len = rawArgs.length;
 
 		for (size_t i = 1; i < len; i++)
 		{
-			auto value = args[i];
+			auto value = rawArgs[i];
 
 			if (value == "--")
 				break;
@@ -198,7 +198,7 @@ private:
 				continue;
 
 			arg.values_ ~= value;
-			args = args.remove(i);
+			rawArgs = rawArgs.remove(i);
 			len--;
 			i--;
 

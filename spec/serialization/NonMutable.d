@@ -20,7 +20,7 @@ class B
 {
 	int a;
 
-	this (int a)
+	pure this (int a)
 	{
 		this.a = a;
 	}
@@ -79,15 +79,12 @@ unittest
 			serializer.reset;
 			serializer.serialize(a);
 
-			version (D_Version2) string stringElementType = "immutable(char)";
-			else string stringElementType = "char";
-
 			assert(archive.data().containsDefaultXmlContent());
 			assert(archive.data().contains(`<object runtimeType="spec.serialization.NonMutable.A" type="spec.serialization.NonMutable.A" key="0" id="0">`));
 
 			assert(archive.data().containsXmlTag("int", `key="a" id="1"`, "1"));
 			assert(archive.data().containsXmlTag("int", `key="b" id="2"`, "2"));
-			assert(archive.data().containsXmlTag("string", `type="` ~ stringElementType ~ `" length="3" key="c" id="3"`, "str"));
+			assert(archive.data().containsXmlTag("string", `type="immutable(char)" length="3" key="c" id="3"`, "str"));
 
 			assert(archive.data().contains(`<object runtimeType="spec.serialization.NonMutable.B" type="immutable(spec.serialization.NonMutable.B)" key="d" id="4">`));
 

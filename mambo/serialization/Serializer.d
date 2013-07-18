@@ -1268,7 +1268,7 @@ class Serializer
 		auto slice = deserializeSlice(key);
 
 		if (auto tmp = getDeserializedSlice!(T)(slice))
-			return *tmp;
+			return tmp;
 		
 		T value;
 		
@@ -1306,7 +1306,7 @@ class Serializer
 		auto slice = deserializeSlice(key);
 
 		if (auto tmp = getDeserializedSlice!(T)(slice))
-			return *tmp;
+			return tmp;
 		
 		alias ElementTypeOfArray!(T) E;
 		alias Unqual!(E) UnqualfiedE;
@@ -1591,32 +1591,18 @@ class Serializer
 		static if (isObject!(T) && !is(T == Object))
 			deserializeBaseTypes(value);
 	}
-	
-	version (D_Version2)
-		mixin(`private void serializeBaseTypes (T : Object) (inout T value)
+
+	private void serializeBaseTypes (T : Object) (inout T value)
+	{
+		alias BaseTypeTupleOf!(T)[0] Base;
+
+		static if (!is(Base == Object))
 		{
-			alias BaseTypeTupleOf!(T)[0] Base;
-
-			static if (!is(Base == Object))
-			{
-				archive.archiveBaseClass(typeid(Base).toString, nextKey, nextId);
-				inout Base base = value;
-				objectStructSerializeHelper(base);
-			}
-		}`);
-
-	else
-		private void serializeBaseTypes (T : Object) (T value)
-		{
-			alias BaseTypeTupleOf!(T)[0] Base;
-
-			static if (!is(Base == Object))
-			{
-				archive.archiveBaseClass(typeid(Base).toString, nextKey, nextId);
-				Base base = value;
-				objectStructSerializeHelper(base);
-			}
+			archive.archiveBaseClass(typeid(Base).toString, nextKey, nextId);
+			inout Base base = value;
+			objectStructSerializeHelper(base);
 		}
+	}
 
 	private void deserializeBaseTypes (T : Object) (T value)
 	{
@@ -1691,11 +1677,14 @@ class Serializer
 		return null;
 	}
 	
-	private T* getDeserializedSlice (T) (Slice slice)
+	private T getDeserializedSlice (T) (Slice slice)
 	{
 		if (auto array = slice.id in deserializedSlices)
-			return &(cast(T) *array)[slice.offset .. slice.offset + slice.length]; // dereference the array, cast it to the right type, 
-																				   // slice it and then return a pointer to the result
+		{
+			auto typed = cast(T) *array;
+			return typed[slice.offset .. slice.offset + slice.length];
+		}
+
 		return null;		
 	}
 

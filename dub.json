@@ -1,0 +1,17 @@
+{
+	"name": "mambo",
+	"description": "A utility library for the D programming language",
+	"authors": ["Jacob Carlborg"],
+	"homepage": "https://github.com/jacob-carlborg/mambo",
+	"license": "BSL-1.0",
+	"copyright": "Copyright (c) 2008-2013 Jacob Carlborg. All rights reserved.",
+
+	"targetType": "staticLibrary",
+	"targetName": "mambo",
+	"sourcePaths": ["mambo"],
+	"importPaths": ["."],
+
+	"dependencies": {
+		"tango": "~d2port"
+	}
+}

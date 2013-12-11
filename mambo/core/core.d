@@ -38,14 +38,15 @@ import mambo.util.Traits;
 		
 		return match(t, regex(`\S`, "g")).empty;
 	}
-	
-	static if (__traits(compiles, t.isEmpty))
+
+	else static if (__traits(compiles, t.isEmpty))
 		return t.isEmpty;
 		
 	else static if (isPrimitive!(T) || isStruct!(T) || isUnion!(T))
 		return false;
 
-	return T.init == t;
+	else
+		return T.init == t;
 }
 
 @property bool isPresent (T) (T t)

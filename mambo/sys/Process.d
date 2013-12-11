@@ -65,7 +65,7 @@ char[] getProcessPath (char[] buf = null)
 			buf ~= new char[len - buf.length];
 
 		auto strLen = strlenz(realpath(tmp.ptr, buf.ptr));
-		buf = buf[0 .. strLen];;
+		buf = buf[0 .. strLen];
 	}
 	
 	else version (freebsd)

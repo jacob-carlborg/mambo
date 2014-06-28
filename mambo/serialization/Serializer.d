@@ -1268,7 +1268,7 @@ class Serializer
 		auto slice = deserializeSlice(key);
 
 		if (auto tmp = getDeserializedSlice!(T)(slice))
-			return *tmp;
+			return tmp;
 		
 		T value;
 		
@@ -1306,7 +1306,7 @@ class Serializer
 		auto slice = deserializeSlice(key);
 
 		if (auto tmp = getDeserializedSlice!(T)(slice))
-			return *tmp;
+			return tmp;
 		
 		alias ElementTypeOfArray!(T) E;
 		alias Unqual!(E) UnqualfiedE;
@@ -1691,12 +1691,15 @@ class Serializer
 		return null;
 	}
 	
-	private T* getDeserializedSlice (T) (Slice slice)
+	private T getDeserializedSlice (T) (Slice slice)
 	{
 		if (auto array = slice.id in deserializedSlices)
-			return &(cast(T) *array)[slice.offset .. slice.offset + slice.length]; // dereference the array, cast it to the right type, 
-																				   // slice it and then return a pointer to the result
-		return null;		
+		{
+			auto typed = cast(T) *array;
+			return typed[slice.offset .. slice.offset + slice.length];
+		}
+
+		return null;
 	}
 
 	private T getDeserializedValue (T) (Id id)

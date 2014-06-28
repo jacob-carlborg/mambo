@@ -20,7 +20,7 @@ class B
 {
 	int a;
 
-	this (int a)
+	pure this (int a)
 	{
 		this.a = a;
 	}

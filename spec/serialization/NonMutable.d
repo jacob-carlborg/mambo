@@ -64,11 +64,17 @@ class A
 	}
 }
 
-struct CTFEFields
+class CTFEFields
 {
-	public immutable FIRST = 1;
-	public immutable SECOND = 1;
+	public immutable int FIRST;
+	public immutable int SECOND;
 	public bool someFlag;
+
+	this ()
+	{
+		FIRST = 1;
+		SECOND = 1;
+	}
 }
 
 A a;
@@ -113,7 +119,7 @@ unittest
 	describe! "serializing object with CTFE fields" in {
 	    it! "should compile" in {
 	        assert(__traits(compiles, {
-	            serializer.serialize(CTFEFields());
+	            serializer.serialize(new CTFEFields);
 	        }));
 	    };
 	};

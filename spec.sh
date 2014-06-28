@@ -2,7 +2,7 @@
 
 if [ -s "$HOME/.dvm/scripts/dvm" ] ; then
     . "$HOME/.dvm/scripts/dvm" ;
-    dvm use 2.063
+    dvm use 2.065.0
 fi
 
 function all_files () {

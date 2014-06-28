@@ -163,14 +163,17 @@ struct NonSerializedField (string name)
  * 
  * Returns: an array containing the names of the given aliases
  */
-static string[] toArray (Args ...) ()
+template toArray (Args ...)
 {
-	string[] args;
-	
-	foreach (i, _ ; typeof(Args))
-		args ~= Args[i].stringof;
-	
-	return args;
+	static string[] toArray ()
+	{
+		string[] args;
+
+		foreach (i, _ ; typeof(Args))
+			args ~= Args[i].stringof;
+
+		return args;
+	}
 }
 
 package:

@@ -241,15 +241,23 @@ bool any (alias predicate, Range) (Range range)
 }
 
 /// Returns the first element of the given array.
-@property auto first (T) (T[] arr)
+@property auto first (Range) (Range range)
 {
-	return stdArray.front(arr);
+	static if (isArray!(Range))
+		return stdArray.front(range);
+
+	else
+		return range.front;
 }
 
 /// Returns the first element of the given array.
-@property auto last (T) (T[] arr)
+@property auto last (Range) (Range range)
 {
-	return stdArray.back(arr);
+	static if (isArray!(Range))
+		return stdArray.back(range);
+
+	else
+		return range.back;
 }
 
 /// Strips all the trailing delimiters from the given array.

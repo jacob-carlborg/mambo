@@ -54,6 +54,7 @@ class DefaultFormatter : Formatter
 	{
 		Arguments arguments;
 		ArgumentBase[] positionalArguments_;
+		ArgumentBase[] commands_;
 		Option!(int)[] options_;
 		enum indentation = "    ";
 
@@ -110,20 +111,19 @@ class DefaultFormatter : Formatter
 
 	override @property string helpText ()
 	{
-		string help = header;
+		string[] textSegments;
 
 		if (positionalArguments.any)
-			help ~= "\n\n" ~ positionalArgumentsText;
+			textSegments ~= positionalArgumentsText;
+
+		if (commands.any)
+			textSegments ~= commandsText;
 
 		if (options.any)
-			help ~= "\n\n" ~ optionsText;
+			textSegments ~= optionsText;
 
-		help ~= '\n' ~ footer;
-
-		return help;
+		return format("{}\n\n{}\n{}", header, textSegments.join("\n"), footer);
 	}
-
-private:
 
 	@property string optionsText ()
 	{
@@ -163,6 +163,27 @@ private:
 		return help;
 	}
 
+	@property string commandsText ()
+	{
+		immutable len = lengthOfLongest(commands);
+		auto str = "Commands:\n";
+		enum numberOfIndentations = 1;
+
+		foreach (arg ; commands)
+		{
+			immutable text = arg.helpText ~ '.';
+
+			str ~= format("{}{}{}{}{}\n",
+				indentation,
+				arg.name,
+				" ".repeat(len - arg.name.count),
+				indentation.repeat(numberOfIndentations),
+				text);
+		}
+
+		return str;
+	}
+
 	@property Option!(int)[] options ()
 	{
 		return options_ = options_.any ? options_ : arguments.options;
@@ -183,9 +204,17 @@ private:
 		return positionalArguments_.any ? positionalArguments_ : positionalArguments_ = arguments.positionalArguments;
 	}
 
+	@property ArgumentBase[] commands ()
+	{
+		return commands_.any ? commands_ : commands_ = arguments.commands;
+	}
+
 	@property string header ()
 	{
 		string str = "Usage: " ~ appName;
+
+		if (commands.any)
+			str ~= " <command>";
 
 		if (options.any)
 			str ~= " [options]";
@@ -205,7 +234,7 @@ private:
 
 	@property string positionalArgumentsText ()
 	{
-		immutable len = lengthOfLongestPositionalArgument;
+		immutable len = lengthOfLongest(positionalArguments);
 		auto str = "Positional Arguments:\n";
 		enum numberOfIndentations = 1;
 
@@ -224,9 +253,9 @@ private:
 		return str;
 	}
 
-	@property size_t lengthOfLongestPositionalArgument ()
+	@property size_t lengthOfLongest (ArgumentBase[] arguments)
 	{
-		return positionalArguments.reduce!((a, b) => a.name.count > b.name.count ? a : b).name.count;
+		return arguments.reduce!((a, b) => a.name.count > b.name.count ? a : b).name.count;
 	}
 
     string[] generateOptionNames ()

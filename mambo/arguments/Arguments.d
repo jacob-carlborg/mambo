@@ -32,9 +32,15 @@ class Arguments
 
 	private
 	{
+		alias ArgumentStore = HashMap!(string, ArgumentBase);
+
+		ArgumentStore positionalArguments_;
+		ArgumentStore commands_;
+
 		Options optionProxy;
-		HashMap!(string, ArgumentBase) positionalArguments_;
-		ArgumentProxy proxy;
+		PositionalProxy positionalProxy;
+		CommandProxy commandProxy;
+
 		ArgumentBase[] sortedPosArgs_;
 		Formatter formatter_;
 
@@ -51,14 +57,21 @@ class Arguments
 		this.assignment = assignment;
 
 		internalArguments = new Internal.Arguments(shortPrefix, longPrefix, assignment);
+		positionalArguments_ = new ArgumentStore;
+		commands_ = new ArgumentStore;
 		optionProxy = Options(this);
-		positionalArguments_ = new HashMap!(string, ArgumentBase);
-		proxy = ArgumentProxy.create(this);
+		positionalProxy = PositionalProxy(this);
+		commandProxy = CommandProxy(this);
 	}
 
 	@property Formatter formatter ()
 	{
 		return formatter_ = formatter_ ? formatter_ : Formatter.instance(this);
+	}
+
+	@property Formatter formatter (Formatter formatter)
+	{
+		return formatter_ = formatter;
 	}
 
 	Option!(T) opIndex (T = string) (string name)
@@ -79,14 +92,24 @@ class Arguments
 		return optionProxy;
 	}
 
-	@property ArgumentProxy argument () ()
+	@property PositionalProxy positional () ()
 	{
-		return proxy;
+		return positionalProxy;
 	}
 
-	Argument!(T) argument (T = string) (string name, string helpText)
+	Argument!(T) positional (T = string) (string name, string helpText)
 	{
-		return proxy.opCall!(T)(name, helpText);
+		return positionalProxy.opCall!(T)(name, helpText);
+	}
+
+	@property CommandProxy command () ()
+	{
+		return commandProxy;
+	}
+
+	Argument!(T) command (T = string) (string name, string helpText)
+	{
+		return commandProxy.opCall!(T)(name, helpText);
 	}
 
 	bool parse (string[] input)
@@ -99,6 +122,7 @@ class Arguments
 			return false;
 
 		rawArgs = cast(string[]) internalArguments(null).assigned;
+		parseCommand();
 		return result && parsePositionalArguments();
 	}
 
@@ -130,6 +154,11 @@ class Arguments
 	@property ArgumentBase[] positionalArguments ()
 	{
 		return positionalArguments_.toArray();
+	}
+
+	@property ArgumentBase[] commands ()
+	{
+		return commands_.toArray();
 	}
 
 	@property Option!(int)[] options ()
@@ -217,27 +246,44 @@ private:
 
 		return error == 0;
 	}
+
+	void parseCommand ()
+	{
+		if (commands.isEmpty)
+			return;
+
+		auto parsedCommands = rawArgs.filter!(e => !(e.startsWith(longPrefix) &&
+			e.startsWith(shortPrefix)));
+
+		if (parsedCommands.any)
+		{
+			auto cmd = parsedCommands.first;
+
+			if (auto command = cmd in commands_)
+			{
+				rawArgs = rawArgs.remove(cmd);
+				command.values_ ~= cmd;
+			}
+		}
+	}
 }
 
-struct ArgumentProxy
+struct ArgumentProxy (string argumentStore)
 {
 	private Arguments arguments;
 
-	static ArgumentProxy create (Arguments arguments)
+	this (Arguments arguments)
 	{
-		ArgumentProxy proxy;
-		proxy.arguments = arguments;
-
-		return proxy;
+		this.arguments = arguments;
 	}
 
 	Argument!(T) opCall (T = string) (string name, string helpText)
 	{
-		assert(!arguments.positionalArguments_.containsKey(name));
+		assert(!store.containsKey(name));
 
-		auto arg = new Argument!(T)(arguments.positionalArguments_.size, name);
+		auto arg = new Argument!(T)(store.size, name);
 		arg.help(helpText);
-		arguments.positionalArguments_[name] = arg;
+		store[name] = arg;
 
 		return arg;
 	}
@@ -252,9 +298,17 @@ struct ArgumentProxy
 
 	Argument!(T) opIndex (T = string) (string name)
 	{
-		return cast(Argument!(T)) arguments.positionalArguments_[name];
+		return cast(Argument!(T)) store[name];
+	}
+
+	private auto store ()
+	{
+		mixin("return arguments." ~ argumentStore ~ ";");
 	}
 }
+
+alias PositionalProxy = ArgumentProxy!("positionalArguments_");
+alias CommandProxy = ArgumentProxy!("commands_");
 
 class ArgumentBase
 {

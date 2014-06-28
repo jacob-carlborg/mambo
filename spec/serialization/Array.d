@@ -21,6 +21,11 @@ class D
 	int[] arr;
 }
 
+struct ArrayOfObject
+{
+	Object[] arr;
+}
+
 D d;
 
 unittest
@@ -52,6 +57,22 @@ unittest
 		it! "should return a deserialize array equal to the original array" in {
 			auto dDeserialized = serializer.deserialize!(D)(archive.untypedData);
 			assert(d.arr == dDeserialized.arr);
+		};
+	};
+
+	describe! "serialize array of objects" in {
+		it! "sucessfully compiles" in {
+			assert(__traits(compiles, {
+				serializer.serialize(ArrayOfObject());
+			}));
+		};
+	};
+
+	describe! "deserialize array of objects" in {
+		it! "sucessfully compiles" in {
+			assert(__traits(compiles, {
+				serializer.deserialize!(ArrayOfObject)("");
+			}));
 		};
 	};
 }

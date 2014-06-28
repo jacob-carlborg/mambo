@@ -699,7 +699,7 @@ class Serializer
 	 */
 	void serializeBase (T) (T value)
 	{
-		static if (isObject!(T) && !is(T == Object))
+		static if (isObject!(T) && !is(Unqual!(T) == Object))
 				serializeBaseTypes(value);
 	}
 	
@@ -848,8 +848,11 @@ class Serializer
 		auto array = Array(value.ptr, value.length, ElementTypeOfArray!(T).sizeof);
 
 		archive.archiveArray(array, arrayToString!(T), key, id, {
-			foreach (i, e ; value)
-				serializeInternal(e, toData(i));
+		    for (size_t i = 0; i < value.length; i++)
+		    {
+		        const e = value[i];
+		        serializeInternal(e, toData(i));
+		    }
 		});
 
 		if (value.length > 0)
@@ -1104,7 +1107,7 @@ class Serializer
 	 */
 	void deserializeBase (T) (T value)
 	{
-		static if (isObject!(T) && !is(T == Object))
+		static if (isObject!(T) && !is(Unqual!(T) == Object))
 			deserializeBaseTypes(value);
 	}
 	
@@ -1268,7 +1271,7 @@ class Serializer
 		auto slice = deserializeSlice(key);
 
 		if (auto tmp = getDeserializedSlice!(T)(slice))
-			return *tmp;
+			return tmp;
 		
 		T value;
 		
@@ -1306,7 +1309,7 @@ class Serializer
 		auto slice = deserializeSlice(key);
 
 		if (auto tmp = getDeserializedSlice!(T)(slice))
-			return *tmp;
+			return tmp;
 		
 		alias ElementTypeOfArray!(T) E;
 		alias Unqual!(E) UnqualfiedE;
@@ -1518,7 +1521,7 @@ class Serializer
 			}
 		}
 		
-		static if (isObject!(T) && !is(T == Object))
+		static if (isObject!(T) && !is(Unqual!(T) == Object))
 			serializeBaseTypes(value);
 	}
 	
@@ -1588,7 +1591,7 @@ class Serializer
 			}	
 		}
 
-		static if (isObject!(T) && !is(T == Object))
+		static if (isObject!(T) && !is(Unqual!(T) == Object))
 			deserializeBaseTypes(value);
 	}
 	
@@ -1597,7 +1600,7 @@ class Serializer
 		{
 			alias BaseTypeTupleOf!(T)[0] Base;
 
-			static if (!is(Base == Object))
+			static if (!is(Unqual!(Base) == Object))
 			{
 				archive.archiveBaseClass(typeid(Base).toString, nextKey, nextId);
 				inout Base base = value;
@@ -1610,7 +1613,7 @@ class Serializer
 		{
 			alias BaseTypeTupleOf!(T)[0] Base;
 
-			static if (!is(Base == Object))
+			static if (!is(Unqual!(Base) == Object))
 			{
 				archive.archiveBaseClass(typeid(Base).toString, nextKey, nextId);
 				Base base = value;
@@ -1622,7 +1625,7 @@ class Serializer
 	{
 		alias BaseTypeTupleOf!(T)[0] Base;
 		
-		static if (!is(Base == Object))
+		static if (!is(Unqual!(Base) == Object))
 		{
 			archive.unarchiveBaseClass(nextKey);
 			Base base = value;
@@ -1691,12 +1694,15 @@ class Serializer
 		return null;
 	}
 	
-	private T* getDeserializedSlice (T) (Slice slice)
+	private T getDeserializedSlice (T) (Slice slice)
 	{
 		if (auto array = slice.id in deserializedSlices)
-			return &(cast(T) *array)[slice.offset .. slice.offset + slice.length]; // dereference the array, cast it to the right type, 
-																				   // slice it and then return a pointer to the result
-		return null;		
+		{
+			auto typed = cast(T) *array;
+			return typed[slice.offset .. slice.offset + slice.length];
+		}
+
+		return null;
 	}
 
 	private T getDeserializedValue (T) (Id id)

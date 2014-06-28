@@ -699,7 +699,7 @@ class Serializer
 	 */
 	void serializeBase (T) (T value)
 	{
-		static if (isObject!(T) && !is(T == Object))
+		static if (isObject!(T) && !is(Unqual!(T) == Object))
 				serializeBaseTypes(value);
 	}
 	
@@ -1107,7 +1107,7 @@ class Serializer
 	 */
 	void deserializeBase (T) (T value)
 	{
-		static if (isObject!(T) && !is(T == Object))
+		static if (isObject!(T) && !is(Unqual!(T) == Object))
 			deserializeBaseTypes(value);
 	}
 	
@@ -1521,7 +1521,7 @@ class Serializer
 			}
 		}
 		
-		static if (isObject!(T) && !is(T == Object))
+		static if (isObject!(T) && !is(Unqual!(T) == Object))
 			serializeBaseTypes(value);
 	}
 	
@@ -1591,7 +1591,7 @@ class Serializer
 			}	
 		}
 
-		static if (isObject!(T) && !is(T == Object))
+		static if (isObject!(T) && !is(Unqual!(T) == Object))
 			deserializeBaseTypes(value);
 	}
 	
@@ -1600,7 +1600,7 @@ class Serializer
 		{
 			alias BaseTypeTupleOf!(T)[0] Base;
 
-			static if (!is(Base == Object))
+			static if (!is(Unqual!(Base) == Object))
 			{
 				archive.archiveBaseClass(typeid(Base).toString, nextKey, nextId);
 				inout Base base = value;
@@ -1613,7 +1613,7 @@ class Serializer
 		{
 			alias BaseTypeTupleOf!(T)[0] Base;
 
-			static if (!is(Base == Object))
+			static if (!is(Unqual!(Base) == Object))
 			{
 				archive.archiveBaseClass(typeid(Base).toString, nextKey, nextId);
 				Base base = value;
@@ -1625,7 +1625,7 @@ class Serializer
 	{
 		alias BaseTypeTupleOf!(T)[0] Base;
 		
-		static if (!is(Base == Object))
+		static if (!is(Unqual!(Base) == Object))
 		{
 			archive.unarchiveBaseClass(nextKey);
 			Base base = value;

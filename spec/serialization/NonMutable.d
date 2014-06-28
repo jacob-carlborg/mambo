@@ -64,6 +64,13 @@ class A
 	}
 }
 
+struct CTFEFields
+{
+	public immutable FIRST = 1;
+	public immutable SECOND = 1;
+	public bool someFlag;
+}
+
 A a;
 immutable int ptr = 3;
 
@@ -101,5 +108,13 @@ unittest
 			auto aDeserialized = serializer.deserialize!(A)(archive.untypedData);
 			assert(a == aDeserialized);
 		};
+	};
+
+	describe! "serializing object with CTFE fields" in {
+	    it! "should compile" in {
+	        assert(__traits(compiles, {
+	            serializer.serialize(CTFEFields());
+	        }));
+	    };
 	};
 }

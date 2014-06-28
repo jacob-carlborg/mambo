@@ -34,8 +34,28 @@ class Foo
 	}
 }
 
+class WithString
+{
+	string b;
+
+	void toData (Serializer serializer, Serializer.Data key)
+	{
+		j++;
+		serializer.serialize(b, "y");
+	}
+
+	void fromData (Serializer serializer, Serializer.Data key)
+	{
+		j++;
+		b = serializer.deserialize!(string)("y");
+	}
+}
+
 Foo foo;
 int i;
+
+WithString withString;
+int j;
 
 unittest
 {
@@ -46,6 +66,10 @@ unittest
 	foo.a = 3;
 	foo.b = 4;
 	i = 3;
+
+	withString = new WithString;
+	withString.b = "a string";
+	j = 3;
 
 	describe! "serialize object using custom serialization methods" in {
 		it! "should return a custom serialized object" in {
@@ -66,6 +90,29 @@ unittest
 			assert(foo.a == f.a);
 			
 			assert(i == 5);
+		};
+	};
+
+	describe! "serialize object with string using custom serialization" in {
+		it! "serailzes the object" in {
+			serializer.reset();
+
+			serializer.serialize(withString);
+
+			assert(archive.data().containsDefaultXmlContent());
+			assert(archive.data().containsXmlTag("object", `runtimeType="spec.serialization.Custom.WithString" type="spec.serialization.Custom.WithString" key="0" id="0"`));
+			assert(archive.data().containsXmlTag("string", `type="immutable(char)" length="8" key="y" id="1"`, "a string"));
+
+			assert(j == 4);
+		};
+	};
+
+	describe! "deserialize object with string using custom serialization" in {
+		it! "returns an object equal to the original object" in {
+			auto a = serializer.deserialize!(WithString)(archive.untypedData);
+
+			assert(withString.b == a.b);
+			assert(j == 5);
 		};
 	};
 }

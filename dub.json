@@ -12,6 +12,6 @@
 	"importPaths": ["."],
 
 	"dependencies": {
-		"tango": "~d2port"
+		"tango": "1.0.0+2.066"
 	}
 }

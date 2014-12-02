@@ -177,6 +177,8 @@ private:
 
 	bool parsePositionalArguments ()
 	{
+		import std.algorithm : remove;
+
 		int error;
 		auto posArgs = sortedPosArgs;
 

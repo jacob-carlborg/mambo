@@ -167,32 +167,6 @@ bool isEmpty (K, V) (V[K] aa)
 	return aa.length == 0;
 }
 
-
-/**
- * Returns a array of the values contained in the 
- * specifed associative array. The array is backed by 
- * the associative array(if it contains classes or pointers),
- * so changes to the associative array are reflected in 
- * the array, and vice-versa. If the associative array is
- * modified while an iteration over the collection is in progress
- * (except through the iterator's own <tt>remove</tt> operation),
- * the results of the iteration are undefined.  The collection
- * supports element removal, which removes the corresponding
- * mapping from the map, via the <tt>Iterator.remove</tt>,
- * <tt>Collection.remove</tt>, <tt>removeAll</tt>,
- * <tt>retainAll</tt> and <tt>clear</tt> operations.  It does not
- * support the <tt>add</tt> or <tt>addAll</tt> operations.
- * 
- * Params:
- *     aa = the associative array to get the values from
- *     
- * Returns: a collection view of the values contained in this map
- */
-V[] values (K, V) (V[K] aa)
-{
-	return aa.values;
-}
-
 /**
  * Returns the number of key-value mappings in
  * the specified associative array

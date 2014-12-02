@@ -1355,9 +1355,10 @@ abstract class ArchiveBase (U) : Archive
 		}
 		
 		catch (ConversionException e)
+		{
 			error(e);
-		
-		return Data.init;
+			return Data.init;
+		}
 	}
 
 	/**
@@ -1390,9 +1391,10 @@ abstract class ArchiveBase (U) : Archive
 		}
 
 		catch (ConversionException e)
-			error(e);
-		
-		return T.init;
+		{
+		    error(e);
+		    return T.init;
+		}
 	}
 
 	/**

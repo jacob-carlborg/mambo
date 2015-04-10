@@ -10,6 +10,7 @@
 	"targetName": "mambo",
 	"sourcePaths": ["mambo"],
 	"importPaths": ["."],
+	"excludedSourceFiles-windows": ["c/sys/utsname.d"],
 
 	"dependencies": {
 		"tango": "1.0.0+2.066"

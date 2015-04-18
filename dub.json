@@ -13,6 +13,8 @@
 	"excludedSourceFiles-windows": ["c/sys/utsname.d"],
 
 	"dependencies": {
-		"tango": "1.0.0+2.066"
-	}
+		"tango": "1.0.1+2.067"
+	},
+
+    "buildRequirements": ["allowWarnings"]
 }

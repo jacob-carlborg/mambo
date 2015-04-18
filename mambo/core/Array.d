@@ -20,12 +20,12 @@ import mambo.core.AssociativeArray;
 import mambo.core.core;
 import mambo.util.Traits;
 
-alias algorithm.array toArray;
+alias stdArray.array toArray;
 alias algorithm.canFind contains;
 alias algorithm.count count;
 alias algorithm.countUntil indexOf;
 alias algorithm.filter filter;
-alias algorithm.join join;
+alias stdArray.join join;
 alias algorithm.sort sort;
 alias algorithm.startsWith startsWith;
 alias algorithm.uniq unique;

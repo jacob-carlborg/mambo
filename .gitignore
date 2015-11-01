@@ -1,4 +1,8 @@
 *.deps
 *.o
+*.a
+.dub
+dub.selections.json
+run.sh
 spec_bin
 main.d

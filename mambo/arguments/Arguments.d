@@ -268,11 +268,12 @@ class ArgumentBase
 		enum maxParams = 42;
 		size_t position_;
 		string[] values_;
-		int error_;
+		int error_ = Internal.Arguments.Argument.None;
 
 		string name_;
 		string helpText_;
 		string defaults_;
+		bool required_;
 	}
 
 	private this (size_t position, string name)
@@ -340,6 +341,12 @@ class ArgumentBase
 
 	private int validate ()
 	{
+		if (!hasValue && required_)
+			return error = Internal.Arguments.Argument.Required;
+
+		if (!hasValue)
+			return error;
+
 		if (rawValues.length < min)
 			error = Internal.Arguments.Argument.ParamLo;
 
@@ -396,6 +403,12 @@ class Argument (T) : ArgumentBase
 		this.min = min;
 		this.max = max;
 
+		return this;
+	}
+
+	Argument required ()
+	{
+		required_ = true;
 		return this;
 	}
 }

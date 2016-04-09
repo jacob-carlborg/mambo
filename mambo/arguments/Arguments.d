@@ -261,7 +261,7 @@ struct ArgumentProxy
 class ArgumentBase
 {
 	int min = 1;
-	int max = 1;
+	int max = int.max;
 
 	private
 	{

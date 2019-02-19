@@ -10,7 +10,7 @@ Tuple!(Types) tuple (Types ...) (Types values)
 {
 	Tuple!(Types) t;
 	t.values = values;
-	
+
 	return t;
 }
 

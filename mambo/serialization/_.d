@@ -7,7 +7,7 @@
 module mambo.serialization._;
 
 public:
-	
+
 import mambo.serialization.Events;
 import mambo.serialization.RegisterWrapper;
 import mambo.serialization.Serializable;

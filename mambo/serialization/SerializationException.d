@@ -12,13 +12,13 @@ alias Throwable ExceptionBase;
 
 /**
  * This class represents an exception, it's the base class of all exceptions used
- * throughout this library. 
+ * throughout this library.
  */
 class SerializationException : ExceptionBase
-{	
+{
 	/**
 	 * Creates a new exception with the given message.
-	 * 
+	 *
 	 * Params:
 	 *     message = the message of the exception
 	 */
@@ -26,10 +26,10 @@ class SerializationException : ExceptionBase
 	{
 		super(message);
 	}
-	
+
 	/**
 	 * Creates a new exception with the given message, file and line info.
-	 * 
+	 *
 	 * Params:
 	 *     message = the message of the exception
 	 *     file = the file where the exception occurred

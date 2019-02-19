@@ -17,7 +17,7 @@ class RegisterBase { }
 
 /**
  * This class wraps registered functions for serialization.
- * 
+ *
  * Params:
  *     T = the type of the class or struct which is serialized
  */
@@ -29,8 +29,8 @@ class SerializeRegisterWrapper (T) : RegisterBase
 	/**
 	 * Creates a new instance of this class with the given delegate that performs the
 	 * custom serialization.
-	 * 
-	 * 
+	 *
+	 *
 	 * Params:
 	 *     dg = the delegate to call when performing custom serialization
 	 */
@@ -43,8 +43,8 @@ class SerializeRegisterWrapper (T) : RegisterBase
 	/**
 	 * Creates a new instance of this class with the given function that performs the
 	 * custom serialization.
-	 * 
-	 * 
+	 *
+	 *
 	 * Params:
 	 *     dg = the delegate to call when performing custom serialization
 	 */
@@ -55,7 +55,7 @@ class SerializeRegisterWrapper (T) : RegisterBase
 
 	/**
 	 * Calls the function to perform the custom serialization.
-	 * 
+	 *
 	 * Params:
 	 *     value = the instance that is to be serialized
 	 *     serializer = the serializer that performs the serialization
@@ -65,7 +65,7 @@ class SerializeRegisterWrapper (T) : RegisterBase
 	{
 		if (dg && isDelegate)
 			dg(value, serializer, key);
-		
+
 		else if (dg)
 			dg.funcptr(value, serializer, key);
 	}
@@ -73,7 +73,7 @@ class SerializeRegisterWrapper (T) : RegisterBase
 
 /**
  * This class wraps registered functions for deserialization.
- * 
+ *
  * Params:
  *     T = the type of the class or struct which is deserialized
  */
@@ -85,8 +85,8 @@ class DeserializeRegisterWrapper (T) : RegisterBase
 	/**
 	 * Creates a new instance of this class with the given delegate that performs the
 	 * custom deserialization.
-	 * 
-	 * 
+	 *
+	 *
 	 * Params:
 	 *     dg = the delegate to call when performing custom serialization
 	 */
@@ -99,8 +99,8 @@ class DeserializeRegisterWrapper (T) : RegisterBase
 	/**
 	 * Creates a new instance of this class with the given function that performs the
 	 * custom serialization.
-	 * 
-	 * 
+	 *
+	 *
 	 * Params:
 	 *     dg = the delegate to call when performing custom serialization
 	 */
@@ -111,7 +111,7 @@ class DeserializeRegisterWrapper (T) : RegisterBase
 
 	/**
 	 * Calls the function to perform the custom deserialization.
-	 * 
+	 *
 	 * Params:
 	 *     value = the instance that is to be deserialized
 	 *     serializer = the serializer that performs the deserialization
@@ -121,7 +121,7 @@ class DeserializeRegisterWrapper (T) : RegisterBase
 	{
 		if (dg && isDelegate)
 			dg(value, serializer, key);
-		
+
 		if (dg)
 			dg.funcptr(value, serializer, key);
 	}

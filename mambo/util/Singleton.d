@@ -9,14 +9,14 @@ module mambo.util.Singleton;
 template Singleton ()
 {
 	private static typeof(this) instance_;
-	
+
 	static typeof(this) instance ()
 	{
 		if (instance_)
 			return instance_;
-		
+
 		return instance_ = new typeof(this);
 	}
-	
+
 	private this () {}
 }

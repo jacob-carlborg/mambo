@@ -3,7 +3,7 @@
  * Authors: Jacob Carlborg
  * Version: Initial created: 2007
  * License: $(LINK2 http://www.boost.org/LICENSE_1_0.txt, Boost Software License 1.0)
- * 
+ *
  */
 module mambo.core.io;
 
@@ -16,7 +16,7 @@ version (Tango)
 
 	/**
 	 * Print to the standard output
-	 * 
+	 *
 	 * Params:
 	 *     args = what to print
 	 */
@@ -33,7 +33,7 @@ version (Tango)
 
 	/**
 	 * Print to the standard output, adds a new line
-	 * 
+	 *
 	 * Params:
 	 *     args = what to print
 	 */
@@ -55,7 +55,7 @@ else
 
 	/**
 	 * Print to the standard output
-	 * 
+	 *
 	 * Params:
 	 *     args = what to print
 	 */
@@ -66,7 +66,7 @@ else
 
 	/**
 	 * Print to the standard output, adds a new line
-	 * 
+	 *
 	 * Params:
 	 *     args = what to print
 	 */

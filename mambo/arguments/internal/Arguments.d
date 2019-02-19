@@ -3,11 +3,11 @@
         copyright:      Copyright (c) 2009 Kris. All rights reserved.
 
         license:        BSD style: $(LICENSE)
-        
+
         version:        Oct 2009: Initial release
-        
+
         author:         Kris
-    
+
 *******************************************************************************/
 
 module mambo.arguments.internal.Arguments;
@@ -47,8 +47,8 @@ version=dashdash;       // -- everything assigned to the null argument
         ---
         The 'null' argument is always defined and acts as an accumulator
         for parameters left uncaptured by other arguments. In the above
-        instance it was assigned both parameters. 
-        
+        instance it was assigned both parameters.
+
         Examples thus far have used 'sloppy' argument declaration, via
         the second argument of parse() being set true. This allows the
         parser to create argument declaration on-the-fly, which can be
@@ -65,8 +65,8 @@ version=dashdash;       // -- everything assigned to the null argument
         argument 'x' is declared. The parse() method will fail if the
         pre-conditions are not fully met. Additional qualifiers include
         specifying how many parameters are allowed for each individual
-        argument, default parameters, whether an argument requires the 
-        presence or exclusion of another, etc. Qualifiers are typically 
+        argument, default parameters, whether an argument requires the
+        presence or exclusion of another, etc. Qualifiers are typically
         chained together and the following example shows argument "foo"
         being made required, with one parameter, aliased to 'f', and
         dependent upon the presence of another argument "bar":
@@ -79,7 +79,7 @@ version=dashdash;       // -- everything assigned to the null argument
         and the parser will fail on mismatched input:
         ---
         args("greeting").restrict("hello", "yo", "gday");
-        args("enabled").restrict("true", "false", "t", "f", "y", "n");  
+        args("enabled").restrict("true", "false", "t", "f", "y", "n");
         ---
 
         A set of declared arguments may be configured in this manner
@@ -93,19 +93,19 @@ version=dashdash;       // -- everything assigned to the null argument
                        if (arg.error)
                            ...
         ---
-       
+
         Error codes are as follows:
         ---
         None:           ok (zero)
         ParamLo:        too few params for an argument
         ParamHi:        too many params for an argument
-        Required:       missing argument is required 
+        Required:       missing argument is required
         Requires:       depends on a missing argument
         Conflict:       conflicting argument is present
         Extra:          unexpected argument (see sloppy)
         Option:         parameter does not match options
         ---
-        
+
         A simpler way to handle errors is to invoke an internal format
         routine, which constructs error messages on your behalf:
         ---
@@ -117,7 +117,7 @@ version=dashdash;       // -- everything assigned to the null argument
         the messages themselves may be customized (for i18n purposes).
         See the two errors() methods for more information on this.
 
-        The parser make a distinction between a short and long prefix, 
+        The parser make a distinction between a short and long prefix,
         in that a long prefix argument is always distinct while short
         prefix arguments may be combined as a shortcut:
         ---
@@ -142,8 +142,8 @@ version=dashdash;       // -- everything assigned to the null argument
         as parameters are assigned(). See the bind() methods for delegate
         signature details.
 
-        You may change the argument prefix to be something other than 
-        "-" and "--" via the constructor. You might, for example, need 
+        You may change the argument prefix to be something other than
+        "-" and "--" via the constructor. You might, for example, need
         to specify a "/" indicator instead, and use ':' for explicitly
         assigning parameters:
         ---
@@ -169,8 +169,8 @@ version=dashdash;       // -- everything assigned to the null argument
         implicit parameters are assigned to arguments from right to left,
         according to how many parameters said arguments may consume. Each
         sloppy argument consumes parameters by default, so those implicit
-        parameters would have been assigned to -v without the declaration 
-        shown. On the other hand, an explicit assignment (via '=') always 
+        parameters would have been assigned to -v without the declaration
+        shown. On the other hand, an explicit assignment (via '=') always
         associates the parameter with that argument even when an overflow
         would occur (though will cause an error to be raised).
 
@@ -182,12 +182,12 @@ version=dashdash;       // -- everything assigned to the null argument
         args.parse (`--comment="-- a comment --"`);
         ---
 
-        Without the explicit assignment, the text content might otherwise 
+        Without the explicit assignment, the text content might otherwise
         be considered the start of another argument (due to how argv/argc
         values are stripped of original quotes).
 
         Lastly, all subsequent text is treated as paramter-values after a
-        "--" token is encountered. This notion is applied by unix systems 
+        "--" token is encountered. This notion is applied by unix systems
         to terminate argument processing in a similar manner. Such values
         are considered to be implicit, and are assigned to preceding args
         in the usual right to left fashion (or to the null argument):
@@ -195,7 +195,7 @@ version=dashdash;       // -- everything assigned to the null argument
         args.parse (`-- -thisfile --thatfile`);
         assert (args(null).assigned().length is 2);
         ---
-        
+
 *******************************************************************************/
 
 class Arguments
@@ -213,24 +213,24 @@ class Arguments
         private const(char[])[]         msgs = errmsg;  // error messages
         private static const const(char[])[]   errmsg =        // default errors
                 [
-                "argument '{0}' expects {2} parameter(s) but has {1}\n", 
-                "argument '{0}' expects {3} parameter(s) but has {1}\n", 
-                "argument '{0}' is missing\n", 
-                "argument '{0}' requires '{4}'\n", 
-                "argument '{0}' conflicts with '{4}'\n", 
-                "unexpected argument '{0}'\n", 
-                "argument '{0}' expects one of {5}\n", 
-                "invalid parameter for argument '{0}': {4}\n", 
+                "argument '{0}' expects {2} parameter(s) but has {1}\n",
+                "argument '{0}' expects {3} parameter(s) but has {1}\n",
+                "argument '{0}' is missing\n",
+                "argument '{0}' requires '{4}'\n",
+                "argument '{0}' conflicts with '{4}'\n",
+                "unexpected argument '{0}'\n",
+                "argument '{0}' expects one of {5}\n",
+                "invalid parameter for argument '{0}': {4}\n",
                 ];
 
         /***********************************************************************
-              
-              Construct with the specific short & long prefixes, and the 
+
+              Construct with the specific short & long prefixes, and the
               given assignment character (typically ':' on Windows but we
               set the defaults to look like unix instead)
 
         ***********************************************************************/
-        
+
         this (const(char)[] sp="-", const(char)[] lp="--", char eq='=')
         {
                 this.sp = sp;
@@ -240,11 +240,11 @@ class Arguments
         }
 
         /***********************************************************************
-              
+
                 Parse string[] into a set of Argument instances. The 'sloppy'
                 option allows for unexpected arguments without error.
-                
-                Returns false where an error condition occurred, whereupon the 
+
+                Returns false where an error condition occurred, whereupon the
                 arguments should be traversed to discover said condition(s):
                 ---
                 auto args = new Arguments;
@@ -253,7 +253,7 @@ class Arguments
                 ---
 
         ***********************************************************************/
-        
+
         final bool parse (const(char)[] input, bool sloppy=false)
         {
                 const(char[])[] tmp;
@@ -263,11 +263,11 @@ class Arguments
         }
 
         /***********************************************************************
-              
+
                 Parse a string into a set of Argument instances. The 'sloppy'
                 option allows for unexpected arguments without error.
-                
-                Returns false where an error condition occurred, whereupon the 
+
+                Returns false where an error condition occurred, whereupon the
                 arguments should be traversed to discover said condition(s):
                 ---
                 auto args = new Arguments;
@@ -276,7 +276,7 @@ class Arguments
                 ---
 
         ***********************************************************************/
-        
+
         final bool parse (const(char[])[] input, bool sloppy=false)
         {
                 bool    done;
@@ -297,19 +297,19 @@ class Arguments
                                    continue;
                         }
                         stack.top.append (s);
-                        }  
+                        }
                 foreach (arg; args)
                          error |= arg.valid();
                 return error is 0;
         }
 
         /***********************************************************************
-              
-                Clear parameter assignments, flags and errors. Note this 
+
+                Clear parameter assignments, flags and errors. Note this
                 does not remove any Arguments
 
         ***********************************************************************/
-        
+
         final Arguments clear ()
         {
                 stack.clear();
@@ -323,27 +323,27 @@ class Arguments
         }
 
         /***********************************************************************
-              
+
                 Obtain an argument reference, creating an new instance where
                 necessary. Use array indexing or opCall syntax if you prefer
 
         ***********************************************************************/
-        
+
         final Argument get (char name)
         {
                 return get ((&name)[0..1]);
         }
 
         /***********************************************************************
-              
+
                 Obtain an argument reference, creating an new instance where
                 necessary. Use array indexing or opCall syntax if you prefer.
 
                 Pass null to access the 'default' argument (where unassigned
                 implicit parameters are gathered)
-                
+
         ***********************************************************************/
-        
+
         final Argument get (const(char)[] name)
         {
                 auto a = name in args;
@@ -361,7 +361,7 @@ class Arguments
         final int opApply (scope int delegate(ref Argument) dg)
         {
                 int result;
-                foreach (arg; args)  
+                foreach (arg; args)
                          if ((result=dg(arg)) != 0)
                               break;
                 return result;
@@ -377,7 +377,7 @@ class Arguments
                 ---
 
                 The messages are replacable with custom (i18n) versions
-                instead, using the errors(char[][]) method 
+                instead, using the errors(char[][]) method
 
         ***********************************************************************/
 
@@ -388,15 +388,15 @@ class Arguments
                 foreach (arg; args)
                 {
                          if (arg.error)
-                             result ~= dg (tmp, msgs[arg.error-1], arg.name, 
-                                           arg.values.length, arg.min, arg.max, 
+                             result ~= dg (tmp, msgs[arg.error-1], arg.name,
+                                           arg.values.length, arg.min, arg.max,
                                            arg.bogus, arg.options);
                 }
                 return result;
         }
 
         /***********************************************************************
-                
+
                 Use this method to replace the default error messages. Note
                 that arguments are passed to the formatter in the following
                 order, and these should be indexed appropriately by each of
@@ -422,8 +422,8 @@ class Arguments
         }
 
         /***********************************************************************
-                
-                Expose the configured set of help text, via the given 
+
+                Expose the configured set of help text, via the given
                 delegate
 
         ***********************************************************************/
@@ -437,13 +437,13 @@ class Arguments
         }
 
         /***********************************************************************
-              
-                Test for the presence of a switch (long/short prefix) 
-                and enable the associated arg where found. Also look 
+
+                Test for the presence of a switch (long/short prefix)
+                and enable the associated arg where found. Also look
                 for and handle explicit parameter assignment
-                
+
         ***********************************************************************/
-        
+
         private bool argument (const(char)[] s, const(char)[] p, bool sloppy, bool flag)
         {
                 if (s.length >= p.length && s[0..p.length] == p)
@@ -472,14 +472,14 @@ class Arguments
         }
 
         /***********************************************************************
-              
+
                 Indicate the existance of an argument, and handle sloppy
                 options along with multiple-flags and smushed parameters.
                 Note that sloppy arguments are configured with parameters
                 enabled.
 
         ***********************************************************************/
-        
+
         private Argument enable (const(char)[] elem, bool sloppy, bool flag=false)
         {
                 if (flag && elem.length > 1)
@@ -509,22 +509,22 @@ class Arguments
         }
 
         /***********************************************************************
-              
-                A specific argument instance. You get one of these from 
+
+                A specific argument instance. You get one of these from
                 Arguments.get() and visit them via Arguments.opApply()
 
         ***********************************************************************/
-        
+
         class Argument
-        {       
+        {
                 /***************************************************************
-                
+
                         Error identifiers:
                         ---
                         None:           ok
                         ParamLo:        too few params for an argument
                         ParamHi:        too many params for an argument
-                        Required:       missing argument is required 
+                        Required:       missing argument is required
                         Requires:       depends on a missing argument
                         Conflict:       conflicting argument is present
                         Extra:          unexpected argument (see sloppy)
@@ -532,7 +532,7 @@ class Arguments
                         ---
 
                 ***************************************************************/
-        
+
                 enum {None, ParamLo, ParamHi, Required, Requires, Conflict, Extra, Option, Invalid};
 
                 alias void   delegate() Invoker;
@@ -558,49 +558,49 @@ class Arguments
                 private Argument[]      dependees,      // who we require
                                         conflictees;    // who we conflict with
                 private const(char)[] delegate () lazyDefault;
-                
+
                 /***************************************************************
-              
+
                         Create with the given name
 
                 ***************************************************************/
-        
+
                 this (const(char)[] name)
                 {
                         this.name = name;
                 }
 
                 /***************************************************************
-              
+
                         Return the name of this argument
 
                 ***************************************************************/
-        
+
                 override immutable(char)[] toString()
                 {
                         return name.idup;
                 }
 
                 /***************************************************************
-                
+
                         return the assigned parameters, or the defaults if
                         no parameters were assigned
 
                 ***************************************************************/
-        
+
                 final const(char[])[] assigned ()
                 {
                         return values.length ? values : (lazyDefault ? [lazyDefault()] : deefalts);
                 }
 
                 /***************************************************************
-              
-                        Alias this argument with the given name. If you need 
+
+                        Alias this argument with the given name. If you need
                         long-names to be aliased, create the long-name first
                         and alias it to a short one
 
                 ***************************************************************/
-        
+
                 final Argument aliased (char name)
                 {
                         this.outer.aliases[(&name)[0..1].idup] = this;
@@ -609,11 +609,11 @@ class Arguments
                 }
 
                 /***************************************************************
-              
+
                         Make this argument a requirement
 
                 ***************************************************************/
-        
+
                 @property final Argument required ()
                 {
                         this.req = true;
@@ -621,11 +621,11 @@ class Arguments
                 }
 
                 /***************************************************************
-              
+
                         Set this argument to depend upon another
 
                 ***************************************************************/
-        
+
                 final Argument requires (Argument arg)
                 {
                         dependees ~= arg;
@@ -633,33 +633,33 @@ class Arguments
                 }
 
                 /***************************************************************
-              
+
                         Set this argument to depend upon another
 
                 ***************************************************************/
-        
+
                 final Argument requires (const(char)[] other)
                 {
                         return requires (this.outer.get(other));
                 }
 
                 /***************************************************************
-              
+
                         Set this argument to depend upon another
 
                 ***************************************************************/
-        
+
                 final Argument requires (char other)
                 {
                         return requires ((&other)[0..1]);
                 }
 
                 /***************************************************************
-              
+
                         Set this argument to conflict with another
 
                 ***************************************************************/
-        
+
                 final Argument conflicts (Argument arg)
                 {
                         conflictees ~= arg;
@@ -667,55 +667,55 @@ class Arguments
                 }
 
                 /***************************************************************
-              
+
                         Set this argument to conflict with another
 
                 ***************************************************************/
-        
+
                 final Argument conflicts (const(char)[] other)
                 {
                         return conflicts (this.outer.get(other));
                 }
 
                 /***************************************************************
-              
+
                         Set this argument to conflict with another
 
                 ***************************************************************/
-        
+
                 final Argument conflicts (char other)
                 {
                         return conflicts ((&other)[0..1]);
                 }
 
                 /***************************************************************
-              
+
                         Enable parameter assignment: 0 to 42 by default
 
                 ***************************************************************/
-        
+
                 final Argument params ()
                 {
                         return params (0, 42);
                 }
 
                 /***************************************************************
-              
+
                         Set an exact number of parameters required
 
                 ***************************************************************/
-        
+
                 final Argument params (int count)
                 {
                         return params (count, count);
                 }
 
                 /***************************************************************
-              
+
                         Set both the minimum and maximum parameter counts
 
                 ***************************************************************/
-        
+
                 final Argument params (int min, int max)
                 {
                         this.min = min;
@@ -724,11 +724,11 @@ class Arguments
                 }
 
                 /***************************************************************
-                        
+
                         Add another default parameter for this argument
 
                 ***************************************************************/
-        
+
                 final Argument defaults (const(char)[] values)
                 {
                         this.deefalts ~= values;
@@ -742,14 +742,14 @@ class Arguments
                 }
 
                 /***************************************************************
-              
+
                         Set an inspector for this argument, fired when a
                         parameter is appended to an argument. Return null
                         from the delegate when the value is ok, or a text
                         string describing the issue to trigger an error
 
                 ***************************************************************/
-        
+
                 final Argument bind (Inspector inspector)
                 {
                         this.inspector = inspector;
@@ -757,12 +757,12 @@ class Arguments
                 }
 
                 /***************************************************************
-              
+
                         Set an invoker for this argument, fired when an
                         argument declaration is seen
 
                 ***************************************************************/
-        
+
                 final Argument bind (Invoker invoker)
                 {
                         this.invoker = invoker;
@@ -770,13 +770,13 @@ class Arguments
                 }
 
                 /***************************************************************
-              
-                        Enable smushing for this argument, where "-ofile" 
-                        would result in "file" being assigned to argument 
+
+                        Enable smushing for this argument, where "-ofile"
+                        would result in "file" being assigned to argument
                         'o'
 
                 ***************************************************************/
-        
+
                 final Argument smush (bool yes=true)
                 {
                         cat = yes;
@@ -784,11 +784,11 @@ class Arguments
                 }
 
                 /***************************************************************
-              
+
                         Disable implicit arguments
 
                 ***************************************************************/
-        
+
                 @property final Argument explicit ()
                 {
                         exp = true;
@@ -796,12 +796,12 @@ class Arguments
                 }
 
                 /***************************************************************
-              
-                        Alter the title of this argument, which can be 
+
+                        Alter the title of this argument, which can be
                         useful for naming the default argument
 
                 ***************************************************************/
-        
+
                 final Argument title (const(char)[] name)
                 {
                         this.name = name;
@@ -809,11 +809,11 @@ class Arguments
                 }
 
                 /***************************************************************
-              
+
                         Set the help text for this argument
 
                 ***************************************************************/
-        
+
                 final Argument help (const(char)[] text)
                 {
                         this.text = text;
@@ -821,12 +821,12 @@ class Arguments
                 }
 
                 /***************************************************************
-              
+
                         Fail the parse when this arg is encountered. You
                         might use this for managing help text
 
                 ***************************************************************/
-        
+
                 final Argument halt ()
                 {
                         this.fail = true;
@@ -834,11 +834,11 @@ class Arguments
                 }
 
                 /***************************************************************
-              
+
                         Restrict values to one of the given set
 
                 ***************************************************************/
-        
+
                 final Argument restrict (const(char[])[] options ...)
                 {
                         this.options = cast(const(char)[][])options;
@@ -846,13 +846,13 @@ class Arguments
                 }
 
                 /***************************************************************
-              
+
                         This arg is present, but set an error condition
                         (Extra) when unexpected and sloppy is not enabled.
                         Fires any configured invoker callback.
 
                 ***************************************************************/
-        
+
                 private Argument enable (bool unexpected=false)
                 {
                         this.set = true;
@@ -867,12 +867,12 @@ class Arguments
                 }
 
                 /***************************************************************
-              
+
                         Append a parameter value, invoking an inspector as
                         necessary
 
                 ***************************************************************/
-        
+
                 private void append (const(char)[] value, bool explicit=false)
                 {
                         Argument arg = this;
@@ -909,11 +909,11 @@ class Arguments
                 }
 
                 /***************************************************************
-                
-                        Test and set the error flag appropriately 
+
+                        Test and set the error flag appropriately
 
                 ***************************************************************/
-        
+
                 private int valid ()
                 {
                         if (error is None)
@@ -944,8 +944,8 @@ class Arguments
                             }
                         }
                         debug(Arguments) stdout.formatln ("{}: error={}, set={}, min={}, max={}, "
-                                               "req={}, values={}, defaults={}, requires={}", 
-                                               name, error, set, min, max, req, values, 
+                                               "req={}, values={}, defaults={}, requires={}",
+                                               name, error, set, min, max, req, values,
                                                deefalts, dependees);
                         return error;
                 }
@@ -954,7 +954,7 @@ class Arguments
 
 
 /*******************************************************************************
-      
+
 *******************************************************************************/
 
 debug(UnitTest)
@@ -963,7 +963,7 @@ debug(UnitTest)
         {
         auto args = new Arguments;
 
-        // basic 
+        // basic
         auto x = args['x'];
         assert (args.parse (""));
         x.required;
@@ -1003,7 +1003,7 @@ debug(UnitTest)
         assert (x.assigned()[0] == "param1");
         assert (args(null).assigned().length is 1);
         assert (args(null).assigned()[0] == "param2");
-        
+
         // now with default params
         assert (args.clear().parse ("param1 param2 -x=blah"));
         assert (args[null].assigned().length is 2);
@@ -1122,11 +1122,11 @@ debug(UnitTest)
 }
 
 /*******************************************************************************
-      
+
 *******************************************************************************/
 
 debug (Arguments)
-{       
+{
         import tango.io.Stdout;
 
         void main()

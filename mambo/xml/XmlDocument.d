@@ -42,36 +42,36 @@ final class XmlDocument (T = char)
 {
 	/// The type of the document implementation.
 	alias Document!(T) Doc;
-	
+
 	/// The type of the node implementation.
 	alias Doc.Node Node;
 
 	/// The type of the query node implementation.
 	//alias XmlPath!(T).NodeSet QueryNode;
-	
+
 	///
 	alias const(T)[] tstring;
-	
+
 	/// The type of the visitor type implementation.
 	alias Doc.Visitor VisitorType;
 
 	/// Set this to true if there should be strict errro checking.
 	bool strictErrorChecking;
-	
+
 	/// The number of spaces used for indentation used when printing the document.
 	uint indentation = 4;
-	
-	private Doc doc;	
+
+	private Doc doc;
 	private DocPrinter!(T) printer;
-	
+
 	/**
 	 * Creates a new instance of this class
-	 * 
+	 *
 	 * Examples:
 	 * ---
 	 * auto doc = new XmlDocument!();
 	 * ---
-	 * 
+	 *
 	 * Params:
 	 *     strictErrorChecking = true if strict errro checking should be enabled
 	 */
@@ -80,20 +80,20 @@ final class XmlDocument (T = char)
 		doc = new Doc;
 		this.strictErrorChecking = strictErrorChecking;
 	}
-	
+
 	/**
 	 * Attaches a header to the document.
-	 * 
+	 *
 	 * Examples:
 	 * ---
 	 * auto doc = new XmlDocument!();
 	 * doc.header("UTF-8");
 	 * // <?xml version="1.0" encoding="UTF-8"?>
 	 * ---
-	 * 
+	 *
 	 * Params:
 	 *     encoding = the encoding that should be put in the header
-	 *      
+	 *
 	 * Returns: the receiver
 	 */
 	XmlDocument header (tstring encoding = null)
@@ -102,7 +102,7 @@ final class XmlDocument (T = char)
 
 		return this;
 	}
-	
+
 	/// Rests the reciver. Allows to parse new content.
 	XmlDocument reset ()
 	{
@@ -110,16 +110,16 @@ final class XmlDocument (T = char)
 
 		return this;
 	}
-	
+
 	/// Return the root document node, from which all other nodes are descended.
 	Node tree ()
 	{
 		return doc.tree;
 	}
-	
+
 	/**
 	 * Parses the given string of XML.
-	 * 
+	 *
 	 * Params:
 	 *     xml = the XML to parse
 	 */
@@ -127,14 +127,14 @@ final class XmlDocument (T = char)
 	{
 		doc.parse(xml);
 	}
-	
+
 	/// Return an xpath handle to query this document. This starts at the document root.
 	auto query ()
 	{
 		return doc.tree.query;
 		//return QueryProxy(doc.tree.query);
 	}
-	
+
 	/// Pretty prints the document.
 	override string toString ()
 	{
@@ -146,14 +146,14 @@ final class XmlDocument (T = char)
 
 		return str.assumeUnique;
 	}
-	
+
 	/**
 	 * Attaches a new node to the docuement.
-	 * 
+	 *
 	 * Params:
 	 *     name = the name of the node
 	 *     value = the vale of the node
-	 *     
+	 *
 	 * Returns: returns the newly created node
 	 */
 	Node createNode (tstring name, tstring value = null)

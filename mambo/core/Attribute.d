@@ -34,7 +34,7 @@ template isAttribute (alias symbol)
 /**
  * Returns a tuple of all attributes attached to the given symbol. By default this will only
  * include actual attributes (see mambo.core.Attribute.isAttribute).
- * 
+ *
  * Params:
  *     symbol = the symbol to return the attributes for
  *     includeNonAttributes = if true, will return all values. Included those not considered

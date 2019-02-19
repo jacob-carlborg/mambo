@@ -15,19 +15,19 @@ import mambo.util.Traits;
 /**
  * Returns true if the given value is blank. A string is considered blank if any of
  * the following conditions are true:
- * 
+ *
  * $(UL
  * 	$(LI The string is null)
  * 	$(LI The length of the string is equal to 0)
  * 	$(LI The string only contains blank characters, i.e. space, newline or tab)
  * )
- * 
+ *
  * Params:
  *     str = the string to test if it's blank
- *     
+ *
  * Returns: $(D_KEYWORD true) if any of the above conditions are met
- * 
- * See_Also: isPresent 
+ *
+ * See_Also: isPresent
  */
 @property bool isBlank (T) (T t)
 {
@@ -35,13 +35,13 @@ import mambo.util.Traits;
 	{
 		if (t.length == 0)
 			return true;
-		
+
 		return match(t, regex(`\S`, "g")).empty;
 	}
 
 	else static if (__traits(compiles, t.isEmpty))
 		return t.isEmpty;
-		
+
 	else static if (isPrimitive!(T) || isStruct!(T) || isUnion!(T))
 		return false;
 

@@ -48,12 +48,12 @@ struct Value
 	{
 		static if (__traits(compiles, mixin("{ value." ~ name ~ "();}")))
 			mixin("return value." ~ name ~ "();");
-	
+
 		else
 		{
 			if (auto v = name in map)
 				return *v;
-	
+
 			else
 			{
 				map[name] = Value();

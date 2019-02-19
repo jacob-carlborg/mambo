@@ -102,7 +102,7 @@ template isArray (T)
 {
 	static if (is(T U : U[]))
 		enum bool isArray = true;
-	
+
 	else
 		enum bool isArray = false;
 }
@@ -125,7 +125,7 @@ template isPointer (T)
 {
 	static if (is(T U : U*))
 		enum bool isPointer = true;
-	
+
 	else
 		enum bool isPointer = false;
 }
@@ -171,7 +171,7 @@ template BaseTypeOfPointer (T)
 {
 	static if (is(T U : U*))
 		alias BaseTypeOfPointer!(U) BaseTypeOfPointer;
-	
+
 	else
 		alias T BaseTypeOfPointer;
 }
@@ -181,7 +181,7 @@ template BaseTypeOfTypedef (T)
 {
 	static if (is(T U == typedef))
 		alias BaseTypeOfTypedef!(U) BaseTypeOfTypedef;
-	
+
 	else
 		alias T BaseTypeOfTypedef;
 }
@@ -191,7 +191,7 @@ template BaseTypeOfEnum (T)
 {
 	static if (is(T U == enum))
 		alias BaseTypeOfEnum!(U) BaseTypeOfEnum;
-	
+
 	else
 		alias T BaseTypeOfEnum;
 }

@@ -23,7 +23,7 @@ version (GNU)
 {
 	version (darwin)
 		version = OSX;
-	
+
 	static if ((void*).sizeof > int.sizeof)
 		version = D_LP64;
 }
@@ -50,7 +50,7 @@ else enum bool D_Version2 = false;
 
 
 
-//Processors 
+//Processors
 version (PPC) enum bool PPC = true;
 else enum bool PPC = false;
 
@@ -148,14 +148,14 @@ version (Tango)
 {
 	enum bool Tango = true;
 	enum bool Phobos = false;
-	
+
 	version (PhobosCompatibility) enum bool PhobosCompatibility = true;
-	else enum bool PhobosCompatibility = false;	
+	else enum bool PhobosCompatibility = false;
 }
 
 else
 {
 	enum bool Tango = false;
-	enum bool Phobos = true; 
+	enum bool Phobos = true;
 	enum bool PhobosCompatibility = false;
 }

@@ -180,7 +180,7 @@ private:
 
 	@property ArgumentBase[] positionalArguments ()
 	{
-		return positionalArguments_.any ? positionalArguments_ : positionalArguments_ = arguments.positionalArguments;
+		return positionalArguments_.any ? positionalArguments_ : (positionalArguments_ = arguments.positionalArguments);
 	}
 
 	@property string header ()

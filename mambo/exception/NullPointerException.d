@@ -11,8 +11,6 @@ module mambo.exception.NullPointerException;
 
 import tango.core.Exception;
 
-import mambo.core.string : string;
-
 /**
  * Thrown when an application attempts to use <code>null</code> in a
  * case where an object is required. These include:

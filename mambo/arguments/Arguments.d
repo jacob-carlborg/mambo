@@ -33,7 +33,7 @@ class Arguments
 	private
 	{
 		Options optionProxy;
-		HashMap!(string, ArgumentBase) positionalArguments_;
+		ArgumentBase[string] positionalArguments_;
 		ArgumentProxy proxy;
 		ArgumentBase[] sortedPosArgs_;
 		Formatter formatter_;
@@ -52,7 +52,6 @@ class Arguments
 
 		internalArguments = new Internal.Arguments(shortPrefix, longPrefix, assignment);
 		optionProxy = Options(this);
-		positionalArguments_ = new HashMap!(string, ArgumentBase);
 		proxy = ArgumentProxy.create(this);
 	}
 
@@ -129,7 +128,7 @@ class Arguments
 
 	@property ArgumentBase[] positionalArguments ()
 	{
-		return positionalArguments_.toArray();
+		return positionalArguments_.values;
 	}
 
 	@property Option!(int)[] options ()
@@ -235,9 +234,9 @@ struct ArgumentProxy
 
 	Argument!(T) opCall (T = string) (string name, string helpText)
 	{
-		assert(!arguments.positionalArguments_.containsKey(name));
+		assert(name !in arguments.positionalArguments_);
 
-		auto arg = new Argument!(T)(arguments.positionalArguments_.size, name);
+		auto arg = new Argument!(T)(arguments.positionalArguments_.length, name);
 		arg.help(helpText);
 		arguments.positionalArguments_[name] = arg;
 

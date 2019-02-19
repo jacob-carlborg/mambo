@@ -22,8 +22,8 @@ version (Tango)
 	 */
 	void print (A...)(A args)
 	{
-		static enum string fmt = "{}{}{}{}{}{}{}{}"
-					        	  "{}{}{}{}{}{}{}{}"
+		static enum string fmt = "{}{}{}{}{}{}{}{}" ~
+					        	  "{}{}{}{}{}{}{}{}" ~
 					        	  "{}{}{}{}{}{}{}{}";
 
 		static assert (A.length <= fmt.length / 2, "mambo.io.print :: too many arguments");
@@ -39,8 +39,8 @@ version (Tango)
 	 */
 	void println (A...)(A args)
 	{
-		static enum string fmt = "{}{}{}{}{}{}{}{}"
-					        	  "{}{}{}{}{}{}{}{}"
+		static enum string fmt = "{}{}{}{}{}{}{}{}" ~
+					        	  "{}{}{}{}{}{}{}{}" ~
 					        	  "{}{}{}{}{}{}{}{}";
 
 		static assert (A.length <= fmt.length / 2, "mambo.io.println :: too many arguments");

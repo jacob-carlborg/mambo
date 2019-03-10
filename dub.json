@@ -13,6 +13,6 @@
 	"excludedSourceFiles-windows": ["mambo/c/sys/utsname.d"],
 
 	"dependencies": {
-		"tango": "~>1.0.5"
+		"tango": "~d2port"
 	}
 }
